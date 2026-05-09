@@ -1,0 +1,23 @@
+# ── 整个「海投网页」文件夹作为一个仓库时用 ──
+
+# Next.js（career-app）
+career-app/node_modules/
+career-app/.next/
+career-app/out/
+career-app/.vercel
+career-app/.env
+career-app/.env.*
+career-app/*.tsbuildinfo
+career-app/npm-debug.log*
+career-app/yarn-error.log*
+
+# 旧版 HTML 目录里若以后装了依赖
+Claude 发/node_modules/
+
+# 勿把 Git 内部备份目录提交上来
+**/.git.backup*/
+
+# 系统
+.DS_Store
+Thumbs.db
+*.pem

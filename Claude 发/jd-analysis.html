@@ -1,0 +1,2849 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD 分析 — 求职助手</title>
+<style>
+  /* 不使用 Google Fonts，避免部分地区无法访问导致标签页一直转圈 */
+  :root {
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", "Liberation Mono", monospace;
+    --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--surface3:#e8e5df;
+    --border:#e2dfd8;--border2:#d0cdc6;
+    --text:#1a1916;--text2:#6b6860;--text3:#9e9b96;--accent:#1a1916;
+    --green:#2d6a4f;--green-bg:#d8f3dc;--green-border:#a7d9b8;
+    --amber:#92400e;--amber-bg:#fef3c7;
+    --blue:#1e40af;--blue-bg:#dbeafe;--blue-border:#93c5fd;
+    --red:#991b1b;--red-bg:#fee2e2;
+    --purple:#5b21b6;--purple-bg:#ede9fe;
+    --teal:#0f766e;--teal-bg:#ccfbf1;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+
+  /* NAV */
+  .topnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:200;flex-shrink:0;}
+  .nav-logo{font-weight:600;font-size:15px;letter-spacing:-0.3px;}
+  .nav-divider{width:1px;height:20px;background:var(--border);}
+  .nav-links{display:flex;gap:2px;}
+  .nav-link{padding:5px 10px;border-radius:6px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;font-family:inherit;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;}
+  .nav-link:hover{background:var(--surface2);color:var(--text);}
+  .nav-link.active{background:var(--accent);color:white;}
+  .nav-link.soft-active{background:rgba(26,25,22,.12);color:rgba(26,25,22,.72);}
+  .nav-link.disabled{opacity:.45;cursor:not-allowed;pointer-events:none;}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+
+  .btn{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;}
+  .btn:hover{background:var(--surface2);border-color:var(--border2);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-primary{background:var(--accent);color:white;border-color:var(--accent);}
+  .btn-primary:hover:not(:disabled){opacity:.88;}
+  .btn-green{background:var(--green);color:white;border-color:var(--green);}
+  .btn-green:hover:not(:disabled){opacity:.88;}
+  .btn-board-compare{background:#5b21b6;color:#fff;border-color:#5b21b6;font-weight:700;}
+  .btn-board-compare:hover:not(:disabled){opacity:.9;}
+  .btn-board-tracking{background:#0f766e;color:#fff;border-color:#0f766e;font-weight:700;}
+  .btn-board-tracking:hover:not(:disabled){opacity:.9;}
+  .btn-board-nav{height:32px;padding:0 14px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;}
+
+  /* LAYOUT */
+  .page-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - 52px);}
+  
+  /* LEFT PANEL — JD INPUT */
+  .left-panel{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;height:calc(100vh - 52px);overflow-y:auto;position:sticky;top:52px;}
+  .panel-header{display:none;}
+  .panel-title{font-size:16px;font-weight:600;letter-spacing:-0.3px;margin-bottom:3px;}
+  .panel-sub{font-size:12px;color:var(--text3);}
+  .panel-body{padding:12px 24px 16px;display:flex;flex-direction:column;gap:10px;flex:1;min-height:0;}
+
+  .field-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:6px;display:block;}
+  .jd-textarea{width:100%;flex:1;min-height:0;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);resize:none;outline:none;line-height:1.6;transition:border-color .15s;}
+  .jd-textarea:focus{border-color:var(--accent);}
+  .jd-textarea::placeholder{color:var(--text3);}
+  .jd-zone{display:flex;flex-direction:column;flex:1;min-height:0;gap:8px;}
+  .jd-text-wrap{display:flex;flex-direction:column;flex:1;min-height:0;}
+
+  .source-row{display:flex;gap:8px;}
+  .source-input{width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;transition:border-color .15s;}
+  .source-input:focus{border-color:var(--accent);}
+  .job-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}
+  .job-grid .span-2{grid-column:span 2;}
+
+  .analyze-btn-wrap{display:flex;gap:8px;align-items:center;}
+  .char-count{font-size:11px;color:var(--text3);font-family:var(--font-mono);}
+
+  /* RIGHT PANEL — RESULTS */
+  .right-panel{background:var(--bg);display:flex;flex-direction:column;overflow-y:auto;min-height:0;height:calc(100vh - 52px);position:sticky;top:52px;}
+  .right-empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 32px;text-align:center;color:var(--text3);}
+  .empty-icon{font-size:40px;margin-bottom:16px;opacity:.3;}
+  .empty-title{font-size:15px;font-weight:500;margin-bottom:6px;color:var(--text2);}
+  .empty-steps{font-size:13px;line-height:2;text-align:left;display:inline-block;}
+
+  .results-wrap{padding:20px 24px;display:flex;flex-direction:column;gap:16px;}
+  .job-confirm{background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:10px;padding:10px 12px;display:none;}
+  .job-confirm-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#1e3a8a;margin-bottom:4px;}
+  .job-confirm-text{font-size:12px;color:#1e3a8a;line-height:1.5;}
+  .job-confirm-top{display:flex;align-items:center;gap:10px;justify-content:space-between;}
+  .btn-confirm-add{background:#1e40af;color:#fff;border-color:#1e40af;font-weight:700;display:inline-flex;align-items:center;gap:6px;}
+  .btn-confirm-add:hover:not(:disabled){opacity:.9;}
+  .btn-add-compare-plus{display:inline-flex;align-items:center;justify-content:center;min-width:1.35em;height:1.35em;padding:0 4px;border-radius:5px;background:rgba(255,255,255,.22);font-weight:800;font-size:13px;line-height:1;}
+
+  /* EXTRACTED INFO CARD */
+  .info-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+  .info-card-header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+  .info-card-title{font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;}
+  .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;}
+  .info-cell{padding:10px 16px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+  .info-cell:nth-child(even){border-right:none;}
+  .info-cell:nth-last-child(-n+2){border-bottom:none;}
+  .info-cell-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:3px;}
+  .info-cell-val{font-size:13px;font-weight:500;color:var(--text);}
+  .info-cell-val.empty{color:var(--text3);font-weight:400;font-style:italic;}
+  .edit-badge{font-size:10px;padding:2px 7px;border-radius:4px;background:var(--surface2);color:var(--text3);border:none;cursor:pointer;font-family:inherit;}
+  .edit-badge:hover{background:var(--surface3);color:var(--text2);}
+
+  /* EDITABLE FIELD */
+  .info-cell-input{font-size:13px;font-weight:500;color:var(--text);border:none;outline:none;background:transparent;width:100%;font-family:inherit;padding:0;}
+  .info-cell-input:focus{color:var(--accent);}
+
+  /* SCORE CARDS */
+  .score-section{display:flex;flex-direction:column;gap:10px;}
+  .score-big{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;}
+  .score-big-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;}
+  .score-grade{font-size:44px;font-weight:600;line-height:1;letter-spacing:-2px;}
+  .score-grade.A{color:#065f46;}
+  .score-grade.B{color:#1e40af;}
+  .score-grade.C{color:#92400e;}
+  .score-grade.D{color:#991b1b;}
+  .score-label-big{font-size:13px;font-weight:600;margin-bottom:2px;}
+  .score-reasoning{font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;padding-top:10px;border-top:1px solid var(--border);}
+
+  .score-row-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 16px;}
+  .score-row-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;}
+  .score-row-label{font-size:12px;font-weight:500;}
+  .score-row-num{font-family:var(--font-mono);font-size:18px;font-weight:600;}
+  .score-bar-track{height:4px;background:var(--surface2);border-radius:2px;overflow:hidden;margin-bottom:6px;}
+  .score-bar-fill{height:100%;border-radius:2px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+  .score-note{font-size:11px;color:var(--text3);line-height:1.4;}
+
+  /* MATCH/GAP TAGS */
+  .tags-section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 16px;}
+  .tags-title{font-size:12px;font-weight:600;color:var(--text2);margin-bottom:8px;}
+  .tags-row{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:500;}
+  .tag-match{background:var(--green-bg);color:var(--green);}
+  .tag-gap{background:var(--red-bg);color:var(--red);}
+  .tag-weak{background:var(--amber-bg);color:var(--amber);}
+
+  /* ACTION BAR */
+  .action-bar{background:var(--surface);border-top:1px solid var(--border);padding:16px 24px;display:flex;gap:10px;align-items:center;position:sticky;bottom:0;}
+  .action-note{font-size:12px;color:var(--text3);margin-right:auto;}
+
+  /* LOADING */
+  .loading-overlay{position:absolute;inset:0;background:rgba(245,244,240,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:50;border-radius:12px;}
+  .spinner{width:28px;height:28px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-text{font-size:13px;color:var(--text2);}
+  .loading-step{font-size:11px;color:var(--text3);}
+
+  /* TOAST */
+  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+  .toast{background:var(--accent);color:white;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:0 4px 20px rgba(0,0,0,.2);animation:slideIn .2s ease;display:flex;align-items:center;gap:8px;}
+  @keyframes slideIn{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+  @keyframes slideOut{from{opacity:1}to{opacity:0}}
+
+  .pill{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;}
+  .pill-green{background:var(--green-bg);color:var(--green);}
+  .pill-amber{background:var(--amber-bg);color:var(--amber);}
+  .pill-blue{background:var(--blue-bg);color:var(--blue);}
+  .pill-red{background:var(--red-bg);color:var(--red);}
+  .resume-list-host{font-size:13px;}
+  .resume-row{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface);}
+  .resume-row:last-child{margin-bottom:0;}
+  .resume-row-cb{flex-shrink:0;margin-top:2px;}
+  .resume-row-main{flex:1;min-width:0;}
+  .resume-row-title{font-weight:600;font-size:13px;margin-bottom:4px;word-break:break-all;}
+  .resume-row-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11px;color:var(--text3);}
+  .resume-del-btn{flex-shrink:0;font-size:12px;padding:4px 10px;}
+  .wobble-loop{animation:wobbleLoop .32s ease-in-out infinite;}
+  @keyframes wobbleLoop{
+    0%{transform:translateX(0)}
+    20%{transform:translateX(-2px)}
+    40%{transform:translateX(2px)}
+    60%{transform:translateX(-1px)}
+    80%{transform:translateX(1px)}
+    100%{transform:translateX(0)}
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <span class="nav-logo">求职助手</span>
+  <div class="nav-divider"></div>
+  <div class="nav-links">
+    <button class="nav-link" id="nav-p1" onclick="navGoPage('p1')">Step 1 简历设置</button>
+    <button class="nav-link" id="nav-p2" onclick="navGoPage('p2')">Step 2 JD分析&看板</button>
+    <button class="nav-link" id="nav-p3" onclick="navGoPage('p3')">Step 3 优化简历</button>
+  </div>
+  <div class="nav-right">
+    <span id="nav-status" style="font-size:12px;color:var(--text3)"></span>
+    <div class="nav-divider" id="nav-board-divider"></div>
+    <button class="btn btn-board-nav btn-board-compare" id="btn-open-compare" onclick="openCompareKanban()">
+      查看JD对比看板
+    </button>
+  </div>
+</nav>
+
+<!-- ══ PAGE 1 — 简历设置 ══ -->
+<div id="page-p1" style="display:none;min-height:calc(100vh - 52px);background:var(--bg);flex-direction:column;">
+  <div id="page-p1-scroll" style="flex:1;max-width:680px;width:100%;margin:0 auto;padding:40px 24px;padding-bottom:32px;box-sizing:border-box;">
+
+    <div style="margin-bottom:28px;">
+      <div style="font-size:20px;font-weight:600;letter-spacing:-.5px;margin-bottom:5px;">简历设置</div>
+      <div style="font-size:12px;color:var(--text3);">上传 <strong>PDF / Word（.docx）</strong> 后自动保存到本地列表；<strong>勾选</strong>要参与 JD 分析的简历（可多选）。上传/勾选后会自动同步到账户。请用底部<strong>「下一步：去分析 JD」</strong>进入 Step 2（顶部 Step 2/3 在此页不可直接点）。</div>
+    </div>
+
+    <!-- ① 上传 PDF / Word -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:14px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:3px;">📎 上传简历文件</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;">支持 PDF、.docx，<strong>单文件最大 5MB</strong>（含 5MB）；<strong>每人最多保留 2 份</strong>，请先删再传。解析失败会显示原因。</div>
+      <div id="resume-dropzone" style="border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg);transition:border-color .15s, background .15s;">
+        <input type="file" id="resume-file-input" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;">
+        <div style="font-size:13px;color:var(--text);">点击或拖拽文件到此处</div>
+        <div id="resume-upload-status" style="font-size:11px;color:var(--text3);margin-top:8px;min-height:1.2em;"></div>
+      </div>
+    </div>
+
+    <!-- ② 已上传简历列表（勾选参与分析） -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
+        <div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">📋 已上传的简历</div>
+          <div style="font-size:11px;color:var(--text3);">勾选将合并用于 Step 2 的 AI 分析；变更后会自动同步云端（需已登录）。</div>
+        </div>
+        <button type="button" class="btn btn-sm" onclick="clearAllResumes()" style="color:#92400e;border-color:#fcd34d;font-size:12px;">清空全部</button>
+      </div>
+      <div id="resume-list-host" class="resume-list-host"></div>
+      <!-- 供旧逻辑同步合并正文，不在界面展示 -->
+      <textarea id="resume-text" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" tabindex="-1" autocomplete="off"></textarea>
+    </div>
+
+    <!-- ③ 未来职业发展方向 -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;">
+      <div style="font-size:13px;font-weight:600;margin-bottom:3px;">🎯 未来职业发展方向</div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:14px;">
+        <strong>选填。</strong>填写后会自动保存，刷新或从 Step 2/3 返回仍保留；AI 分析会结合勾选的简历与此描述。
+      </div>
+      <textarea id="career-goal" style="width:100%;min-height:140px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);resize:vertical;outline:none;line-height:1.7;transition:border-color .15s;" placeholder="例如：我现在做景观设计9年了，想慢慢转到 tech 行业…（可不填）"></textarea>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px;">
+        <span id="career-goal-status" style="font-size:11px;color:var(--green);min-height:1.2em;"></span>
+        <span id="goal-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);">0 字</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 吸底操作栏：避免长简历时按钮被滚到屏幕外 -->
+  <div id="p1-sticky-actions" style="flex-shrink:0;position:sticky;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -6px 24px rgba(26,25,22,.08);z-index:90;padding:14px 24px calc(14px + env(safe-area-inset-bottom, 0px));">
+    <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:8px;">
+      <button type="button" onclick="goToStep2FromP1()" style="width:100%;padding:13px 16px;border-radius:8px;background:var(--accent);color:white;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">
+        下一步：去分析 JD →
+      </button>
+      <div id="p1-save-status" style="text-align:center;font-size:12px;color:var(--text3);min-height:1.2em;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE 2 — JD ANALYSIS ══ -->
+<div id="page-p2" style="display:block;">
+<div class="page-layout">
+
+  <!-- LEFT: INPUT -->
+  <div class="left-panel">
+    <div class="panel-body">
+
+      <!-- MANUAL JOB FIELDS — AI auto-fills, user can edit anytime -->
+      <div style="background:var(--surface2);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;">
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text3);margin-bottom:2px;">
+          职位基本信息 <span style="font-weight:400;color:var(--text3);text-transform:none">· AI 分析后自动填入，可手动修改，实时同步看板</span>
+        </div>
+        <div class="job-grid">
+          <div>
+            <label class="field-label" style="margin-bottom:3px;">公司名称</label>
+            <input class="source-input" id="f-company" placeholder="自动提取" oninput="syncField('company',this.value)" style="font-size:12px;padding:6px 8px;">
+          </div>
+          <div>
+            <label class="field-label" style="margin-bottom:3px;">职位名称</label>
+            <input class="source-input" id="f-role" placeholder="自动提取" oninput="syncField('role',this.value)" style="font-size:12px;padding:6px 8px;">
+          </div>
+          <div>
+            <label class="field-label" style="margin-bottom:3px;">薪资范围</label>
+            <input class="source-input" id="f-salary" placeholder="e.g. $80k–$100k" oninput="syncField('salary',this.value)" style="font-size:12px;padding:6px 8px;">
+          </div>
+          <div>
+            <label class="field-label" style="margin-bottom:3px;">合同类型</label>
+            <select class="source-input" id="f-contract" onchange="syncField('contract',this.value)" style="font-size:12px;padding:6px 8px;">
+              <option value="">自动提取</option>
+              <option value="Full time">Full Time</option>
+              <option value="Part time">Part Time</option>
+              <option value="Contract">Contract</option>
+              <option value="Casual">Casual</option>
+            </select>
+          </div>
+          <div>
+            <label class="field-label" style="margin-bottom:3px;">截止日期</label>
+            <input class="source-input" id="f-deadline" type="date" oninput="syncField('deadline',this.value)" style="font-size:12px;padding:6px 8px;">
+          </div>
+          <div class="span-2">
+            <label class="field-label" style="margin-bottom:3px;">JD 链接 URL</label>
+            <input class="source-input" id="jd-url" placeholder="https://seek.com.au/..." oninput="syncField('url',this.value)" style="font-size:12px;padding:6px 8px;">
+          </div>
+
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:2px;">
+          <button class="btn" onclick="extractInfoFromJD()" title="先从JD文本提取基础信息并填入上方字段">提取信息</button>
+        </div>
+        <div id="sync-indicator" style="font-size:11px;color:var(--green);display:none;">✓ 已同步到看板</div>
+      </div>
+
+      <!-- JD TEXT + ACTION -->
+      <div class="jd-zone">
+        <div class="jd-text-wrap">
+          <label class="field-label">JD 全文 *</label>
+          <textarea class="jd-textarea" id="jd-text"
+            placeholder="把完整的 JD 粘贴到这里...&#10;&#10;包括职位名称、公司、职责描述、要求、薪资等所有信息。&#10;粘贴越完整，分析越准确。"></textarea>
+        </div>
+        <div class="analyze-btn-wrap">
+          <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入，不写入看板">清除当前</button>
+          <button class="btn btn-primary" id="analyze-btn" onclick="analyze()" style="flex:1;padding:10px;font-size:14px;justify-content:center;">
+            分析这份 JD →
+          </button>
+          <span class="char-count" id="char-count">0 字</span>
+        </div>
+        <div style="font-size:10px;color:var(--text3);margin-top:6px;line-height:1.45;">
+          点击「分析这份 JD」后，浏览器 Network 会出现请求 <code style="font-size:9px;">analyze-jd</code>（不会自动发起）。
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: RESULTS -->
+  <div class="right-panel" id="right-panel">
+
+    <!-- EMPTY STATE -->
+    <div class="right-empty" id="empty-state">
+      <div class="empty-icon">◎</div>
+      <div class="empty-title">粘贴 JD 后点击「分析这份 JD」</div>
+      <div class="empty-steps" style="text-align:center;line-height:1.7;">
+        左侧填写职位信息并粘贴职位描述全文，点击左侧「分析这份 JD」后开始评估匹配度、缺口与评分（不会自动分析）。
+      </div>
+    </div>
+
+    <!-- LOADING STATE -->
+    <div id="loading-state" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:48px;">
+      <div class="spinner"></div>
+      <div class="loading-text" id="loading-text">正在读取 JD...</div>
+      <div class="loading-step" id="loading-step">Claude 正在提取关键信息</div>
+      <div class="loading-step" id="loading-timeout-hint" style="max-width:320px;text-align:center;line-height:1.5;">一般 30–120 秒内完成；若网络不稳定可能更久。超时将自动停止并提示重试。</div>
+      <button type="button" class="btn" id="btn-cancel-analyze" onclick="cancelAnalyze()" style="margin-top:8px;">取消本次分析</button>
+    </div>
+
+    <!-- RESULTS -->
+    <div id="results-state" style="display:none;flex-direction:column;min-height:0;flex:1;">
+      <div class="results-wrap">
+        <div class="job-confirm" id="r-job-confirm">
+          <div class="job-confirm-top">
+            <div class="job-confirm-title" style="margin-bottom:0;">当前分析职位（确认信息）</div>
+            <button type="button" class="btn btn-sm btn-confirm-add" id="btn-add-compare-manual" onclick="addCurrentToCompareBoard()" disabled><span class="btn-add-compare-plus" aria-hidden="true">+</span><span>添加入JD对比看板</span></button>
+          </div>
+          <div class="job-confirm-text" id="r-job-confirm-text">—</div>
+        </div>
+
+        <!-- ① 匹配程度 橙色首位 -->
+        <div id="r-match-card" style="background:#fffbeb;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+            <div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:6px;">🎯 你与这份 JD 的匹配程度</div>
+              <div style="display:flex;align-items:baseline;gap:10px;">
+                <div id="r-match-pct" style="font-size:40px;font-weight:600;line-height:1;letter-spacing:-2px;color:#92400e;">—</div>
+                <div>
+                  <div id="r-match-label" style="font-size:13px;font-weight:600;color:#78350f;">综合匹配度</div>
+                  <div id="r-match-sub" style="font-size:11px;color:#b45309;">基于简历 × JD 全维度比对</div>
+                </div>
+              </div>
+            </div>
+            <div id="r-match-pill" style="font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:#fef3c7;color:#92400e;border:1px solid #fcd34d;white-space:nowrap;align-self:flex-start;"></div>
+          </div>
+          <div style="font-size:10px;font-weight:600;color:#92400e;margin-bottom:6px;">已匹配关键词</div>
+          <div class="tags-row" id="r-matched-tags"></div>
+          <div style="font-size:11px;color:#92400e;line-height:1.6;margin-top:10px;padding-top:10px;border-top:1px solid #fcd34d;" id="r-match-reasoning"></div>
+        </div>
+
+        <!-- ② 缺失技能 红色 -->
+        <div style="background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#991b1b;margin-bottom:8px;">✗ 缺失技能 / 关键词</div>
+          <div style="font-size:11px;color:#7f1d1d;margin-bottom:8px;line-height:1.6;" id="r-gap-analysis"></div>
+          <div class="tags-row" id="r-gap-tags"></div>
+        </div>
+
+        <!-- ③ 可迁移技能 黄色 -->
+        <div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:14px 16px;">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;">～ 有基础但需强化表述（可迁移技能）</div>
+          <div class="tags-row" id="r-weak-tags"></div>
+          <div style="font-size:11px;color:#b45309;margin-top:8px;line-height:1.5;" id="r-weak-note"></div>
+        </div>
+
+        <!-- ④ ATS -->
+        <div class="score-row-card">
+          <div class="score-row-top">
+            <div>
+              <div class="score-row-label">④ ATS 关键词匹配率</div>
+              <div class="score-note" style="margin-top:3px;color:var(--text2);font-size:11px;line-height:1.5;"><strong style="color:var(--text)">ATS（Applicant Tracking System，简历追踪系统）</strong>是企业自动筛简历的软件——先被机器扫关键词再到人眼。Jobscan 250万份数据：65% 及格，75% 优秀，职位名称精确匹配面试率提升 10.6 倍。</div>
+            </div>
+            <div class="score-row-num" id="r-ats-score" style="color:var(--blue);">—</div>
+          </div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="r-ats-bar" style="width:0%;background:#3b82f6"></div></div>
+          <div class="score-note" id="r-ats-detail" style="margin-top:4px"></div>
+        </div>
+
+        <!-- ⑤ 技能差距 -->
+        <div class="score-row-card">
+          <div class="score-row-top">
+            <div><div class="score-row-label">⑤ 技能差距综合评分</div><div class="score-note">硬技能 / 软技能 / 可迁移技能三维拆解</div></div>
+            <div class="score-row-num" id="r-skills-score" style="color:var(--teal);">—</div>
+          </div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="r-skills-bar" style="width:0%;background:#0f766e"></div></div>
+          <div class="score-note" id="r-skills-detail" style="margin-top:4px"></div>
+        </div>
+
+        <!-- ⑥ Career成长 -->
+        <div class="score-row-card">
+          <div class="score-row-top">
+            <div><div class="score-row-label">⑥ Career 成长价值</div><div class="score-note">这份工作对进入 tech / AI 方向的跳板价值</div></div>
+            <div class="score-row-num" id="r-career-score" style="color:var(--purple);">—</div>
+          </div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="r-career-bar" style="width:0%;background:#8b5cf6"></div></div>
+          <div class="score-note" id="r-career-detail" style="margin-top:4px"></div>
+        </div>
+
+        <!-- ⑦ 转行可行性 -->
+        <div class="score-row-card" style="border-left:3px solid #f59e0b;">
+          <div class="score-row-top">
+            <div><div class="score-row-label">⑦ 转行可行性</div><div class="score-note">从景观设计背景跨行业投递的实际可行性</div></div>
+            <div class="score-row-num" id="r-switch-score" style="color:var(--amber);">—</div>
+          </div>
+          <div class="score-bar-track"><div class="score-bar-fill" id="r-switch-bar" style="width:0%;background:#f59e0b"></div></div>
+          <div class="score-note" id="r-switch-detail" style="margin-top:4px"></div>
+        </div>
+
+        <!-- ⑧ Career Path -->
+        <div class="tags-section" id="r-career-card" style="border-left:3px solid #8b5cf6;">
+          <div class="tags-title" style="color:var(--purple);">Career Path 分析</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;" id="r-career-text">—</div>
+        </div>
+
+        <!-- ⑨ AI建议投递评级 绿色末位 -->
+        <div id="r-score-big" style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:16px 18px;">
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#065f46;margin-bottom:10px;">🏆 AI 建议投递评级</div>
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
+            <div class="score-grade" id="r-grade">—</div>
+            <div>
+              <div class="score-label-big" id="r-priority-label" style="color:#065f46;">—</div>
+              <div style="font-size:11px;color:var(--text3);" id="r-priority-sub"></div>
+            </div>
+          </div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-top:8px;padding-top:10px;border-top:1px solid #a7f3d0;" id="r-reasoning">—</div>
+        </div>
+
+        <!-- 隐藏字段（供JS读取） -->
+        <div style="display:none">
+          <span id="r-company"></span><span id="r-role"></span>
+          <span id="r-location"></span><span id="r-contract"></span>
+          <span id="r-salary"></span><span id="r-deadline"></span>
+        </div>
+
+      </div>
+
+      <!-- ACTION BAR -->
+      <div class="action-bar">
+        <span class="action-note" id="action-note">修改 JD 全文后直接点「分析这份 JD」即可自动重新评估并更新看板</span>
+        <button class="btn btn-primary" onclick="goToP3()" style="margin-left:auto;">优化简历 →</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div><!-- end page-p2 -->
+<!-- ══ PAGE 3 — 简历针对JD优化 ══ -->
+<div id="page-p3" style="display:none;height:calc(100vh - 52px);overflow:hidden;position:relative;flex-direction:column;">
+
+  <!-- 顶部：修改重点总结 + 匹配度 -->
+  <div id="p3-topbar" style="background:var(--surface);border-bottom:2px solid var(--border);padding:12px 22px;flex-shrink:0;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;">
+      <div style="flex:1;">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:4px;">
+          基于 JD 分析结果 — 本次简历改写重点
+        </div>
+        <div id="p3-top-summary" style="font-size:12px;color:var(--text);line-height:1.6;">—</div>
+      </div>
+      <div style="flex-shrink:0;text-align:right;">
+        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:5px;">ATS 匹配度变化</div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="text-align:center;">
+            <div id="p3-score-before" style="font-size:22px;font-weight:600;font-family:var(--font-mono);color:var(--red);line-height:1;">—</div>
+            <div style="font-size:10px;color:var(--text3);">原简历</div>
+          </div>
+          <div style="font-size:16px;color:var(--text3);">→</div>
+          <div style="text-align:center;">
+            <div id="p3-score-after" style="font-size:22px;font-weight:600;font-family:var(--font-mono);color:var(--green);line-height:1;">—</div>
+            <div style="font-size:10px;color:var(--text3);">改写后</div>
+          </div>
+          <div id="p3-score-delta" style="font-size:14px;font-weight:700;display:none;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 主体 左右分栏 -->
+  <div style="display:grid;grid-template-columns:380px 1fr;height:calc(100% - 80px);overflow:hidden;">
+
+    <!-- LEFT: 改写原因面板 -->
+    <div style="background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;">
+      <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);flex-shrink:0;">
+        <div style="font-size:12px;font-weight:600;margin-bottom:1px;">改写说明</div>
+        <div style="font-size:10px;color:var(--text3);">🟢 必须改 — 直接影响通过率 &nbsp;·&nbsp; 🟡 加分项 — 可选择性采纳</div>
+      </div>
+      <div id="p3-generate-bar" style="padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--surface2);">
+        <button type="button" class="btn btn-primary btn-sm" id="btn-p3-generate" onclick="p3Generate()">生成优化简历</button>
+        <span style="font-size:10px;color:var(--text3);line-height:1.4;">仅在点击按钮时请求 AI（Network 会出现 <code style="font-size:9px;">p3-rewrite</code>，不会出现 <code style="font-size:9px;">analyze-jd</code>）。</span>
+      </div>
+      <div id="p3-reasons-list" style="flex:1;overflow-y:auto;padding:12px 12px;display:flex;flex-direction:column;gap:8px;">
+        <div style="text-align:center;padding:30px 16px;color:var(--text3);font-size:12px;">请先点击上方「生成优化简历」</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: 改写后的简历 (可编辑) -->
+    <div style="background:var(--bg);display:flex;flex-direction:column;overflow:hidden;">
+      <div style="padding:10px 16px 8px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:12px;font-weight:600;margin-bottom:1px;">改写后的简历（可直接编辑）</div>
+          <div style="font-size:10px;color:var(--text3);">AI 基于 JD 整体改写 · 可手动调整 · 改完点「重新检测」</div>
+        </div>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <span id="p3-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);"></span>
+          <button class="btn btn-sm" onclick="p3ResetToOriginal()" style="color:var(--text2);" title="退回未修改版本">↺ 退回原版</button>
+          <button class="btn btn-sm" onclick="p3CheckMatch()" style="border-color:var(--purple);color:var(--purple);font-weight:600;">🔄 重新检测匹配度</button>
+        </div>
+      </div>
+      <div style="flex:1;overflow:hidden;padding:12px 14px;">
+        <textarea id="p3-editor" style="width:100%;height:100%;padding:14px 16px;border:1px solid var(--border);border-radius:10px;font-size:12px;font-family:var(--font-mono);color:var(--text);background:var(--surface);resize:none;outline:none;line-height:1.9;" placeholder="点击左侧「生成优化简历」后，改写结果将出现在此处；也可先在此处粘贴简历草稿。" oninput="p3OnEdit()"></textarea>
+      </div>
+      <!-- 底部导出栏 -->
+      <div style="padding:10px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;gap:8px;align-items:center;">
+        <span id="p3-edit-note" style="font-size:11px;color:var(--text3);margin-right:auto;"></span>
+        <button class="btn btn-sm" onclick="p3SaveToResume()" style="background:var(--green);color:white;border-color:var(--green);">💾 保存为新简历</button>
+        <button onclick="p3ExportWord()" style="padding:6px 16px;border-radius:6px;background:#1e40af;color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;">⬇ 导出 Word (.docx)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 全屏加载遮罩 -->
+  <div id="p3-loading" style="display:none;position:absolute;inset:0;background:rgba(245,244,240,.92);backdrop-filter:blur(4px);z-index:50;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+    <div class="spinner"></div>
+    <div id="p3-loading-text" style="font-size:13px;color:var(--text2);font-weight:500;">AI 正在生成改写版简历...</div>
+    <div id="p3-loading-sub" style="font-size:11px;color:var(--text3);max-width:340px;text-align:center;line-height:1.5;">一般 30–120 秒；若长期无响应多为网络或 API 阻塞，届时将自动超时，也可点下方取消。</div>
+    <button type="button" class="btn" id="btn-cancel-p3-generate" onclick="cancelP3Generate()" style="margin-top:4px;">取消本次生成</button>
+  </div>
+</div>
+
+<script>
+// ── STORAGE KEYS ──────────────────────────────────────────────────────────
+const DB_KEY    = 'career_compare_board_v1'  // shared with compare-dashboard.html
+const TRACKING_KEY = 'career_tracking_board_v1'
+const RESUME_KEY = 'career_resume_v1'
+const RESUME_HISTORY_KEY = 'career_resume_history_v1'
+const RESUME_SELECTION_KEY = 'career_resume_selection_v1'
+/** Step 1 职业发展方向独立持久化（与简历列表一并影响云端分析） */
+const CAREER_GOAL_PERSIST_KEY = 'career_step1_career_goal_v1'
+const LAST_PAGE_KEY = 'career_last_page'
+const P2_SESSION_KEY = 'career_p2_session_v1'
+/** 简历内容每变更一次递增；与上次分析时的代数对比，用于丢弃过期的 Step2 结果 */
+const CAREER_RESUME_GEN_KEY = 'career_resume_content_gen_v1'
+const CURRENT_JD_TEXT_KEY = 'current_jd_text'
+const CURRENT_JOB_ID_KEY = 'current_job_id'
+const CURRENT_JOB_TITLE_KEY = 'current_job_title'
+/** 浏览器 fetch 无默认超时，过长会永远转圈；到点中止并提示用户 */
+const CLAUDE_FETCH_TIMEOUT_MS = 180000
+/** Step 3 改写输出更长，单独放宽上限（仍会中止，避免无限挂起） */
+const P3_REWRITE_FETCH_TIMEOUT_MS = 300000
+let p3RewriteAbortController = null
+/** Step 1 上传：单文件最大 5MB（等于 5MB 允许）；列表最多保留条数（与后端一致） */
+const RESUME_UPLOAD_MAX_BYTES = 5 * 1024 * 1024
+const RESUME_UPLOAD_MAX_SLOTS = 2
+let currentPageId = 'p1'
+let step3AccessGrantedThisVisit = false
+/** 用户曾在 Step 2 点击「优化简历 →」进入过 Step 3；新一次「分析这份 JD」会清除，需再次点击优化简历 */
+const STEP3_GATE_KEY = 'career_step3_ready_v1'
+
+function hasCompletedJDAnalysisForStep3() {
+  return !!(
+    currentResult &&
+    (currentResult.atsScore != null ||
+      currentResult.grade ||
+      currentResult.matchPct != null)
+  )
+}
+
+function hasStep3OptimizeGate() {
+  try {
+    return !!localStorage.getItem(STEP3_GATE_KEY)
+  } catch (e) {
+    return false
+  }
+}
+
+// ── CURRENT ANALYSIS RESULT ───────────────────────────────────────────────
+let currentResult = null
+/** 完成「分析这份 JD」时的 getResumeContentGen()，用于判断结果是否仍对应当前简历 */
+let analysisResultResumeGen = null
+let analyzeAbortController = null
+
+// ── CHAR COUNT ────────────────────────────────────────────────────────────
+document.getElementById('jd-text').addEventListener('input', function() {
+  const text = this.value
+  document.getElementById('char-count').textContent = text.length + ' 字'
+  syncField('jd', text, { persist: false })
+  saveP2Session('editing')
+})
+
+// ── RESUME CONTEXT ────────────────────────────────────────────────────────
+function getResumeContext() {
+  try {
+    const r = localStorage.getItem(RESUME_KEY)
+    if (r) return JSON.parse(r)
+  } catch(e) {}
+  return null
+}
+
+/** 简历正文字数（去掉零宽/软连字符，避免显示异常偏大） */
+function countResumeBodyChars(s) {
+  return String(s || '').replace(/[\u200B-\u200D\uFEFF\u00AD]/g, '').length
+}
+
+function normalizeResumeRecord(r) {
+  if (!r || typeof r !== 'object') return null
+  const parseStatus = r.parseStatus || r.status || 'ok'
+  return {
+    id: r.id || ('res_' + Math.random().toString(36).slice(2,10)),
+    rawText: typeof r.rawText === 'string' ? r.rawText : '',
+    careerGoal: (r.careerGoal || '').trim(),
+    fileName: (r.fileName || '').trim(),
+    origin: (r.origin || 'manual').trim(),
+    savedAt: r.savedAt || new Date().toISOString(),
+    version: Number.isFinite(Number(r.version)) ? Number(r.version) : 1,
+    parseStatus: typeof parseStatus === 'string' ? parseStatus : 'ok',
+    statusMessage: typeof r.statusMessage === 'string' ? r.statusMessage : '',
+  }
+}
+
+function getResumeHistory() {
+  try {
+    const raw = localStorage.getItem(RESUME_HISTORY_KEY)
+    const list = raw ? JSON.parse(raw) : []
+    if (Array.isArray(list) && list.length) {
+      let mapped = list
+        .map(normalizeResumeRecord)
+        .filter(Boolean)
+        .sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt))
+      if (mapped.length > RESUME_UPLOAD_MAX_SLOTS) {
+        mapped = mapped.slice(0, RESUME_UPLOAD_MAX_SLOTS)
+        try {
+          localStorage.setItem(RESUME_HISTORY_KEY, JSON.stringify(mapped))
+        } catch (e) {}
+        ensureSelection(mapped)
+      }
+      return mapped
+    }
+  } catch(e) {}
+  const active = getResumeContext()
+  const normalized = normalizeResumeRecord(active)
+  if (normalized) {
+    try {
+      localStorage.setItem(RESUME_HISTORY_KEY, JSON.stringify([normalized]))
+      setSelectedResumeIds([normalized.id])
+    } catch(e) {}
+    return [normalized]
+  }
+  return []
+}
+
+function setResumeHistory(list) {
+  try {
+    localStorage.setItem(
+      RESUME_HISTORY_KEY,
+      JSON.stringify(list.slice(0, RESUME_UPLOAD_MAX_SLOTS))
+    )
+  } catch (e) {}
+}
+
+function getSelectedResumeIds() {
+  try {
+    const raw = localStorage.getItem(RESUME_SELECTION_KEY)
+    const ids = raw ? JSON.parse(raw) : []
+    return Array.isArray(ids) ? ids.filter(Boolean) : []
+  } catch(e) {
+    return []
+  }
+}
+
+function setSelectedResumeIds(ids) {
+  try { localStorage.setItem(RESUME_SELECTION_KEY, JSON.stringify((ids || []).filter(Boolean))) } catch(e) {}
+}
+
+function ensureSelection(list) {
+  const selected = getSelectedResumeIds()
+  const okIds = list
+    .filter(
+      (x) =>
+        (x.parseStatus || 'ok') === 'ok' &&
+        (x.rawText || '').trim().length >= 40
+    )
+    .map((x) => x.id)
+  let valid = selected.filter(
+    (id) => list.some((x) => x.id === id) && okIds.includes(id)
+  )
+  if (!valid.length && okIds.length) valid = [okIds[0]]
+  setSelectedResumeIds(valid)
+  return valid
+}
+
+function getSelectedResumeRecords() {
+  const list = getResumeHistory()
+  const selectedIds = ensureSelection(list)
+  return list.filter(x => selectedIds.includes(x.id))
+}
+
+/** 合并勾选条目写入 RESUME_KEY，并同步隐藏域 resume-text（供少数旧逻辑读取） */
+function syncActiveResumeKeyFromSelection() {
+  const selected = getSelectedResumeRecords().filter(
+    (r) => (r.parseStatus || 'ok') === 'ok' && (r.rawText || '').trim().length > 0
+  )
+  const merged = selected
+    .map((r) => (r.rawText || '').trim())
+    .filter(Boolean)
+    .join('\n\n---\n\n')
+  const goalInput = ((document.getElementById('career-goal') || { value: '' }).value || '').trim()
+  const goalSel = selected.map((x) => (x.careerGoal || '').trim()).find(Boolean) || ''
+  const goal = goalInput.length >= goalSel.length ? goalInput : goalSel
+  const fileName =
+    selected.length > 0
+      ? selected
+          .map((s) => s.fileName || '简历')
+          .join(' + ')
+          .slice(0, 500)
+      : 'resume'
+  try {
+    if (merged.trim().length > 0 || goal.length > 0) {
+      const rec = {
+        id: '_merged_active',
+        rawText: merged,
+        careerGoal: goal,
+        fileName: fileName || 'resume',
+        origin: selected.length > 1 ? 'multi' : selected[0]?.origin || 'upload',
+        savedAt: new Date().toISOString(),
+        version: 0,
+        parseStatus: 'ok',
+      }
+      localStorage.setItem(RESUME_KEY, JSON.stringify(rec))
+    } else {
+      localStorage.removeItem(RESUME_KEY)
+    }
+  } catch (e) {}
+  const rt = document.getElementById('resume-text')
+  if (rt) rt.value = merged
+}
+
+function getMergedRawTextFromSelection() {
+  return getSelectedResumeRecords()
+    .filter((r) => (r.parseStatus || 'ok') === 'ok')
+    .map((r) => (r.rawText || '').trim())
+    .filter(Boolean)
+    .join('\n\n---\n\n')
+}
+
+function appendResumeToHistory(record) {
+  const norm = normalizeResumeRecord(record)
+  if (!norm) return
+  const list = getResumeHistory().filter((x) => x.id !== norm.id)
+  list.unshift(norm)
+  const capped = list.slice(0, RESUME_UPLOAD_MAX_SLOTS)
+  setResumeHistory(capped)
+  const sel = getSelectedResumeIds().filter((id) => capped.some((x) => x.id === id))
+  if ((norm.parseStatus || 'ok') === 'ok' && (norm.rawText || '').trim().length >= 40) {
+    if (!sel.includes(norm.id)) sel.unshift(norm.id)
+  }
+  setSelectedResumeIds(sel.length ? sel : [])
+  ensureSelection(capped)
+  syncActiveResumeKeyFromSelection()
+}
+
+function updateResumeInHistory(id, patch) {
+  const list = getResumeHistory()
+  const idx = list.findIndex((x) => x.id === id)
+  if (idx < 0) return
+  const next = { ...list[idx], ...patch }
+  list[idx] = normalizeResumeRecord(next) || list[idx]
+  setResumeHistory(list)
+  ensureSelection(list)
+  syncActiveResumeKeyFromSelection()
+}
+
+function removeResumeFromHistory(id) {
+  let list = getResumeHistory().filter((x) => x.id !== id)
+  setResumeHistory(list)
+  setSelectedResumeIds(getSelectedResumeIds().filter((x) => x !== id))
+  if (!list.length) {
+    try {
+      localStorage.removeItem(RESUME_KEY)
+    } catch (e) {}
+  } else ensureSelection(list)
+  syncActiveResumeKeyFromSelection()
+}
+
+function hasSavedResume() {
+  try {
+    const list = getResumeHistory()
+    if (
+      list.some(
+        (x) =>
+          (x.parseStatus || 'ok') === 'ok' &&
+          (x.rawText || '').trim().length > 0
+      )
+    )
+      return true
+    const r = getResumeContext()
+    if (!r) return false
+    return Boolean(
+      (r.rawText && r.rawText.trim()) ||
+      (r.careerGoal && r.careerGoal.trim())
+    )
+  } catch (e) {
+    return false
+  }
+}
+
+function updateStepGuards() {
+  const navP2 = document.getElementById('nav-p2')
+  const navP3 = document.getElementById('nav-p3')
+  if (navP2) navP2.classList.toggle('disabled', currentPageId === 'p1')
+  if (navP3) {
+    const step3Ok =
+      hasCompletedJDAnalysisForStep3() && hasStep3OptimizeGate()
+    const blockP3 =
+      currentPageId === 'p3' ? false : !step3Ok
+    navP3.classList.toggle('disabled', blockP3)
+  }
+}
+
+function getSavedResumeCharCount() {
+  try {
+    const r = getResumeContext()
+    if (r && typeof r.rawText === 'string') return countResumeBodyChars(r.rawText.trim())
+  } catch (e) {}
+  return 0
+}
+
+function updateNavStatus() {
+  let count = 0
+  try {
+    count = JSON.parse(localStorage.getItem(DB_KEY) || '[]').length
+  } catch(e) {}
+  const savedChars = getSavedResumeCharCount()
+  const draftLen = countResumeBodyChars(getMergedRawTextFromSelection().trim())
+  let resumeLine = '未设置简历'
+  if (hasSavedResume()) {
+    if (savedChars >= 40) resumeLine = `简历已保存 · ${savedChars}字`
+    else if (savedChars > 0) resumeLine = `简历已保存 · ${savedChars}字`
+    else resumeLine = '简历已保存 · 请补充正文'
+  } else if (draftLen > 0) {
+    resumeLine = `编辑中 · ${draftLen}字（未保存）`
+  }
+  const status = [resumeLine, `已录入${count}条`]
+  document.getElementById('nav-status').textContent = status.join(' · ')
+  updateStepGuards()
+}
+
+// ── MAIN ANALYZE ──────────────────────────────────────────────────────────
+function parseResultFromApi(data, jdText) {
+  const copy = (data && typeof data === 'object') ? { ...data } : {}
+  const clamp = (x) => {
+    if (typeof x === 'number' && !Number.isNaN(x)) return Math.max(0, Math.min(100, Math.round(x)))
+    if (typeof x === 'string') {
+      const m = x.match(/\d+/)
+      if (m) return Math.max(0, Math.min(100, parseInt(m[0], 10)))
+    }
+    return 0
+  }
+  copy.atsScore = clamp(copy.atsScore)
+  copy.skillsScore = clamp(copy.skillsScore)
+  copy.careerFit = clamp(copy.careerFit)
+  copy.switchScore = clamp(copy.switchScore)
+  copy.jdText = jdText
+  copy.url = document.getElementById('jd-url').value.trim()
+  copy.analyzedAt = new Date().toISOString()
+  return copy
+}
+
+async function analyze() {
+  const jd = document.getElementById('jd-text').value.trim()
+
+  if (!jd || jd.length < 50) { toast('请粘贴完整的 JD 内容（至少50字）', '⚠'); return }
+
+  maybeWarnResumeExtractQuality()
+
+  if (analyzeAbortController) analyzeAbortController.abort()
+  analyzeAbortController = new AbortController()
+  const signal = analyzeAbortController.signal
+
+  const analyzeBtn = document.getElementById('analyze-btn')
+  if (analyzeBtn) analyzeBtn.disabled = true
+
+  setState('loading')
+  setLoadingText('读取 JD 内容...', '正在提取职位关键信息')
+
+  const timeoutCtrl = new AbortController()
+  const tid = setTimeout(() => timeoutCtrl.abort(), CLAUDE_FETCH_TIMEOUT_MS)
+  const combined = mergeAbortSignals(signal, timeoutCtrl.signal)
+
+  try {
+    setLoadingText('AI 正在分析...', '提取职位信息 + 评分计算中')
+
+    console.info(
+      '[求职助手] 即将请求 POST /api/analyze-jd — 请在 Network 筛选「analyze-jd」；服务端日志在运行 next dev 的终端（[analyze-jd] POST）'
+    )
+    const res = await fetch('/api/analyze-jd', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ jdText: jd }),
+      signal: combined,
+    })
+    const payload = await res.json().catch(() => ({}))
+
+    if (!res.ok) {
+      let msg = payload.error || ('请求失败 (' + res.status + ')')
+      if (res.status === 401) msg = '请先登录后再分析 JD'
+      throw new Error(msg)
+    }
+
+    setLoadingText('处理结果...', '整理分析数据')
+
+    const result = parseResultFromApi(payload, jd)
+    currentResult = result
+    analysisResultResumeGen = getResumeContentGen()
+
+    renderResults(result)
+    renderJobConfirm(result)
+    fillLeftFields(result)
+    setState('results')
+    saveP2Session('results')
+    step3AccessGrantedThisVisit = false
+    try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
+
+  } catch(err) {
+    console.error(err)
+    const msg = err.name === 'AbortError'
+      ? '已取消或请求超时（' + Math.round(CLAUDE_FETCH_TIMEOUT_MS / 1000) + ' 秒）。请检查网络、代理或稍后重试。'
+      : (err.message || '分析失败，请稍后重试')
+    toast('分析失败：' + msg, '✗')
+    setState('empty')
+  } finally {
+    clearTimeout(tid)
+    analyzeAbortController = null
+    if (analyzeBtn) analyzeBtn.disabled = false
+    updateStepGuards()
+  }
+}
+
+function cancelAnalyze() {
+  if (analyzeAbortController) {
+    analyzeAbortController.abort()
+    analyzeAbortController = null
+  }
+}
+
+function mergeAbortSignals(a, b) {
+  if (!a && !b) return undefined
+  if (!a) return b
+  if (!b) return a
+  const ctrl = new AbortController()
+  const forward = (src) => {
+    if (src.aborted) ctrl.abort()
+    else src.addEventListener('abort', () => ctrl.abort(), { once: true })
+  }
+  forward(a)
+  forward(b)
+  return ctrl.signal
+}
+
+// ── RESUME CONTEXT FROM PAGE 1 ───────────────────────────────────────────
+
+// ── RENDER RESULTS ────────────────────────────────────────────────────────
+function renderResults(r, animate=true) {
+  // ① 匹配程度
+  const matchPct = r.matchPct || Math.round(((r.atsScore||0)+(r.skillsScore||0))/2)
+  document.getElementById('r-match-pct').textContent = matchPct + '%'
+  playMatchPctWobble(900)
+  document.getElementById('r-match-label').textContent = r.matchLabel || '综合匹配度'
+  document.getElementById('r-match-sub').textContent = r.matchSub || '基于简历 × JD 全维度比对'
+  document.getElementById('r-match-reasoning').textContent = r.matchReasoning || ''
+  const pill = document.getElementById('r-match-pill')
+  pill.textContent = matchPct>=70?'匹配良好':matchPct>=50?'基本匹配':'匹配偏低'
+  pill.style.cssText = matchPct>=70 ? 'font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:#d1fae5;color:#065f46;border:1px solid #6ee7b7' :
+    matchPct>=50 ? 'font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:#fef3c7;color:#92400e;border:1px solid #fcd34d' :
+    'font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;background:#fee2e2;color:#991b1b;border:1px solid #fca5a5'
+
+  // ② 缺失技能
+  document.getElementById('r-gap-analysis').textContent = r.gapAnalysis || ''
+  document.getElementById('r-gap-tags').innerHTML = (r.gapKeywords||[]).map(k=>`<span class="tag tag-gap">✗ ${esc(k)}</span>`).join('')
+
+  // ③ 可迁移技能
+  document.getElementById('r-weak-tags').innerHTML = (r.weakKeywords||[]).map(k=>`<span class="tag tag-weak">～ ${esc(k)}</span>`).join('')
+  document.getElementById('r-weak-note').textContent = r.weakNote || ''
+
+  // 隐藏字段（供加入看板用）
+  setVal('r-company', r.company); setVal('r-role', r.role)
+  setVal('r-location', r.location); setVal('r-contract', r.contract)
+  setVal('r-salary', r.salary); setVal('r-deadline', r.deadline)
+
+  // ④-⑦ 四维评分
+  if (animate) animateScore('r-ats-score','r-ats-bar',r.atsScore,'#3b82f6')
+  else setScoreInstant('r-ats-score','r-ats-bar',r.atsScore,'#3b82f6')
+  document.getElementById('r-ats-detail').textContent = r.atsDetail||''
+  if (animate) animateScore('r-skills-score','r-skills-bar',r.skillsScore,'#0f766e')
+  else setScoreInstant('r-skills-score','r-skills-bar',r.skillsScore,'#0f766e')
+  document.getElementById('r-skills-detail').textContent = r.skillsDetail||''
+  if (animate) animateScore('r-career-score','r-career-bar',r.careerFit,'#8b5cf6')
+  else setScoreInstant('r-career-score','r-career-bar',r.careerFit,'#8b5cf6')
+  document.getElementById('r-career-detail').textContent = r.careerDetail||''
+  if (animate) animateScore('r-switch-score','r-switch-bar',r.switchScore,'#f59e0b')
+  else setScoreInstant('r-switch-score','r-switch-bar',r.switchScore,'#f59e0b')
+  document.getElementById('r-switch-detail').textContent = r.switchDetail||''
+
+  // 已匹配词（在匹配卡片里）
+  document.getElementById('r-matched-tags').innerHTML = (r.matchedKeywords||[]).map(k=>`<span class="tag tag-match">✓ ${esc(k)}</span>`).join('')
+
+  // ⑧ Career path
+  document.getElementById('r-career-text').textContent = r.careerPathNote||'—'
+
+  // ⑨ AI评级
+  const gradeEl = document.getElementById('r-grade')
+  gradeEl.textContent = r.grade||'—'
+  gradeEl.className = 'score-grade '+(r.grade||'')
+  document.getElementById('r-priority-label').textContent = r.priorityLabel||'—'
+  document.getElementById('r-priority-sub').textContent = r.prioritySub||''
+  document.getElementById('r-reasoning').textContent = r.reasoning||'—'
+
+  const gc = {A:'var(--green)',B:'var(--blue)',C:'var(--amber)',D:'var(--red)'}
+  document.getElementById('action-note').innerHTML = `评级 <strong style="color:${gc[r.grade]||'var(--text)'}">${r.grade}</strong> — ${r.priorityLabel}`
+}
+
+
+function setVal(id, val) {
+  const el = document.getElementById(id)
+  if (!val || val === 'null') { el.textContent = '未知'; el.className = 'info-cell-val empty'; return }
+  el.textContent = val
+  el.className = 'info-cell-val'
+}
+
+function animateScore(numId, barId, target, color, unit='%') {
+  let curr = 0
+  const step = (target || 0) / 40
+  const iv = setInterval(() => {
+    curr = Math.min(curr + step, target || 0)
+    document.getElementById(numId).textContent = Math.round(curr) + unit
+    document.getElementById(barId).style.width = Math.round(curr) + '%'
+    document.getElementById(barId).style.background = color
+    if (curr >= (target || 0)) clearInterval(iv)
+  }, 20)
+}
+function setScoreInstant(numId, barId, target, color, unit='%') {
+  const v = Math.max(0, Math.min(100, Number(target) || 0))
+  document.getElementById(numId).textContent = Math.round(v) + unit
+  document.getElementById(barId).style.width = Math.round(v) + '%'
+  document.getElementById(barId).style.background = color
+}
+function playMatchPctWobble(durationMs=900) {
+  const el = document.getElementById('r-match-pct')
+  if (!el) return
+  if (window._matchWobbleTimer) clearTimeout(window._matchWobbleTimer)
+  el.classList.remove('wobble-loop')
+  void el.offsetWidth
+  el.classList.add('wobble-loop')
+  window._matchWobbleTimer = setTimeout(() => {
+    el.classList.remove('wobble-loop')
+  }, durationMs)
+}
+function animateBar(barId, pct, color) {
+  setTimeout(() => {
+    const el = document.getElementById(barId)
+    el.style.width = pct + '%'
+    el.style.background = color
+  }, 100)
+}
+
+// ── EDITABLE FIELDS ───────────────────────────────────────────────────────
+function makeEditable(cell, field) {
+  const valEl = cell.querySelector('.info-cell-val')
+  if (valEl.querySelector('input')) return // already editing
+  const current = valEl.textContent === '未知' ? '' : valEl.textContent
+  const input = document.createElement('input')
+  input.className = 'info-cell-input'
+  input.value = current
+  input.placeholder = '输入内容...'
+  valEl.textContent = ''
+  valEl.className = 'info-cell-val'
+  valEl.appendChild(input)
+  input.focus()
+  input.select()
+  const save = () => {
+    const v = input.value.trim()
+    if (currentResult) currentResult[field] = v
+    valEl.textContent = v || '未知'
+    valEl.className = v ? 'info-cell-val' : 'info-cell-val empty'
+  }
+  input.addEventListener('blur', save)
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') input.blur() })
+}
+
+// ── ADD TO DASHBOARD ──────────────────────────────────────────────────────
+function addToDashboard() {
+  if (!currentResult) return
+  const r = currentResult
+
+  // Load existing jobs
+  let jobs = []
+  try { const raw = localStorage.getItem(DB_KEY); if (raw) jobs = JSON.parse(raw) } catch(e) {}
+
+  // Merge AI result with any manual edits in left fields
+  const lf = readLeftFields()
+  const maxOrder = jobs.reduce((m, j) => Math.max(m, j.order || 0), 0)
+  const existingIdx = liveJobId ? jobs.findIndex(j => j.id === liveJobId) : -1
+  const jobId = existingIdx >= 0 ? liveJobId : ('j_' + Math.random().toString(36).slice(2, 10))
+  const newJob = {
+    id: jobId,
+    order: existingIdx >= 0 ? (jobs[existingIdx].order || maxOrder + 1) : (maxOrder + 1),
+    company:      lf.company || r.company || '',
+    role:         lf.role    || r.role    || '',
+    location:     r.location || '',
+    contract:     lf.contract|| r.contract|| '',
+    salary:       lf.salary  || r.salary  || '',
+    deadline:     lf.deadline|| r.deadline|| '',
+    applied_date: '',
+    status:       '未申请',
+    type:         r.type || '',
+    score:        r.atsScore || null,
+    url:          lf.url     || r.url     || '',
+    jd:           r.jdText || '',
+    resume_notes: '',
+    notes:        `AI评级：${r.grade} · ${r.priorityLabel}`,
+    ai_grade:     r.grade,
+    ai_reasoning: r.reasoning,
+    ai_career_fit: r.careerFit,
+    ai_ats_score: r.atsScore,
+    ai_switch_score: r.switchScore,
+  }
+  liveJobId = jobId  // track so future edits sync live
+
+  if (existingIdx >= 0) jobs[existingIdx] = { ...jobs[existingIdx], ...newJob, status: jobs[existingIdx].status || '未申请' }
+  else jobs.push(newJob)
+  localStorage.setItem(DB_KEY, JSON.stringify(jobs))
+
+  // Update button
+  const btn = document.getElementById('add-to-db-btn')
+  btn.textContent = '✓ 已加入看板'
+  btn.disabled = true
+  btn.style.background = '#2d6a4f'
+
+  document.getElementById('action-note').textContent = `已保存到对比看板 #${newJob.order} — 可在对比看板中加入追踪`
+  toast('✓ 已保存到对比看板 #' + newJob.order + '  — ' + (r.company || '') + ' · ' + (r.role || ''), '✓')
+}
+
+// ── STATES ────────────────────────────────────────────────────────────────
+function setState(s) {
+  document.getElementById('empty-state').style.display   = s === 'empty'   ? 'flex' : 'none'
+  document.getElementById('loading-state').style.display = s === 'loading' ? 'flex' : 'none'
+  document.getElementById('results-state').style.display = s === 'results' ? 'flex' : 'none'
+}
+function setLoadingText(main, sub) {
+  document.getElementById('loading-text').textContent = main
+  document.getElementById('loading-step').textContent = sub
+}
+function clearAndReset() {
+  currentResult = null
+  analysisResultResumeGen = null
+  document.getElementById('jd-text').value = ''
+  document.getElementById('char-count').textContent = '0 字'
+  clearLeftFields()
+  const btn = document.getElementById('add-to-db-btn')
+  btn.textContent = '添加到看板并录入新JD'
+  btn.disabled = false
+  btn.style.background = ''
+  setState('empty')
+  try { localStorage.removeItem(P2_SESSION_KEY) } catch(e) {}
+  step3AccessGrantedThisVisit = false
+  try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
+  updateStepGuards()
+}
+
+// ── NAV ───────────────────────────────────────────────────────────────────
+
+
+
+// ── UTILS ─────────────────────────────────────────────────────────────────
+function esc(s) {
+  if (!s) return ''
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+}
+
+/** Step 3 / AI 接口：把 Anthropic 返回的 JSON 错误压成可读文案 */
+function formatAiErrorForUi(raw) {
+  if (raw == null) return ''
+  const str = String(raw)
+  if (/Anthropic API 额度不足/.test(str)) return str
+  if (/credit balance is too low/i.test(str)) {
+    return 'Anthropic API 额度不足：请在 console.anthropic.com 的 Plans & Billing 充值，或由管理员配置有效的 ANTHROPIC_API_KEY。'
+  }
+  const idx = str.search(/\{"type"\s*:\s*"error"/)
+  if (idx >= 0) {
+    try {
+      const j = JSON.parse(str.slice(idx))
+      const m = j && j.error && typeof j.error.message === 'string' ? j.error.message : ''
+      if (m && /credit balance is too low/i.test(m)) {
+        return 'Anthropic API 额度不足：请在 console.anthropic.com 的 Plans & Billing 充值，或由管理员配置有效的 ANTHROPIC_API_KEY。'
+      }
+      if (m) return m
+    } catch (e) {}
+  }
+  return str.replace(/^\d{3}\s+/, '').trim() || str
+}
+function toast(msg, icon='✓') {
+  let wrap = document.getElementById('toast-wrap')
+  if (!wrap) {
+    wrap = document.createElement('div')
+    wrap.id = 'toast-wrap'
+    wrap.className = 'toast-wrap'
+    document.body.appendChild(wrap)
+  }
+  const el = document.createElement('div')
+  el.className = 'toast'
+  el.innerHTML = `<span>${icon}</span><span>${msg}</span>`
+  wrap.appendChild(el)
+  setTimeout(() => { el.style.animation = 'slideOut .3s ease forwards'; setTimeout(() => el.remove(), 300) }, 3000)
+}
+
+// ── LIVE FIELD SYNC TO DASHBOARD ─────────────────────────────────────────
+// Tracks the job entry that is currently being built (before "add to dashboard")
+let liveJobId = null
+
+function syncField(field, value, options = {}) {
+  const persist = options.persist === true
+  // Update currentResult so addToDashboard uses latest values
+  if (!currentResult) currentResult = {}
+  currentResult[field] = value
+
+  // If we already pushed to dashboard, update that record live
+  if (persist && liveJobId) {
+    updateLiveJob()
+  }
+
+  // Show sync indicator briefly
+  const ind = document.getElementById('sync-indicator')
+  ind.style.display = 'block'
+  clearTimeout(window._syncTimer)
+  window._syncTimer = setTimeout(() => { ind.style.display = 'none' }, 1500)
+  saveP2Session('editing')
+}
+
+function updateLiveJob() {
+  if (!liveJobId || !currentResult) return
+  try {
+    let jobs = JSON.parse(localStorage.getItem(DB_KEY) || '[]')
+    const idx = jobs.findIndex(j => j.id === liveJobId)
+    if (idx < 0) return
+    const j = jobs[idx]
+    if (currentResult.company)  j.company = currentResult.company
+    if (currentResult.role)     j.role = currentResult.role
+    if (currentResult.salary)   j.salary = currentResult.salary
+    if (currentResult.contract) j.contract = currentResult.contract
+    if (currentResult.deadline) j.deadline = currentResult.deadline
+    if (currentResult.url)      j.url = currentResult.url
+    if (currentResult.jd)       j.jd = currentResult.jd
+    if (currentResult.location) j.location = currentResult.location
+    if (currentResult.type)     j.type = currentResult.type
+    if (currentResult.atsScore != null) j.score = currentResult.atsScore
+    if (currentResult.grade)    j.ai_grade = currentResult.grade
+    if (currentResult.reasoning) j.ai_reasoning = currentResult.reasoning
+    if (currentResult.priorityLabel) j.notes = `AI评级：${currentResult.grade || '—'} · ${currentResult.priorityLabel}`
+    jobs[idx] = j
+    localStorage.setItem(DB_KEY, JSON.stringify(jobs))
+  } catch(e) {}
+}
+
+function fillLeftFields(r) {
+  // After AI analysis, push extracted values into left panel input fields
+  if (r.company)  { const el=document.getElementById('f-company');  if(!el.value) el.value=r.company }
+  if (r.role)     { const el=document.getElementById('f-role');     if(!el.value) el.value=r.role }
+  if (r.salary && r.salary!=='null')   { const el=document.getElementById('f-salary');   if(!el.value) el.value=r.salary }
+  if (r.contract) { const el=document.getElementById('f-contract'); if(!el.value) el.value=r.contract }
+  if (r.deadline && r.deadline!=='null') { const el=document.getElementById('f-deadline'); if(!el.value) el.value=r.deadline }
+  if (r.url && r.url!=='null') { const el=document.getElementById('jd-url'); if(!el.value) el.value=r.url }
+  syncField('company', document.getElementById('f-company').value.trim(), { persist: false })
+  syncField('role', document.getElementById('f-role').value.trim(), { persist: false })
+  syncField('salary', document.getElementById('f-salary').value.trim(), { persist: false })
+  syncField('contract', document.getElementById('f-contract').value, { persist: false })
+  syncField('deadline', document.getElementById('f-deadline').value, { persist: false })
+  syncField('url', document.getElementById('jd-url').value.trim(), { persist: false })
+}
+
+function readLeftFields() {
+  // Read current left panel field values (user may have edited them)
+  return {
+    company:  document.getElementById('f-company').value.trim(),
+    role:     document.getElementById('f-role').value.trim(),
+    salary:   document.getElementById('f-salary').value.trim(),
+    contract: document.getElementById('f-contract').value,
+    deadline: document.getElementById('f-deadline').value,
+    url:      document.getElementById('jd-url').value.trim(),
+  }
+}
+
+function clearLeftFields() {
+  ['f-company','f-role','f-salary','f-deadline','jd-url'].forEach(id => {
+    document.getElementById(id).value = ''
+  })
+  document.getElementById('f-contract').value = ''
+  liveJobId = null
+}
+
+function extractInfoFromJD() {
+  const jd = document.getElementById('jd-text').value.trim()
+  if (!jd || jd.length < 40) {
+    toast('请先粘贴更完整的 JD 文本', '⚠')
+    return
+  }
+  const picked = localExtractFromJD(jd)
+  let changed = 0
+  if (picked.company && !document.getElementById('f-company').value.trim()) { document.getElementById('f-company').value = picked.company; changed++ }
+  if (picked.role && !document.getElementById('f-role').value.trim()) { document.getElementById('f-role').value = picked.role; changed++ }
+  if (picked.salary && !document.getElementById('f-salary').value.trim()) { document.getElementById('f-salary').value = picked.salary; changed++ }
+  if (picked.contract && !document.getElementById('f-contract').value) { document.getElementById('f-contract').value = picked.contract; changed++ }
+  if (picked.deadline && !document.getElementById('f-deadline').value) { document.getElementById('f-deadline').value = picked.deadline; changed++ }
+  if (picked.url && !document.getElementById('jd-url').value.trim()) { document.getElementById('jd-url').value = picked.url; changed++ }
+  syncField('company', document.getElementById('f-company').value.trim(), { persist: false })
+  syncField('role', document.getElementById('f-role').value.trim(), { persist: false })
+  syncField('salary', document.getElementById('f-salary').value.trim(), { persist: false })
+  syncField('contract', document.getElementById('f-contract').value, { persist: false })
+  syncField('deadline', document.getElementById('f-deadline').value, { persist: false })
+  syncField('url', document.getElementById('jd-url').value.trim(), { persist: false })
+  syncField('jd', jd, { persist: false })
+  if (changed > 0) toast(`已提取 ${changed} 项信息`, '✓')
+  else toast('未识别到可填充信息（可手动补充）', 'ℹ')
+}
+
+function clearCurrentInputs() {
+  if (!confirm('清除当前页面输入并重新填写？不会写入对比看板。')) return
+  currentResult = null
+  document.getElementById('jd-text').value = ''
+  document.getElementById('char-count').textContent = '0 字'
+  clearLeftFields()
+  setState('empty')
+  toast('已清除当前输入', '↺')
+  step3AccessGrantedThisVisit = false
+  try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
+  try { localStorage.removeItem(P2_SESSION_KEY) } catch(e) {}
+  updateStepGuards()
+}
+
+function upsertCompareBoardOnAnalyze(result, jdText) {
+  try {
+    let jobs = JSON.parse(localStorage.getItem(DB_KEY) || '[]')
+    const lf = readLeftFields()
+    const keyUrl = (lf.url || result.url || '').trim()
+    const keyCompany = (lf.company || result.company || '').trim()
+    const keyRole = (lf.role || result.role || '').trim()
+    let idx = -1
+    if (keyUrl) idx = jobs.findIndex(j => (j.url || '').trim() === keyUrl)
+    if (idx < 0 && keyCompany && keyRole) idx = jobs.findIndex(j => (j.company || '').trim() === keyCompany && (j.role || '').trim() === keyRole)
+    const maxOrder = jobs.reduce((m, j) => Math.max(m, j.order || 0), 0)
+    const item = {
+      id: idx >= 0 ? jobs[idx].id : ('j_' + Math.random().toString(36).slice(2, 10)),
+      order: idx >= 0 ? (jobs[idx].order || maxOrder + 1) : (maxOrder + 1),
+      company: keyCompany,
+      role: keyRole,
+      location: result.location || '',
+      contract: lf.contract || result.contract || '',
+      salary: lf.salary || result.salary || '',
+      deadline: lf.deadline || result.deadline || '',
+      applied_date: idx >= 0 ? (jobs[idx].applied_date || '') : '',
+      status: idx >= 0 ? (jobs[idx].status || '准备中') : '准备中',
+      type: result.type || '',
+      score: result.atsScore ?? null,
+      url: keyUrl,
+      jd: jdText || '',
+      resume_notes: idx >= 0 ? (jobs[idx].resume_notes || '') : '',
+      notes: `AI评级：${result.grade || '—'} · ${result.priorityLabel || ''}`,
+      ai_grade: result.grade || '',
+      ai_reasoning: result.reasoning || '',
+      ai_career_fit: result.careerFit,
+      ai_ats_score: result.atsScore,
+      ai_switch_score: result.switchScore,
+    }
+    let mode = 'created'
+    if (idx >= 0) {
+      jobs[idx] = { ...jobs[idx], ...item }
+      mode = 'updated'
+    } else {
+      jobs.push(item)
+      mode = 'created'
+    }
+    localStorage.setItem(DB_KEY, JSON.stringify(jobs))
+    liveJobId = item.id
+    updateNavStatus()
+    return mode
+  } catch (e) {}
+  return null
+}
+
+function localExtractFromJD(text) {
+  const lines = text.split('\n').map(s => s.trim()).filter(Boolean)
+  const oneLine = text.replace(/\s+/g, ' ')
+  const pick = { company:'', role:'', salary:'', contract:'', deadline:'', url:'' }
+
+  const urlMatch = oneLine.match(/https?:\/\/[^\s)]+/i)
+  if (urlMatch) pick.url = urlMatch[0]
+
+  const companyPatterns = [
+    /(?:Company|Employer|Organization|组织|公司)[:：]\s*([^\n,|]{2,80})/i,
+    /at\s+([A-Z][A-Za-z0-9&.\- ]{2,60})/i
+  ]
+  for (const p of companyPatterns) {
+    const m = oneLine.match(p)
+    if (m && m[1]) { pick.company = m[1].trim(); break }
+  }
+
+  const rolePatterns = [
+    /(?:Job Title|Position|Role|职位|岗位)[:：]\s*([^\n,|]{2,80})/i,
+    /^([A-Za-z][A-Za-z0-9&/,\-() ]{3,80})$/m
+  ]
+  for (const p of rolePatterns) {
+    const m = oneLine.match(p)
+    if (m && m[1]) { pick.role = m[1].trim(); break }
+  }
+  if (!pick.role && lines.length) {
+    const first = lines[0]
+    if (first.length < 90 && /manager|coordinator|officer|assistant|administrator|analyst|lead|specialist/i.test(first)) pick.role = first
+  }
+
+  const salaryMatch = oneLine.match(/(\$ ?\d{2,3}(?:,\d{3})?(?:\s*-\s*\$ ?\d{2,3}(?:,\d{3})?)?\s*(?:k|K|per year|\/year|\/hr|hour|annum)?)/)
+  if (salaryMatch) pick.salary = salaryMatch[1].replace(/\s+/g, ' ').trim()
+
+  if (/full[\s-]?time/i.test(oneLine)) pick.contract = 'Full time'
+  else if (/part[\s-]?time/i.test(oneLine)) pick.contract = 'Part time'
+  else if (/contract/i.test(oneLine)) pick.contract = 'Contract'
+  else if (/casual/i.test(oneLine)) pick.contract = 'Casual'
+
+  const d1 = oneLine.match(/(\d{4})[\/\-](\d{1,2})[\/\-](\d{1,2})/)
+  if (d1) {
+    const y = d1[1], m = String(d1[2]).padStart(2,'0'), d = String(d1[3]).padStart(2,'0')
+    pick.deadline = `${y}-${m}-${d}`
+  } else {
+    const d2 = oneLine.match(/(?:deadline|closing date|apply by|截止日期)[:：]?\s*([A-Za-z]{3,9}\s+\d{1,2},?\s+\d{4})/i)
+    if (d2) {
+      const dt = new Date(d2[1])
+      if (!isNaN(dt.getTime())) {
+        pick.deadline = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`
+      }
+    }
+  }
+  return pick
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+
+
+
+// ── PAGE SWITCH ──────────────────────────────────────────────────────────
+function navGoPage(p) {
+  if (p === 'p2' && currentPageId === 'p1') {
+    toast('请使用页面底部「下一步：去分析 JD」进入 Step 2', '⚠')
+    return
+  }
+  if (p === 'p3' && (currentPageId === 'p1' || currentPageId === 'p2')) {
+    if (!hasCompletedJDAnalysisForStep3()) {
+      toast('请先在 Step 2 点击「分析这份 JD」完成分析', '⚠')
+      return
+    }
+    if (!hasStep3OptimizeGate()) {
+      toast('请先在 Step 2 结果区点击「优化简历 →」；之后可从顶部随时进入 Step 3', '⚠')
+      return
+    }
+  }
+  goPage(p)
+}
+
+function goPage(p) {
+  ['p1','p2','p3'].forEach(id => {
+    const el = document.getElementById('page-'+id)
+    if (el) el.style.display = 'none'
+    const nav = document.getElementById('nav-'+id)
+    if (nav) nav.classList.remove('active','soft-active')
+  })
+
+  if (p === 'p1') {
+    const p1 = document.getElementById('page-p1')
+    if (p1) {
+      p1.style.display = 'flex'
+      p1.style.flexDirection = 'column'
+    }
+    loadP1()
+    currentPageId = 'p1'
+  } else if (p === 'p2') {
+    document.getElementById('page-p2').style.display = 'block'
+    currentPageId = 'p2'
+    syncP2ResultsIfResumeStale()
+  } else if (p === 'p3') {
+    document.getElementById('page-p3').style.display = 'block'
+    loadP3()
+    currentPageId = 'p3'
+  }
+  updateProgressNav(p)
+  togglePage2BoardButtons(p === 'p2')
+  // 入口统一从Step1开始，不再恢复到Step3；仅记录到Step2用于体验优化
+  if (p === 'p2') {
+    try { localStorage.setItem(LAST_PAGE_KEY, p) } catch(e) {}
+  }
+  try {
+    const base = window.location.pathname + window.location.search
+    history.replaceState(null, '', base + '#' + p)
+  } catch (e) {}
+  updateNavStatus()
+}
+function updateProgressNav(current) {
+  const ids = ['p1','p2','p3']
+  ids.forEach(id => {
+    const el = document.getElementById('nav-'+id)
+    if (!el) return
+    if (id === current) el.classList.add('active')
+    else el.classList.add('soft-active')
+  })
+}
+
+/** JD 对比看板数据在 localStorage `career_compare_board_v1`，与 legacy compare-dashboard 一致；勿打开 Next /kanban（另一套 key） */
+function getCompareBoardUrl() {
+  try {
+    if (window.location.protocol === 'file:') return 'compare-dashboard.html'
+    const p = window.location.pathname || ''
+    if (p.includes('/legacy/') || /\/legacy\/jd-analysis/.test(p)) {
+      return window.location.origin + '/legacy/compare-dashboard'
+    }
+  } catch (e) {}
+  return 'compare-dashboard.html'
+}
+function openCompareKanban() {
+  const url = getCompareBoardUrl()
+  const w = window.open(url, '_blank', 'noopener,noreferrer')
+  if (!w) toast('请允许弹出窗口，或手动打开 JD 对比看板页面', '⚠')
+}
+function openDashboard() {
+  openCompareKanban()
+}
+function openTrackingBoard() {
+  const w = window.open('dashboard.html', 'career_tracking_dashboard')
+  if (!w) toast('请允许弹出窗口，或手动打开 dashboard.html', '⚠')
+}
+function addToBoardOnly() {
+  if (!currentResult) {
+    toast('请先完成 JD 分析', '⚠')
+    return
+  }
+  addToDashboard()
+}
+function togglePage2BoardButtons(show) {
+  const a = document.getElementById('btn-open-compare')
+  const b = document.getElementById('btn-open-tracking')
+  const d = document.getElementById('nav-board-divider')
+  if (a) a.style.display = 'inline-flex'
+  if (b) b.style.display = show ? 'inline-flex' : 'none'
+  if (d) d.style.display = 'block'
+}
+function saveAndOpenCompare() {
+  addToDashboard()
+  openDashboard()
+}
+
+// ── PAGE 1 LOGIC ──────────────────────────────────────────────────────────
+
+function toggleResumeSelect(id, checked) {
+  const list = getResumeHistory()
+  const okIds = list
+    .filter(
+      (x) =>
+        (x.parseStatus || 'ok') === 'ok' &&
+        (x.rawText || '').trim().length >= 40
+    )
+    .map((x) => x.id)
+  if (!okIds.includes(id)) return
+  let ids = getSelectedResumeIds().filter((i) => list.some((x) => x.id === i))
+  if (checked) {
+    if (!ids.includes(id)) ids.push(id)
+  } else {
+    ids = ids.filter((i) => i !== id)
+  }
+  ids = ids.filter((i) => okIds.includes(i))
+  setSelectedResumeIds(ids)
+  syncActiveResumeKeyFromSelection()
+  renderResumeHistory()
+  bumpResumeContentGeneration()
+  invalidateAnalysisForResumeChange()
+  persistStep1ToServer().catch(() => {})
+  updateNavStatus()
+}
+
+function removeResumeRow(rid) {
+  removeResumeFromHistory(rid)
+  bumpResumeContentGeneration()
+  invalidateAnalysisForResumeChange()
+  renderResumeHistory()
+  persistStep1ToServer().catch(() => {})
+  updateNavStatus()
+  toast('已删除该文件', '✓')
+}
+
+function renderResumeHistory() {
+  const host = document.getElementById('resume-list-host')
+  if (!host) return
+  const list = getResumeHistory()
+  ensureSelection(list)
+  const selected = new Set(getSelectedResumeIds())
+  if (!list.length) {
+    host.innerHTML =
+      '<div style="font-size:12px;color:var(--text3);padding:8px 0;">暂无文件。请使用上方区域上传 PDF / Word。</div>'
+    return
+  }
+  host.innerHTML = list
+    .map((r) => {
+      const idJs = JSON.stringify(r.id)
+      const st = r.parseStatus || 'ok'
+      let badgeClass = 'pill-green'
+      let badgeText = '读取成功'
+      if (st === 'uploading') {
+        badgeClass = 'pill-amber'
+        badgeText = '处理中…'
+      } else if (st === 'error') {
+        badgeClass = 'pill-red'
+        badgeText = (r.statusMessage || '解析失败').slice(0, 48)
+      }
+      const n = countResumeBodyChars((r.rawText || '').trim())
+      const canUse = st === 'ok' && n >= 40
+      const checked = selected.has(r.id) && canUse ? ' checked' : ''
+      const dis = !canUse ? ' disabled' : ''
+      const name = esc(r.fileName || '未命名')
+      return (
+        `<div class="resume-row">` +
+        `<input type="checkbox" class="resume-row-cb"${checked}${dis} onchange="toggleResumeSelect(${idJs}, this.checked)">` +
+        `<div class="resume-row-main">` +
+        `<div class="resume-row-title">${name}</div>` +
+        `<div class="resume-row-meta">` +
+        `<span class="pill ${badgeClass}">${esc(badgeText)}</span>` +
+        `<span>${n} 字</span>` +
+        `<span style="color:var(--text3);">${esc((r.origin || 'upload') === 'upload' ? '上传' : '其他')}</span>` +
+        `</div></div>` +
+        `<button type="button" class="btn btn-sm resume-del-btn" onclick="removeResumeRow(${idJs})">删除</button>` +
+        `</div>`
+      )
+    })
+    .join('')
+}
+
+function resetResumeInputsUI() {
+  const rt = document.getElementById('resume-text')
+  if (rt) rt.value = ''
+  const goalEl = document.getElementById('career-goal')
+  if (goalEl) goalEl.value = ''
+  const cc = document.getElementById('goal-char-count')
+  if (cc) cc.textContent = '0 字'
+  const cgStat = document.getElementById('career-goal-status')
+  if (cgStat) cgStat.textContent = ''
+  const fi = document.getElementById('resume-file-input')
+  if (fi) fi.value = ''
+  const us = document.getElementById('resume-upload-status')
+  if (us) us.textContent = ''
+}
+
+function clearAllResumes() {
+  const list = getResumeHistory()
+  if (!list.length && !hasSavedResume()) {
+    resetResumeInputsUI()
+    toast('当前已经是空状态', '✓')
+    return
+  }
+  const ok = confirm('确认清空已上传简历列表、职业目标及本地记录吗？\n不影响 JD 对比看板与追踪看板。')
+  if (!ok) return
+  localStorage.removeItem(RESUME_KEY)
+  localStorage.removeItem(RESUME_HISTORY_KEY)
+  localStorage.removeItem(RESUME_SELECTION_KEY)
+  try {
+    localStorage.removeItem(CAREER_GOAL_PERSIST_KEY)
+  } catch (e) {}
+  resetResumeInputsUI()
+  renderResumeHistory()
+  const st = document.getElementById('p1-save-status')
+  if (st) st.textContent = ''
+  bumpResumeContentGeneration()
+  invalidateAnalysisForResumeChange()
+  updateNavStatus()
+  toast('已清空上传列表与本地记录', '✓')
+}
+
+function initResumeUploadZone() {
+  const dz = document.getElementById('resume-dropzone')
+  const input = document.getElementById('resume-file-input')
+  const statusEl = document.getElementById('resume-upload-status')
+  if (!dz || !input || dz._resumeUploadBound) return
+  dz._resumeUploadBound = true
+
+  const setBusy = (busy, msg) => {
+    dz.style.pointerEvents = busy ? 'none' : ''
+    dz.style.opacity = busy ? '0.65' : '1'
+    if (statusEl && msg != null) statusEl.textContent = msg
+  }
+
+  const handleFile = async (file) => {
+    if (!file) return
+    const name = (file.name || '').toLowerCase()
+    if (!name.endsWith('.pdf') && !name.endsWith('.docx')) {
+      toast('请上传 PDF 或 .docx 文件', '⚠')
+      return
+    }
+    if (file.size > RESUME_UPLOAD_MAX_BYTES) {
+      toast('单文件不能超过 5MB（当前 ' + Math.round(file.size / 1024 / 1024 * 10) / 10 + 'MB）', '⚠')
+      return
+    }
+    const history = getResumeHistory()
+    if (history.length >= RESUME_UPLOAD_MAX_SLOTS) {
+      toast('最多保留 ' + RESUME_UPLOAD_MAX_SLOTS + ' 份简历，请先删除一条后再上传', '⚠')
+      return
+    }
+    const nextVersion = history.reduce((m, x) => Math.max(m, Number(x.version) || 0), 0) + 1
+    const tempId =
+      'res_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
+    const careerGoal = (document.getElementById('career-goal') || { value: '' }).value.trim()
+    appendResumeToHistory({
+      id: tempId,
+      rawText: '',
+      careerGoal,
+      fileName: file.name || 'resume',
+      origin: 'upload',
+      parseStatus: 'uploading',
+      statusMessage: '正在上传并解析…',
+      savedAt: new Date().toISOString(),
+      version: nextVersion,
+    })
+    renderResumeHistory()
+    setBusy(true, '正在上传并提取文字…')
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      if (careerGoal) fd.append('careerGoal', careerGoal)
+      const res = await fetch('/api/extract-resume', { method: 'POST', body: fd, credentials: 'same-origin' })
+      const j = await res.json().catch(() => ({}))
+      if (!res.ok) {
+        const errMsg = j && j.error ? String(j.error) : '提取失败'
+        if (res.status === 401) {
+          toast('请先登录后再上传文件。', '⚠')
+          updateResumeInHistory(tempId, {
+            parseStatus: 'error',
+            statusMessage: '需要登录',
+          })
+          setBusy(false, '')
+        } else {
+          toast(errMsg, '⚠')
+          updateResumeInHistory(tempId, {
+            parseStatus: 'error',
+            statusMessage: errMsg.slice(0, 120),
+          })
+          setBusy(false, '')
+        }
+        renderResumeHistory()
+        input.value = ''
+        updateNavStatus()
+        return
+      }
+      const text = typeof j.text === 'string' ? j.text : ''
+      updateResumeInHistory(tempId, {
+        rawText: text,
+        parseStatus: 'ok',
+        statusMessage: '',
+        fileName: j.fileName || file.name || 'resume',
+      })
+      bumpResumeContentGeneration()
+      invalidateAnalysisForResumeChange()
+      renderResumeHistory()
+      updateNavStatus()
+      toast('读取成功，已保存到列表', '✓')
+      setBusy(false, '✓ 最近一条：读取成功 · ' + countResumeBodyChars(text) + ' 字')
+      persistStep1ToServer()
+        .then(() => {
+          const p1st = document.getElementById('p1-save-status')
+          if (p1st) p1st.textContent = '✓ 已自动保存（本地 + 云端）'
+          window._p1SaveHintTimer && clearTimeout(window._p1SaveHintTimer)
+          window._p1SaveHintTimer = setTimeout(() => {
+            if (p1st) p1st.textContent = ''
+          }, 3200)
+        })
+        .catch(() => {})
+    } catch (e) {
+      updateResumeInHistory(tempId, {
+        parseStatus: 'error',
+        statusMessage: '网络或服务器异常',
+      })
+      renderResumeHistory()
+      toast('上传失败，请检查网络后重试', '⚠')
+      setBusy(false, '')
+      updateNavStatus()
+    }
+    input.value = ''
+  }
+
+  dz.addEventListener('click', (e) => {
+    if (e.target === input) return
+    input.click()
+  })
+  input.addEventListener('change', () => {
+    const f = input.files && input.files[0]
+    handleFile(f)
+  })
+  ;['dragenter', 'dragover'].forEach((ev) => {
+    dz.addEventListener(ev, (e) => {
+      e.preventDefault()
+      e.stopPropagation()
+      dz.style.borderColor = 'var(--accent)'
+    })
+  })
+  dz.addEventListener('dragleave', (e) => {
+    e.preventDefault()
+    dz.style.borderColor = 'var(--border)'
+  })
+  dz.addEventListener('drop', (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    dz.style.borderColor = 'var(--border)'
+    const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]
+    handleFile(f)
+  })
+}
+
+function loadP1() {
+  initResumeUploadZone()
+  const goalEl = document.getElementById('career-goal')
+  if (goalEl) {
+    let stored = ''
+    try {
+      stored = localStorage.getItem(CAREER_GOAL_PERSIST_KEY) || ''
+    } catch (e) {}
+    if (!stored.trim()) {
+      try {
+        const r = getResumeContext()
+        const fromHist =
+          getResumeHistory()
+            .map((x) => (x.careerGoal || '').trim())
+            .find(Boolean) || ''
+        stored = ((r && r.careerGoal) || '').trim() || fromHist
+        if (stored) localStorage.setItem(CAREER_GOAL_PERSIST_KEY, stored)
+      } catch (e) {}
+    }
+    goalEl.value = stored
+    const cc = document.getElementById('goal-char-count')
+    if (cc) cc.textContent = goalEl.value.length + ' 字'
+    updateCareerGoalIndicator()
+  }
+  ensureSelection(getResumeHistory())
+  syncActiveResumeKeyFromSelection()
+  renderResumeHistory()
+  if (goalEl && !goalEl._listenerAdded) {
+    goalEl.addEventListener('input', function () {
+      const cc = document.getElementById('goal-char-count')
+      if (cc) cc.textContent = this.value.length + ' 字'
+      updateCareerGoalIndicator()
+      scheduleCareerGoalPersist()
+    })
+    goalEl._listenerAdded = true
+  }
+  updateNavStatus()
+}
+
+async function syncResumeToSupabase(rawText, fileName, careerGoal) {
+  const rt = (rawText || '').trim()
+  const fn = (fileName || 'resume').trim() || 'resume'
+  const cg = (careerGoal || '').trim()
+  if (rt.length < 40 && cg.length < 5) return true
+  try {
+    const res = await fetch('/api/save-resume', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rawText: rt, fileName: fn, careerGoal: cg }),
+    })
+    const j = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      if (res.status === 401) toast('请先登录；简历仅保存在本浏览器，无法用于云端 JD 分析', '⚠')
+      else toast('同步简历到账户失败：' + (j.error || res.status), '⚠')
+      return false
+    }
+    return true
+  } catch (e) {
+    toast('同步简历到账户失败', '⚠')
+    return false
+  }
+}
+
+/** 上传成功 / 勾选变更 / 职业目标变更后：静默同步勾选合并正文 + 职业目标到 Supabase */
+async function persistStep1ToServer() {
+  syncActiveResumeKeyFromSelection()
+  const merged = getMergedRawTextFromSelection().trim()
+  const careerGoal = (document.getElementById('career-goal') || { value: '' }).value.trim()
+  const n = countResumeBodyChars(merged)
+  if (n < 40 && careerGoal.length < 5) return
+  const selected = getSelectedResumeRecords().filter(
+    (r) =>
+      (r.parseStatus || 'ok') === 'ok' &&
+      (r.rawText || '').trim().length >= 40
+  )
+  const fileName = selected.length
+    ? selected
+        .map((s) => s.fileName || '简历')
+        .join(' + ')
+        .slice(0, 500)
+    : 'resume'
+  await syncResumeToSupabase(merged, fileName, careerGoal)
+}
+
+function updateCareerGoalIndicator() {
+  const ind = document.getElementById('career-goal-status')
+  const ta = document.getElementById('career-goal')
+  if (!ind || !ta) return
+  const v = ta.value.trim()
+  let stored = ''
+  try {
+    stored = (localStorage.getItem(CAREER_GOAL_PERSIST_KEY) || '').trim()
+  } catch (e) {}
+  if (v.length >= 5 && v === stored) ind.textContent = '✓ 已保存（将参与 JD 分析）'
+  else if (v.length > 0) ind.textContent = '正在输入…'
+  else ind.textContent = ''
+}
+
+function scheduleCareerGoalPersist() {
+  clearTimeout(window._careerGoalPersistTimer)
+  window._careerGoalPersistTimer = setTimeout(() => {
+    const ta = document.getElementById('career-goal')
+    if (!ta) return
+    const v = ta.value.trim()
+    try {
+      localStorage.setItem(CAREER_GOAL_PERSIST_KEY, v)
+    } catch (e) {}
+    updateCareerGoalIndicator()
+    syncActiveResumeKeyFromSelection()
+    persistStep1ToServer().catch(() => {})
+    updateNavStatus()
+  }, 450)
+}
+
+async function goToStep2FromP1() {
+  const merged = getMergedRawTextFromSelection().trim()
+  const n = countResumeBodyChars(merged)
+  if (n < 40) {
+    toast('请先上传并至少勾选一份「读取成功」的简历（≥40字）', '⚠')
+    return
+  }
+  syncActiveResumeKeyFromSelection()
+  const careerGoal = (document.getElementById('career-goal') || { value: '' }).value.trim()
+  const selected = getSelectedResumeRecords().filter(
+    (r) =>
+      (r.parseStatus || 'ok') === 'ok' &&
+      (r.rawText || '').trim().length >= 40
+  )
+  const fileName = selected.length
+    ? selected
+        .map((s) => s.fileName || '简历')
+        .join(' + ')
+        .slice(0, 500)
+    : 'resume'
+  const st = document.getElementById('p1-save-status')
+  if (st) st.textContent = '正在同步并进入 Step 2…'
+  const synced = await syncResumeToSupabase(merged, fileName, careerGoal)
+  if (st) st.textContent = ''
+  if (!synced) return
+  goPage('p2')
+}
+
+// ── RESUME CONTEXT ────────────────────────────────────────────────────────
+const JD_ANALYSIS_RESUME_SNIPPET_MAX = 12000
+const JD_ANALYSIS_REFERENCE_BG = `候选人参考背景（系统存档，用于补充上下文；若上方已有简历节选请优先以节选为准）：
+约9年景观/建筑设计相关经验，墨尔本本地 Senior 级别经历；擅长项目协调、技术文档、跨团队与 stakeholder 沟通；常用工具含 Revit/AutoCAD/BIM、Adobe、Lumion 等；对 tech/数字化/创意科技方向有兴趣；求职地墨尔本，投递范围含 coordinator/admin/support 等岗位。`
+
+function buildResumeContext() {
+  try {
+    const selected = getSelectedResumeRecords().filter(
+      (r) => (r.parseStatus || 'ok') === 'ok'
+    )
+    const goalInput = ((document.getElementById('career-goal') || { value: '' }).value || '').trim()
+    const goalSel = selected.map((x) => (x.careerGoal || '').trim()).find(Boolean) || ''
+    const goal = goalInput.length >= goalSel.length ? goalInput : goalSel
+
+    let ctx = ''
+    let resumeCharsInjected = 0
+    let includedHighQuality = false
+
+    selected.forEach((r, idx) => {
+      const title = r.fileName || `简历${idx + 1}`
+      const raw = normalizeExtractedText(r.rawText || '')
+      if (raw.length < 40) return
+      if (shouldIncludeResumeRawInContext(raw)) {
+        const chunk = raw.slice(0, JD_ANALYSIS_RESUME_SNIPPET_MAX)
+        ctx += `【简历${idx + 1}：${title}（节选）】\n${chunk}\n\n`
+        resumeCharsInjected += chunk.length
+        includedHighQuality = true
+      }
+    })
+
+    if (!includedHighQuality) {
+      selected.forEach((r, idx) => {
+        const title = r.fileName || `简历${idx + 1}`
+        const raw = normalizeExtractedText(r.rawText || '')
+        if (raw.length < 120) return
+        if (looksLikePdfInfoMetadataBlob(raw) && raw.length < 1500) return
+        const chunk = raw.slice(0, JD_ANALYSIS_RESUME_SNIPPET_MAX)
+        ctx += `【简历${idx + 1}：${title}（自动提取节选，可读性未完全验证）】\n${chunk}\n\n`
+        resumeCharsInjected += chunk.length
+      })
+    }
+
+    if (goal.length > 5) {
+      ctx += '【候选人自述职业发展目标】\n' + goal + '\n\n'
+    }
+
+    if (resumeCharsInjected < 320) {
+      ctx += '【系统参考背景】\n' + JD_ANALYSIS_REFERENCE_BG + '\n'
+    }
+
+    if (ctx.trim().length > 20) return ctx.trim()
+  } catch (e) {}
+  return '【系统参考背景】\n' + JD_ANALYSIS_REFERENCE_BG
+}
+
+
+// ── PAGE 3 LOGIC ──────────────────────────────────────────────────────────
+let p3CurrentJD = ''
+let p3OriginalResume = ''
+let p3OriginalScore = 0
+let p3OriginalText = ''
+
+function loadP3() {
+  document.getElementById('p3-loading').style.display = 'none'
+  const genBar = document.getElementById('p3-generate-bar')
+  const jdEl = document.getElementById('jd-text')
+  p3CurrentJD = jdEl ? jdEl.value.trim() : ''
+  try {
+    const selected = getSelectedResumeRecords()
+    p3OriginalResume = selected.map(x => (x.rawText || '').trim()).filter(Boolean).join('\n\n---\n\n')
+  } catch(e) {}
+  // 兜底：同一会话里用户刚上传但还未点击“保存”时，也允许进入P3生成
+  if (!p3OriginalResume) {
+    const draft = getMergedRawTextFromSelection()
+    if (draft.trim().length > 100) p3OriginalResume = draft.trim()
+  }
+  p3OriginalText = p3OriginalResume
+  if (currentResult && currentResult.atsScore != null) {
+    p3OriginalScore = currentResult.atsScore
+    document.getElementById('p3-score-before').textContent = p3OriginalScore + '%'
+  } else {
+    p3OriginalScore = 0
+    document.getElementById('p3-score-before').textContent = '—'
+  }
+  document.getElementById('p3-edit-note').textContent = '确认满意后保存或导出'
+
+  if (!p3CurrentJD || !p3OriginalResume) {
+    if (genBar) genBar.style.display = 'none'
+    const list = document.getElementById('p3-reasons-list')
+    if (!p3CurrentJD) list.innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 请先在「JD 分析」页分析一份 JD</div>'
+    else list.innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 请先在「简历设置」上传并勾选简历（将自动保存）</div>'
+    document.getElementById('p3-top-summary').textContent = '—'
+    return
+  }
+
+  if (genBar) genBar.style.display = 'flex'
+  const editor = document.getElementById('p3-editor')
+  const editorLen = (editor && editor.value.trim().length) || 0
+  const btn = document.getElementById('btn-p3-generate')
+  if (btn) {
+    btn.disabled = false
+    btn.textContent = editorLen > 80 ? '重新生成优化简历' : '生成优化简历'
+  }
+
+  const top = document.getElementById('p3-top-summary')
+  const reasons = document.getElementById('p3-reasons-list')
+  const keepState =
+    editorLen > 80 &&
+    top.textContent &&
+    top.textContent.trim().length > 15 &&
+    top.textContent.indexOf('请先点击左侧「生成优化简历」') < 0
+
+  if (!keepState) {
+    top.textContent =
+      '请先点击左侧「生成优化简历」。仅在点击按钮时请求 AI，进入本页不会自动调用。'
+    reasons.innerHTML =
+      '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px;">等待生成…</div>'
+  }
+}
+
+function p3OnEdit() {
+  const val = document.getElementById('p3-editor').value
+  document.getElementById('p3-char-count').textContent = val.length + ' 字'
+}
+
+function cancelP3Generate() {
+  if (p3RewriteAbortController) {
+    p3RewriteAbortController.abort()
+    p3RewriteAbortController = null
+  }
+}
+
+function p3ResetToOriginal() {
+  if (!confirm('退回到原始简历？当前编辑将丢失。')) return
+  document.getElementById('p3-editor').value = p3OriginalText
+  document.getElementById('p3-char-count').textContent = p3OriginalText.length + ' 字'
+  document.getElementById('p3-score-after').textContent = '—'
+  document.getElementById('p3-score-delta').style.display = 'none'
+  document.getElementById('p3-edit-note').textContent = '已退回原始版本'
+  toast('已退回原始简历', '↺')
+}
+
+async function p3Generate() {
+  console.info('[Step3] 已点击「生成优化简历」，正在校验简历与 JD…')
+  // 兜底：如果原来简历为空，用右侧编辑框内容（用户可能直接粘贴在那里）
+  if (!p3OriginalResume) {
+    const editorVal = (document.getElementById('p3-editor') || {value:''}).value.trim()
+    if (editorVal.length > 100) {
+      p3OriginalResume = editorVal
+      p3OriginalText = editorVal
+    }
+  }
+  if (!p3OriginalResume) {
+    document.getElementById('p3-reasons-list').innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 简历内容为空。请在右侧编辑框粘贴你的简历，再点「重新检测匹配度」。</div>'
+    toast('未检测到简历正文：请回 Step 1 勾选简历，或在右侧大框粘贴后再点生成', '⚠')
+    return
+  }
+
+  const p2ctx = currentResult ? `JD分析结果：ATS匹配率${currentResult.atsScore}%，评级${currentResult.grade}（${currentResult.priorityLabel}）。缺失关键词：${(currentResult.gapKeywords||[]).slice(0,6).join('、')}。可迁移技能：${(currentResult.weakKeywords||[]).slice(0,4).join('、')}。` : ''
+
+  const cleanedResume = normalizeExtractedText(p3OriginalResume)
+  if (!isResumeTextUsable(cleanedResume)) {
+    document.getElementById('p3-reasons-list').innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 简历文本质量不足。请回到「简历设置」重新上传或调整勾选。</div>'
+    toast('简历内容无法用于 AI 改写：请回到 Step 1 上传可读正文，或右侧粘贴完整简历', '⚠')
+    return
+  }
+
+  const btnGen = document.getElementById('btn-p3-generate')
+  if (btnGen) {
+    btnGen.disabled = true
+    btnGen.style.opacity = '0.75'
+  }
+  document.getElementById('p3-loading').style.display = 'flex'
+  document.getElementById('p3-loading-text').textContent = 'AI 正在生成改写版简历...'
+  document.getElementById('p3-loading-sub').textContent =
+    '一般 30–120 秒；超过 ' +
+    Math.round(P3_REWRITE_FETCH_TIMEOUT_MS / 1000) +
+    ' 秒未返回将自动停止，请检查终端/网络或稍后重试。'
+
+  p3RewriteAbortController = new AbortController()
+  const timeoutCtrl = new AbortController()
+  const tid = setTimeout(() => timeoutCtrl.abort(), P3_REWRITE_FETCH_TIMEOUT_MS)
+  const combined = mergeAbortSignals(p3RewriteAbortController.signal, timeoutCtrl.signal)
+
+  try {
+    console.info(
+      '[求职助手] 即将请求 POST /api/p3-rewrite — 请在 Network 筛选「p3-rewrite」；服务端日志在 next dev 终端（[p3-rewrite] POST）'
+    )
+    const genRes = await fetch('/api/p3-rewrite', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        mode: 'generate',
+        p2ctx,
+        resumeSlice: cleanedResume.slice(0, 3000),
+        jdSlice: p3CurrentJD.slice(0, 1000),
+      }),
+      signal: combined,
+    })
+    const genPayload = await genRes.json().catch(() => ({}))
+    if (!genRes.ok) {
+      let msg = genPayload.error || ('请求失败 (' + genRes.status + ')')
+      if (genRes.status === 401) msg = '请先登录后再使用简历改写'
+      throw new Error(formatAiErrorForUi(msg))
+    }
+    const raw = String(genPayload.text || '')
+    let r = parseP3StructuredResponse(raw)
+    if (!r) {
+      const repairRes = await fetch('/api/p3-rewrite', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'repair', raw: raw.slice(0, 7000) }),
+        signal: combined,
+      })
+      const repairPayload = await repairRes.json().catch(() => ({}))
+      if (!repairRes.ok) {
+        let msg = repairPayload.error || ('修复请求失败 (' + repairRes.status + ')')
+        if (repairRes.status === 401) msg = '请先登录后再使用简历改写'
+        throw new Error(formatAiErrorForUi(msg))
+      }
+      r = parseP3StructuredResponse(String(repairPayload.text || ''))
+    }
+    if (!r) throw new Error('AI返回结构不完整，请重试')
+    if (/(无法读取|未读取到|看不到|无法访问|PDF|文档内容不可用)/i.test(r.newResume || '')) {
+      throw new Error('模型未读取到有效简历文本，请先在Page1手动粘贴完整简历后再试')
+    }
+
+    // 渲染顶部
+    document.getElementById('p3-top-summary').textContent = r.topSummary || ''
+    document.getElementById('p3-score-after').textContent = (r.scoreAfter || '—') + (r.scoreAfter ? '%' : '')
+    const delta = (r.scoreAfter || 0) - p3OriginalScore
+    if (delta > 0) {
+      const el = document.getElementById('p3-score-delta')
+      el.style.display = 'inline'; el.textContent = '↑ +' + delta + '%'; el.style.color = 'var(--green)'
+    }
+
+    // 渲染左栏改写说明
+    let html = ''
+    if ((r.mustReasons||[]).length) {
+      html += `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--green);margin-bottom:3px;">🟢 必须改动 — 直接影响ATS通过率</div>`
+      html += (r.mustReasons||[]).map(m => `
+        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:9px;padding:10px 13px;">
+          <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:5px;">${esc(m.title)}</div>
+          <div style="font-size:11px;color:#2d6a4f;line-height:1.6;">${esc(m.reason)}</div>
+        </div>`).join('')
+    }
+    if ((r.niceReasons||[]).length) {
+      html += `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#92400e;margin-top:8px;margin-bottom:3px;">🟡 加分项 — 可选择性采纳</div>`
+      html += (r.niceReasons||[]).map(m => `
+        <div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:9px;padding:10px 13px;">
+          <div style="font-size:12px;font-weight:600;color:#92400e;margin-bottom:5px;">${esc(m.title)}</div>
+          <div style="font-size:11px;color:#78350f;line-height:1.6;">${esc(m.reason)}</div>
+        </div>`).join('')
+    }
+    document.getElementById('p3-reasons-list').innerHTML = html
+
+    // 渲染右栏简历
+    const editor = document.getElementById('p3-editor')
+    editor.value = r.newResume || ''
+    document.getElementById('p3-char-count').textContent = (r.newResume||'').length + ' 字'
+    document.getElementById('p3-loading').style.display = 'none'
+    if (btnGen) {
+      btnGen.disabled = false
+      btnGen.style.opacity = ''
+      btnGen.textContent = '重新生成优化简历'
+    }
+    toast('改写版简历已生成！', '✓')
+  } catch(err) {
+    console.error('p3Generate', err)
+    document.getElementById('p3-loading').style.display = 'none'
+    const msg =
+      err.name === 'AbortError'
+        ? '已取消或请求超时（' +
+          Math.round(P3_REWRITE_FETCH_TIMEOUT_MS / 1000) +
+          ' 秒内未返回）。请查看本机运行 next dev 的终端是否有报错，或稍后重试。'
+        : formatAiErrorForUi(err.message || '')
+    document.getElementById('p3-reasons-list').innerHTML = `<div style="padding:12px;color:var(--red);font-size:12px;">⚠ 生成失败：${esc(msg)}</div>`
+    toast('AI 请求失败：' + msg, '✗')
+  } finally {
+    clearTimeout(tid)
+    p3RewriteAbortController = null
+    const b = document.getElementById('btn-p3-generate')
+    if (b) {
+      b.disabled = false
+      b.style.opacity = ''
+    }
+  }
+}
+
+function pickSection(text, tag) {
+  const re = new RegExp(`\\[\\[${tag}\\]\\]([\\s\\S]*?)\\[\\[\\/${tag}\\]\\]`, 'i')
+  const m = String(text || '').match(re)
+  return m ? m[1].trim() : ''
+}
+
+function parseReasonLines(block, maxItems) {
+  const lines = String(block || '')
+    .split('\n')
+    .map(s => s.trim())
+    .filter(Boolean)
+  const out = []
+  for (const line of lines) {
+    const s = line.replace(/^[\-•]\s*/, '')
+    const sep = s.indexOf('|')
+    if (sep < 0) continue
+    const title = s.slice(0, sep).trim()
+    const reason = s.slice(sep + 1).trim()
+    if (!title || !reason) continue
+    out.push({ title, reason })
+    if (out.length >= maxItems) break
+  }
+  return out
+}
+
+function parseP3StructuredResponse(raw) {
+  if (!raw) return null
+  const topSummary = pickSection(raw, 'TOP_SUMMARY')
+  const scoreRaw = pickSection(raw, 'SCORE_AFTER')
+  const mustRaw = pickSection(raw, 'MUST_REASONS')
+  const niceRaw = pickSection(raw, 'NICE_REASONS')
+  const resume = pickSection(raw, 'NEW_RESUME')
+  if (!topSummary || !resume) return null
+  const scoreNum = Math.max(0, Math.min(100, parseInt((scoreRaw.match(/\d+/) || ['0'])[0], 10) || 0))
+  return {
+    topSummary,
+    scoreAfter: scoreNum,
+    mustReasons: parseReasonLines(mustRaw, 4),
+    niceReasons: parseReasonLines(niceRaw, 3),
+    newResume: resume
+  }
+}
+
+async function p3CheckMatch() {
+  if (!p3CurrentJD) { toast('请先在「JD 分析」页分析一份 JD', '⚠'); return }
+  const newResume = document.getElementById('p3-editor').value.trim()
+  if (!newResume) { toast('请先在右侧编辑框粘贴简历内容', '⚠'); return }
+  // 如果原来没有简历，用编辑框内容作为原始基准
+  if (!p3OriginalResume && newResume.length > 100) {
+    p3OriginalResume = newResume
+    p3OriginalText = newResume
+    toast('已将编辑框内容设为简历基准', '✓')
+  }
+  document.getElementById('p3-loading').style.display = 'flex'
+  document.getElementById('p3-loading-text').textContent = '重新检测匹配度...'
+  document.getElementById('p3-loading-sub').textContent = '对比修改后简历与 JD'
+  try {
+    const res = await fetch('/api/p3-check-ats', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        resumeSnippet: newResume,
+        jdSnippet: p3CurrentJD,
+      }),
+    })
+    const payload = await res.json().catch(() => ({}))
+    if (!res.ok) {
+      let msg = payload.error || ('检测失败 (' + res.status + ')')
+      if (res.status === 401) msg = '请先登录后再检测匹配度'
+      throw new Error(msg)
+    }
+    const raw = String(payload.raw || '')
+    const i0 = raw.indexOf('{')
+    const i1 = raw.lastIndexOf('}')
+    if (i0 < 0 || i1 < i0) throw new Error('返回格式异常')
+    const parsed = JSON.parse(raw.slice(i0, i1 + 1))
+    const score = parsed.atsScore || 0
+    document.getElementById('p3-score-after').textContent = score + '%'
+    const delta = score - p3OriginalScore
+    const el = document.getElementById('p3-score-delta')
+    el.style.display = 'inline'
+    el.textContent = delta > 0 ? '↑ +'+delta+'%' : delta < 0 ? '↓ '+delta+'%' : '→ 持平'
+    el.style.color = delta > 0 ? 'var(--green)' : delta < 0 ? 'var(--red)' : 'var(--text3)'
+    document.getElementById('p3-edit-note').textContent = '✓ 检测完成，匹配度 ' + score + '%'
+    document.getElementById('p3-loading').style.display = 'none'
+    toast('匹配度：' + score + '%', '✓')
+  } catch(e) {
+    document.getElementById('p3-loading').style.display = 'none'
+    const msg = e.name === 'AbortError' ? '检测超时，请重试' : (e.message || '检测失败')
+    toast(msg, '✗')
+  }
+}
+
+function p3SaveToResume() {
+  const text = document.getElementById('p3-editor').value.trim()
+  if (!text) { toast('没有内容', '⚠'); return }
+  try {
+    const base = getResumeContext() || {}
+    const history = getResumeHistory()
+    const nextVersion = history.reduce((m,x)=>Math.max(m, Number(x.version)||0), 0) + 1
+    const r = {
+      id: 'res_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6),
+      rawText: text,
+      careerGoal: (base.careerGoal || '').trim(),
+      fileName: 'Step3改写简历',
+      origin: 'manual',
+      savedAt: new Date().toISOString(),
+      version: nextVersion,
+      parseStatus: 'ok',
+      statusMessage: '',
+    }
+    appendResumeToHistory(r)
+    renderResumeHistory()
+    updateNavStatus()
+    document.getElementById('p3-edit-note').textContent = '✓ 已保存 · ' + new Date().toLocaleTimeString('zh-CN')
+    toast('已加入简历列表，可在 Step 1 勾选并保存后用于分析', '✓')
+  } catch(e) { toast('保存失败', '✗') }
+}
+
+async function p3ExportWord() {
+  const text = document.getElementById('p3-editor').value.trim()
+  if (!text) { toast('没有内容可导出', '⚠'); return }
+  toast('正在生成 Word 文件...', '⏳')
+  try {
+    if (!window.docx) {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script')
+        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js'
+        s.onload = resolve; s.onerror = reject
+        document.head.appendChild(s)
+      })
+    }
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TabStopPosition, TabStopType } = window.docx
+
+    const lines = text.split('\n')
+    const children = []
+
+    // 分析每一行的类型
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i]
+      const t = raw.trim()
+      const isEmpty = t === ''
+
+      // 检测行类型
+      const isSectionHeader = !isEmpty && t === t.toUpperCase() && t.length > 2 && t.length < 50 && !/[•\-·]/.test(t) && /^[A-Z\s&]+$/.test(t)
+      const isBullet = /^[•\-·]\s/.test(t)
+      const isNameLine = i <= 2 && !isEmpty && !isSectionHeader && !isBullet && t.length < 60 && /^[A-Z]/.test(t) && !/[@·•\-]/.test(t)
+      const isContactLine = !isEmpty && !isSectionHeader && !isBullet && (t.includes('@') || t.includes('·') || /\d{4,}/.test(t)) && t.length < 120
+      const isCompanyLine = !isEmpty && !isSectionHeader && !isBullet && !isContactLine && (
+        /\b(20\d{2})\b/.test(t) && (/[–—-]/.test(t) || /present/i.test(t))
+      )
+
+      if (isEmpty) {
+        children.push(new Paragraph({ spacing: { before: 40, after: 40 }, children: [] }))
+        continue
+      }
+
+      // 姓名行：大字号，粗体
+      if (isNameLine) {
+        children.push(new Paragraph({
+          alignment: AlignmentType.LEFT,
+          spacing: { before: 0, after: 60 },
+          children: [new TextRun({ text: t, font: 'Calibri', size: 36, bold: true, color: '1a1916' })]
+        }))
+        continue
+      }
+
+      // 联系信息行
+      if (isContactLine) {
+        children.push(new Paragraph({
+          alignment: AlignmentType.LEFT,
+          spacing: { before: 0, after: 100 },
+          children: [new TextRun({ text: t, font: 'Calibri', size: 20, color: '555555' })]
+        }))
+        continue
+      }
+
+      // SECTION HEADER：粗体 + 下划线 + 上方有间距
+      if (isSectionHeader) {
+        children.push(new Paragraph({
+          spacing: { before: 240, after: 80 },
+          border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'cccccc', space: 2 } },
+          children: [new TextRun({ text: t, font: 'Calibri', size: 24, bold: true, color: '1a1916' })]
+        }))
+        continue
+      }
+
+      // 公司/职位行：粗体
+      if (isCompanyLine) {
+        // 拆分公司名和日期
+        const parts = t.split(/\s*[·]\s*/)
+        const runs = []
+        parts.forEach((part, idx) => {
+          if (idx > 0) runs.push(new TextRun({ text: ' · ', font: 'Calibri', size: 22, color: '666666' }))
+          const isDate = /20\d{2}/.test(part)
+          runs.push(new TextRun({
+            text: part.trim(),
+            font: 'Calibri',
+            size: 22,
+            bold: !isDate,
+            italics: isDate,
+            color: isDate ? '666666' : '1a1916'
+          }))
+        })
+        children.push(new Paragraph({
+          spacing: { before: 160, after: 40 },
+          children: runs
+        }))
+        continue
+      }
+
+      // Bullet point
+      if (isBullet) {
+        const bulletText = t.replace(/^[•\-·]\s*/, '')
+        children.push(new Paragraph({
+          spacing: { before: 20, after: 20 },
+          indent: { left: 360 },
+          children: [
+            new TextRun({ text: '•  ', font: 'Calibri', size: 21, color: '888888' }),
+            new TextRun({ text: bulletText, font: 'Calibri', size: 21, color: '333333' })
+          ]
+        }))
+        continue
+      }
+
+      // 普通文字
+      children.push(new Paragraph({
+        spacing: { before: 40, after: 40 },
+        children: [new TextRun({ text: t, font: 'Calibri', size: 21, color: '333333' })]
+      }))
+    }
+
+    const doc = new Document({
+      sections: [{
+        properties: {
+          page: {
+            size: { width: 11906, height: 16838 },
+            margin: { top: 900, right: 1100, bottom: 900, left: 1100 }
+          }
+        },
+        children
+      }]
+    })
+
+    const buffer = await Packer.toBuffer(doc)
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    const a = document.createElement('a')
+    a.href = URL.createObjectURL(blob)
+    a.download = 'resume_for_JD_' + new Date().toISOString().slice(0,10) + '.docx'
+    a.click(); URL.revokeObjectURL(a.href)
+    toast('Word 文件已导出！', '✓')
+  } catch(err) {
+    toast('Word 导出失败：' + err.message, '✗')
+  }
+}
+
+
+function goToP3() {
+  if (!currentResult) { toast('请先分析一份 JD', '⚠'); return }
+  step3AccessGrantedThisVisit = true
+  try { localStorage.setItem(STEP3_GATE_KEY, String(Date.now())) } catch (e) {}
+  try {
+    const jdText = (document.getElementById('jd-text') || { value: '' }).value || ''
+    localStorage.setItem(CURRENT_JD_TEXT_KEY, jdText)
+    if (liveJobId) localStorage.setItem(CURRENT_JOB_ID_KEY, liveJobId)
+    const role = (document.getElementById('f-role') || { value: '' }).value || (currentResult.role || '')
+    if (role) localStorage.setItem(CURRENT_JOB_TITLE_KEY, role)
+  } catch (e) {}
+  goPage('p3')
+}
+
+function renderJobConfirm(r){
+  const box = document.getElementById('r-job-confirm')
+  const textEl = document.getElementById('r-job-confirm-text')
+  const addBtn = document.getElementById('btn-add-compare-manual')
+  if (!box || !textEl) return
+  const company = (r?.company || document.getElementById('f-company')?.value || '未识别公司').trim()
+  const role = (r?.role || document.getElementById('f-role')?.value || '未识别职位').trim()
+  textEl.textContent = `${company} ｜ ${role}`
+  box.style.display = 'block'
+  if (addBtn) addBtn.disabled = false
+}
+
+function addCurrentToCompareBoard(){
+  if (!currentResult) {
+    toast('请先完成这份JD分析', '⚠')
+    return
+  }
+  const jd = (document.getElementById('jd-text')?.value || '').trim()
+  const mode = upsertCompareBoardOnAnalyze(currentResult, jd)
+  if (mode === 'created') {
+    toast('已加入看板', '✓')
+  } else if (mode === 'updated') {
+    toast('已加入看板', '✓')
+  } else {
+    toast('写入看板失败，请重试', '✗')
+    return
+  }
+}
+
+function normalizeExtractedText(text) {
+  return String(text || '')
+    .replace(/\u0000/g, '')
+    .replace(/\r/g, '')
+    .replace(/[ \t]{3,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim()
+}
+
+function looksLikePdfInfoMetadataBlob(text) {
+  const t = String(text || '').slice(0, 3000)
+  if (t.length < 60) return false
+  const infoMarks = (t.match(/\/(Title|Author|Creator|Producer|Keywords|Subject)\s*\(/gi) || []).length
+  if (infoMarks >= 2 && t.length < 1800) return true
+  if (/Trapped\s*\/False/i.test(t) && /PDF-\d/i.test(t) && t.length < 1500) return true
+  return false
+}
+
+/** 仅把「像真实简历正文」的内容拼进 JD 分析，避免 PDF 元数据导致 0% 匹配 */
+function shouldIncludeResumeRawInContext(raw) {
+  const t = normalizeExtractedText(raw || '')
+  if (t.length < 80) return false
+  if (looksLikePdfInfoMetadataBlob(t) && t.length < 1500) return false
+  if (isResumeTextUsable(t)) return true
+  if (t.length >= 280) return true
+  return false
+}
+
+function maybeWarnResumeExtractQuality() {
+  try {
+    const selected = getSelectedResumeRecords()
+    if (!selected.length) return
+    const anyChunk = selected.some(r => normalizeExtractedText(r.rawText || '').length >= 80)
+    const anyIncluded = selected.some(r => shouldIncludeResumeRawInContext(r.rawText))
+    if (anyChunk && !anyIncluded) {
+      toast('当前勾选的简历不太像可读正文，本次分析可能不准。请在 Step 1 上传/勾选「读取成功」的简历。', '⚠')
+    }
+  } catch (e) {}
+}
+
+function isResumeTextUsable(text) {
+  if (!text) return false
+  const t = text.trim()
+  if (t.length < 80) return false
+  // PDF二进制乱码特征：大量 "00000" 或 "obj" "endobj" 等PDF结构词
+  const pdfBinaryPatterns = [
+    /0{4,}\s+\d+\s+[nf]/,   // 如 "00000001145 00000 n"
+    /\d+\s+\d+\s+obj/,       // 如 "1 0 obj"
+    /endobj/,
+    /xref\s+\d/,
+    /startxref/,
+    /\/Type\s*\/Catalog/,
+  ]
+  // 仅在命中多个PDF二进制特征时才判失败，避免误杀正常文本
+  const hitCount = pdfBinaryPatterns.reduce((n, pat) => n + (pat.test(t) ? 1 : 0), 0)
+  if (hitCount >= 2) return false
+  const hasReadableChars = /[A-Za-z0-9一-龥]/.test(t)
+  if (!hasReadableChars) return false
+  const readable = (t.match(/[A-Za-z0-9一-龥]/g) || []).length
+  return readable / t.length >= 0.1
+}
+
+function getResumeContentGen() {
+  try {
+    return localStorage.getItem(CAREER_RESUME_GEN_KEY) ?? ''
+  } catch (e) {
+    return ''
+  }
+}
+
+function bumpResumeContentGeneration() {
+  try {
+    const cur = parseInt(localStorage.getItem(CAREER_RESUME_GEN_KEY) || '0', 10)
+    const next = (Number.isFinite(cur) ? cur : 0) + 1
+    localStorage.setItem(CAREER_RESUME_GEN_KEY, String(next))
+  } catch (e) {}
+}
+
+function invalidateAnalysisForResumeChange() {
+  currentResult = null
+  analysisResultResumeGen = null
+  step3AccessGrantedThisVisit = false
+  try { localStorage.removeItem(STEP3_GATE_KEY) } catch (e) {}
+  try {
+    const raw = localStorage.getItem(P2_SESSION_KEY)
+    if (!raw) return
+    const p = JSON.parse(raw)
+    p.currentResult = null
+    p.mode = 'editing'
+    p.analysisCommitted = false
+    delete p.resultResumeGen
+    localStorage.setItem(P2_SESSION_KEY, JSON.stringify(p))
+  } catch (e) {}
+  if (currentPageId === 'p2') setState('empty')
+}
+
+function syncP2ResultsIfResumeStale() {
+  if (!currentResult) return
+  const genNow = getResumeContentGen()
+  if ((analysisResultResumeGen ?? '') !== genNow) {
+    currentResult = null
+    analysisResultResumeGen = null
+    setState('empty')
+    saveP2Session('editing')
+    updateStepGuards()
+    toast('已更换简历，之前的分析结果已清除，请重新点击「分析这份 JD」', '↺')
+  }
+}
+
+function hydrateFromDashboardQuery() {
+  const params = new URLSearchParams(window.location.search)
+  const jobId = params.get('jobId')
+  if (!jobId) return
+  try {
+    const compareJobs = JSON.parse(localStorage.getItem(DB_KEY) || '[]')
+    const trackingJobs = JSON.parse(localStorage.getItem(TRACKING_KEY) || '[]')
+    const job = compareJobs.find(j => j.id === jobId) || trackingJobs.find(j => j.id === jobId)
+    if (!job) return
+    document.getElementById('f-company').value = job.company || ''
+    document.getElementById('f-role').value = job.role || ''
+    document.getElementById('f-salary').value = job.salary || ''
+    document.getElementById('f-contract').value = job.contract || ''
+    document.getElementById('f-deadline').value = job.deadline || ''
+    document.getElementById('jd-url').value = job.url || ''
+    document.getElementById('jd-text').value = job.jd || ''
+    document.getElementById('char-count').textContent = (job.jd || '').length + ' 字'
+    liveJobId = job.id
+    currentResult = { ...(currentResult || {}), ...job, jd: job.jd || '' }
+    analysisResultResumeGen = getResumeContentGen()
+    goPage('p2')
+    toast('已从看板回填职位信息', '↩')
+  } catch(e) {}
+}
+
+function saveP2Session(mode='editing') {
+  try {
+    let prev = {}
+    try {
+      prev = JSON.parse(localStorage.getItem(P2_SESSION_KEY) || '{}')
+    } catch (e) {}
+    const hasAnalyzedResult = hasCompletedJDAnalysisForStep3()
+    const analysisCommitted =
+      mode === 'results'
+        ? true
+        : !!(prev.analysisCommitted && hasAnalyzedResult)
+    const effectiveMode =
+      analysisCommitted && hasAnalyzedResult ? 'results' : 'editing'
+    const payload = {
+      savedAt: new Date().toISOString(),
+      mode: effectiveMode,
+      analysisCommitted,
+      jd: document.getElementById('jd-text').value || '',
+      fields: {
+        company: document.getElementById('f-company').value || '',
+        role: document.getElementById('f-role').value || '',
+        salary: document.getElementById('f-salary').value || '',
+        contract: document.getElementById('f-contract').value || '',
+        deadline: document.getElementById('f-deadline').value || '',
+        url: document.getElementById('jd-url').value || '',
+      },
+      currentResult: currentResult || null,
+      resultResumeGen: currentResult
+        ? (analysisResultResumeGen ?? getResumeContentGen())
+        : null,
+    }
+    localStorage.setItem(P2_SESSION_KEY, JSON.stringify(payload))
+  } catch(e) {}
+}
+
+function restoreP2Session() {
+  try {
+    const raw = localStorage.getItem(P2_SESSION_KEY)
+    if (!raw) return false
+    const p = JSON.parse(raw)
+    if (!p) return false
+    const legacyCommitted =
+      !('analysisCommitted' in p) &&
+      p.mode === 'results' &&
+      p.currentResult &&
+      (p.currentResult.atsScore != null ||
+        p.currentResult.grade ||
+        p.currentResult.matchPct != null)
+    if (!p.analysisCommitted && !legacyCommitted) {
+      try {
+        localStorage.removeItem(P2_SESSION_KEY)
+      } catch (e) {}
+      return false
+    }
+    document.getElementById('jd-text').value = p.jd || ''
+    document.getElementById('char-count').textContent = (p.jd || '').length + ' 字'
+    const f = p.fields || {}
+    document.getElementById('f-company').value = f.company || ''
+    document.getElementById('f-role').value = f.role || ''
+    document.getElementById('f-salary').value = f.salary || ''
+    document.getElementById('f-contract').value = f.contract || ''
+    document.getElementById('f-deadline').value = f.deadline || ''
+    document.getElementById('jd-url').value = f.url || ''
+    currentResult = p.currentResult || null
+    analysisResultResumeGen = null
+    if (currentResult) {
+      if (!('resultResumeGen' in p)) {
+        currentResult = null
+      } else {
+        const rg = p.resultResumeGen
+        analysisResultResumeGen = rg != null && rg !== '' ? String(rg) : null
+        const genNow = getResumeContentGen()
+        if ((analysisResultResumeGen ?? '') !== genNow) {
+          currentResult = null
+          analysisResultResumeGen = null
+        }
+      }
+    }
+    if (currentResult && (p.mode === 'results' || currentResult.atsScore != null || currentResult.grade)) {
+      renderResults(currentResult, true)
+      renderJobConfirm(currentResult)
+      setState('results')
+    } else {
+      setState((p.jd || '').trim() ? 'empty' : 'empty')
+    }
+    updateStepGuards()
+    return true
+  } catch(e) {
+    return false
+  }
+}
+
+
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+setState('empty')
+step3AccessGrantedThisVisit = false
+const initialHash = (window.location.hash || '').trim().toLowerCase()
+try {
+  const urlParams = new URLSearchParams(window.location.search)
+  const wantsP2 = urlParams.get('forceP2') === '1'
+  if (wantsP2) {
+    goPage('p2')
+    try {
+      const u = new URL(window.location.href)
+      u.searchParams.delete('forceP2')
+      history.replaceState(null, '', u.pathname + (u.hash || ''))
+    } catch (e) {}
+  } else {
+    // 产品策略：默认从 Step 1 进入
+    goPage('p1')
+  }
+} catch(e) { goPage('p1') }
+hydrateFromDashboardQuery()
+if (!new URLSearchParams(window.location.search).get('jobId')) {
+  restoreP2Session()
+}
+// 直达 #p3：刷新后仍打开 Step 3（须已具备分析与「优化简历」门禁）
+if (
+  initialHash === '#p3' &&
+  hasCompletedJDAnalysisForStep3() &&
+  hasStep3OptimizeGate()
+) {
+  goPage('p3')
+}
+updateNavStatus()
+
+</script>
+<div class="toast-wrap" id="toast-wrap"></div>
+</body>
+</html>

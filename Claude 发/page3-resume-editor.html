@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page 3 — 简历修改对比</title>
+<style>
+  :root{--bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--border:#e2dfd8;--text:#1a1916;--text2:#6b6860;--text3:#9e9b96;--green:#2d6a4f;--green-bg:#d8f3dc;--blue:#1e40af;--blue-bg:#dbeafe;--red:#991b1b;--red-bg:#fee2e2;--amber:#92400e;--amber-bg:#fef3c7}
+  *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:13px}
+  .topnav{height:50px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;padding:0 18px;position:sticky;top:0;z-index:20}
+  .nav-link{padding:4px 10px;border-radius:6px;text-decoration:none;color:var(--text2)} .nav-link.active{background:#1a1916;color:#fff}
+  .btn{padding:6px 12px;border:1px solid var(--border);background:var(--surface);border-radius:6px;cursor:pointer}
+  .btn-green{background:var(--green);border-color:var(--green);color:#fff}.btn-blue{background:var(--blue);border-color:var(--blue);color:#fff}
+  .page-header{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 18px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .pill{padding:3px 10px;border-radius:999px;font-size:11px}.pill-amber{background:var(--amber-bg);color:var(--amber)}.pill-green{background:var(--green-bg);color:var(--green)}
+  .main{padding:14px 18px;max-width:1400px;margin:0 auto}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .col-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px}
+  .sec-head{padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text2);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+  .sec-body{padding:10px 12px;line-height:1.75}
+  .line{margin-bottom:6px}
+  .bullet{display:flex;gap:8px;margin-bottom:6px}.dot{width:4px;height:4px;border-radius:50%;background:var(--text3);margin-top:9px;flex-shrink:0}
+  .tag{font-size:10px;padding:2px 7px;border-radius:4px}
+  .tag-green{background:var(--green-bg);color:#085041}.tag-blue{background:var(--blue-bg);color:#0c447c}.tag-red{background:var(--red-bg);color:var(--red)}.tag-gray{background:#eef0f2;color:#4b5563}
+  .alert{margin-top:8px;padding:8px 10px;border-radius:7px;font-size:11px}
+  .alert-blue{background:var(--blue-bg);color:#042c53}
+  .alert-red{background:var(--red-bg);color:#501313}
+  .alert-green{background:var(--green-bg);color:#085041}
+  .panel-3{margin-top:8px;display:flex;flex-direction:column;gap:8px}
+  .panel-3-item{padding:8px 10px;border-radius:8px;font-size:11px;line-height:1.55;border-left:3px solid}
+  .panel-3-item h5{margin:0 0 4px 0;font-size:11px}
+  .p3-green{background:#d8f3dc;border-left-color:#2d6a4f;color:#173404}
+  .p3-yellow{background:#fef3c7;border-left-color:#BA7517;color:#412402}
+  .p3-red{background:#fee2e2;border-left-color:#E24B4A;color:#501313}
+  .hl-red{background:#fee2e2;color:#6f1d1b;padding:0 2px;border-radius:2px}
+  .hl-red-del{background:#fee2e2;color:#A32D2D;padding:0 2px;border-radius:2px;text-decoration:line-through}
+  .hl-yellow{background:#fef3c7;color:#713f12;padding:0 2px;border-radius:2px}
+  .hl-green{background:#d8f3dc;color:#14532d;padding:0 2px;border-radius:2px;text-decoration:underline;text-decoration-color:#2d6a4f}
+  .hl-new{background:#d8f3dc;color:#14532d;padding:0 2px;border-radius:2px;border-left:2px solid #2d6a4f}.hl-rewrite{background:#dbeafe;color:#1e3a8a;padding:0 2px;border-radius:2px;border-left:2px solid #1e40af}
+  .editable{outline:none;border-radius:4px}.editable:focus{background:#fffbe9}
+  .action-bar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:10px}
+  .bar-wrap{width:180px;height:6px;border-radius:4px;background:var(--surface2);overflow:hidden;position:relative}.bar-before,.bar-after{height:100%;position:absolute;top:0;left:0}.bar-before{background:#e24b4a}.bar-after{background:var(--green)}
+  .loading{position:fixed;inset:0;background:rgba(245,244,240,.92);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;z-index:30}
+  .spinner{width:28px;height:28px;border:2px solid #d0cdc6;border-top-color:#1a1916;border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <strong>求职助手</strong>
+  <a class="nav-link" href="jd-analysis.html#p1">Step 1 简历设置</a>
+  <a class="nav-link" href="jd-analysis.html#p2">Step 2 JD分析&看板</a>
+  <a class="nav-link active" href="#">Step 3 优化简历</a>
+</nav>
+
+<div class="page-header">
+  <strong>Page 3 — 简历修改对比</strong>
+  <span class="pill pill-amber" id="current-match">当前匹配度 --%</span>
+  <span class="pill pill-green" id="after-match">修改后 --%</span>
+</div>
+
+<div class="main">
+  <div class="grid">
+    <div>
+      <div class="col-label">原始简历（红/黄/绿标注）</div>
+      <div id="left-sections"></div>
+    </div>
+    <div>
+      <div class="col-label">AI建议版本（可直接编辑）</div>
+      <div id="right-sections"></div>
+    </div>
+  </div>
+</div>
+
+<div class="action-bar">
+  <div>
+    <div style="font-size:11px;color:#9e9b96">匹配度对比</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <span id="match-before" style="color:#991b1b;font-weight:600">--%</span>
+      <div class="bar-wrap"><div class="bar-before" id="bar-before"></div><div class="bar-after" id="bar-after"></div></div>
+      <span id="match-after" style="color:#2d6a4f;font-weight:600">--%</span>
+    </div>
+  </div>
+  <div style="margin-left:auto;display:flex;gap:8px">
+    <button class="btn" onclick="window.location.href='jd-analysis.html#p2'">返回JD分析</button>
+    <button class="btn btn-blue" onclick="exportWord()">确认修改并导出</button>
+  </div>
+</div>
+
+<div class="loading" id="loading"><div class="spinner"></div><div>AI 正在生成动态改写内容...</div></div>
+
+<script>
+const RESUME_KEY = 'career_resume_v1'
+const DASHBOARD_KEY = 'career_dashboard_v2'
+const API_KEY = 'career_api_key'
+const CURRENT_JD_KEY = 'current_jd_text'
+const CURRENT_JOB_ID_KEY = 'current_job_id'
+const CURRENT_JOB_TITLE_KEY = 'current_job_title'
+const CLAUDE_URL = `${location.origin}/api/anthropic/v1/messages`
+const CLAUDE_TIMEOUT_MS = 180000
+let currentPayload = null
+let baseSections = []
+
+const RESUME_DATA = {
+  name: "Yuan Fang",
+  contact: "(+61) 415216668 · seasand.cocoyan@hotmail.com · Melbourne, VIC 3000",
+  summary: "A UNSW-qualified professional with 9+ years of international experience delivering open space, public realm and urban design projects across Australia and Asia. Experienced in assisting with procurement, tender processes, coordinating multi-disciplinary consultant teams, stakeholders and monitoring project budgets, schedules and risks across concurrent project portfolios. Proven ability to engage effectively with councils, developers, government agencies, contractors to support delivery from inception through to handover.",
+  education: "Bachelor of Landscape Architecture, University of New South Wales",
+  experience: [
+    { company: "Arcadia Landscape Architecture", location: "Melbourne, Australia", title: "Senior Landscape Architect / Project Coordinator", period: "Sep 2022 – Jun 2025", bullets: ["Supported delivery of open space and public realm capital projects from planning through to handover, coordinating multi-disciplinary consultant teams including civil, structural, hydraulic, electrical and arborist consultants across multiple concurrent projects", "Facilitated vendor screening and negotiations on pricing and service delivery; liaison between clients and suppliers to evaluate compliance, ensure delivery aligned with project requirements and budget", "Monitored project progress, budgets and schedules, identifying risks and escalating issues to senior project managers to maintain delivery on time and within budget", "Engaged with internal and external stakeholders including councils, government agencies, community groups and compliance auditors across a high-volume portfolio spanning open space, health, education and infrastructure sectors"] },
+    { company: "RDA Design Associate", location: "Shanghai, China", title: "Senior Project Coordinator", period: "Jun 2019 – May 2022", bullets: ["Led end-to-end delivery of large-scale landscape, urban design and community environment projects, managing budget and schedule monitoring, resource allocation and reporting to Studio Directors", "Supported strategic procurement and project positioning, including idea initiation, statutory approvals, tendering, fee negotiations and contract administration in coordination with Studio Directors", "Coordinated multi-disciplinary consultant teams and an internal team of 4–6 members; maintained client relationships and established company-wide Quality Assurance (QA) protocols and standards", "Conducted regular site visits for construction review and defect identification, coordinating remediation outcomes with contractors"] },
+    { company: "TROP: terrains + open space", location: "Bangkok, Thailand", title: "Landscape Architect / Project Coordinator", period: "Mar 2017 – May 2018", bullets: ["Supported projects delivery from inception to handover, preparing design, modeling, technical drawings and specifications", "Coordinated multi-disciplinary consultants, contract and fee proposal preparation, and liaised with clients and local government for planning approvals", "Conducted material research, procurement and on-site testing and prototyping; managed budgets and supported contract administration throughout project delivery"] },
+    { company: "ASPECT Studios", location: "Shanghai, China", title: "Landscape Architect", period: "May 2014 – Oct 2016", bullets: ["Delivered design schemes under senior oversight, liaising with consultants and clients and reporting to key stakeholders including government bodies, environmental agencies and developers", "Engaged and supported business development through content creation (magazine, journal, website etc.) and drafting pre-bid proposals, tender submissions and pre-contract documentation as directed by the Directors"] }
+  ],
+  skills: {
+    projectDelivery: ["Open Space Capital", "Project Support", "Procurement & Tender Assistance", "Budget & Schedule Monitoring", "Risk Identification & Escalation", "Stakeholder Consultation & Delivery", "Multi-Project Coordination"],
+    software: ["Microsoft Office Suite (Word, Excel, PowerPoint, Teams)", "AutoCAD", "Revit", "SketchUp", "Adobe Creative Suite (InDesign, Photoshop, Illustrator)", "Lumion", "AIGC prompt engineering"]
+  },
+  fieldsOfExperience: {
+    "Public Realm & Masterplan & Open Space": ["Argyle Reserve, Kinrade St, Hughesdale VIC 2025-Current", "Good News Mambourin Campus Masterplan VIC 2024", "La Trobe Regional Hospital Masterplan VIC 2024", "Warrnambool Hospital Masterplan VIC 2022-2023", "Dubai Creek Harbor Masterplan UAE 2014-2015", "Dubai Central Park Masterplan UAE 2014-2015", "Shanghai Vanke Anting Sports Park Shanghai 2016", "Shanghai Dream Center District Plaza & Open Space 2014-2017"],
+    "Infrastructure & Headquarters": ["Data Center MEL 64/71/81/08 VIC 2022-Current", "Healesville Koo Wee Rup Highway Landscape As-built VIC 2024-Current", "Metropolitan Roads Program WaterGardens VIC 2024-Current", "Alibaba Headquarters Hangzhou China 2014-2017"],
+    "Commercial": ["MOTW Mall of the World UAE 2016", "Powerlong Jingjiang Shopping Center Renewal 2019", "Xuhui Yangjiang Lifestyle & Sales Center Shanghai 2019-2020", "CRland Beer Factory Museum Renewal Wuhan 2019"],
+    "Residential & Hospitality": ["Melbourne Crown Casino VIC 2024-Current", "District Living Docklands VIC 2022-Current", "King Street Apartment VIC 2023", "King Street DA VIC 2025", "Kavanagh St Apartment Southbank VIC 2024", "Luxelake Chengdu A3 & A7 2016", "X Hotel Bangkok Thailand 2017", "One Bangkok Thailand 2017", "Banyan Tree Resort & Residences Chengdu 2019-2022", "Yangjing Residential Design Shanghai 2019", "Zhongnan Xianfeng Residence Xian 2020"],
+    "Health & Education": ["Warrnambool First Nation Courtyard VIC 2024-Current", "La Trobe Regional Hospital Feasibility Study VIC 2024", "Opal Health Care Shade and Courtyard Renewal VIC 2024-Current", "Good News Lutheran College Stage 1B VIC 2024", "Islamic College of Melbourne Playground VIC 2024", "Sale College Campus VIC 2022-2023", "Staughton College Renewal VIC 2022-Current", "Penola College Renewal VIC 2023-Current", "Ryman Kealba Retirement Village VIC 2022"]
+  }
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function showLoading(v){document.getElementById('loading').style.display=v?'flex':'none'}
+function typeTagClass(tag){if(tag==='新增')return'tag-green';if(tag==='改写'||tag==='强化')return'tag-blue';if(tag==='精简')return'tag-red';return'tag-gray'}
+function alertClass(type){if(type==='red')return'alert-red';if(type==='green')return'alert-green';return'alert-blue'}
+function highlightClass(type,isRight){
+  if(isRight) return type==='green'?'hl-new':'hl-rewrite'
+  if(type==='red') return 'hl-red-del'
+  if(type==='yellow') return 'hl-yellow'
+  return 'hl-green'
+}
+
+function toast(msg){
+  try {
+    const text = String(msg || '').trim()
+    if (!text) return
+    // Page3为独立页，使用轻量原生提示避免依赖外部toast组件
+    if (typeof window !== 'undefined' && typeof window.alert === 'function') {
+      window.alert(text)
+    }
+  } catch (_) {}
+}
+
+function ensureResumeData() {
+  const fallback = JSON.parse(JSON.stringify(RESUME_DATA))
+  try {
+    const raw = localStorage.getItem(RESUME_KEY)
+    if (!raw) {
+      localStorage.setItem(RESUME_KEY, JSON.stringify(fallback))
+      return fallback
+    }
+    const parsed = JSON.parse(raw)
+    if (!parsed || typeof parsed !== 'object') throw new Error('invalid resume json')
+    const resume = {
+      ...fallback,
+      ...parsed,
+      experience: Array.isArray(parsed.experience) ? parsed.experience : fallback.experience,
+      skills: {
+        ...fallback.skills,
+        ...(parsed.skills || {}),
+        projectDelivery: Array.isArray(parsed.skills?.projectDelivery) ? parsed.skills.projectDelivery : fallback.skills.projectDelivery,
+        software: Array.isArray(parsed.skills?.software) ? parsed.skills.software : fallback.skills.software
+      },
+      fieldsOfExperience: (parsed.fieldsOfExperience && typeof parsed.fieldsOfExperience === 'object')
+        ? parsed.fieldsOfExperience
+        : fallback.fieldsOfExperience
+    }
+    localStorage.setItem(RESUME_KEY, JSON.stringify(resume))
+    return resume
+  } catch (_) {
+    localStorage.setItem(RESUME_KEY, JSON.stringify(fallback))
+    return fallback
+  }
+}
+
+function buildBaseSections(resume) {
+  const out = []
+  out.push({ id:'name_contact', title:'Name & Contact', tag:'无需修改', original:`${resume.name} | ${resume.contact}`, bullets_original:[] })
+  out.push({ id:'summary', title:'Summary', tag:'改写', original:resume.summary, bullets_original:[] })
+  out.push({ id:'education', title:'Education', tag:'无需修改', original:resume.education, bullets_original:[] })
+  ;(resume.experience||[]).forEach((exp, idx) => {
+    out.push({
+      id:`experience_${idx}`,
+      title:`${exp.company} · ${exp.title} · ${exp.period}`,
+      tag:'改写',
+      original:'',
+      bullets_original: exp.bullets || []
+    })
+  })
+  out.push({ id:'skills_projectDelivery', title:'Skills · Project Delivery', tag:'强化', original:'', bullets_original: resume.skills?.projectDelivery || [] })
+  out.push({ id:'skills_software', title:'Skills · Software', tag:'强化', original:'', bullets_original: resume.skills?.software || [] })
+  Object.keys(resume.fieldsOfExperience || {}).forEach(key => {
+    out.push({ id:`foe_${key}`, title:`Fields Of Experience · ${key}`, tag:'无需修改', original:'', bullets_original: resume.fieldsOfExperience[key] || [] })
+  })
+  return out
+}
+
+function applyHighlights(text, highlights, isRight){
+  const list = Array.isArray(highlights)?highlights:[]
+  let out = esc(text||'')
+  list.forEach(h=>{
+    const t = esc(h.text||'')
+    if(!t) return
+    const cls = highlightClass(h.type, isRight)
+    out = out.replace(t, `<span class="${cls}" title="${esc(h.reason||'')}">${t}</span>`)
+  })
+  return out
+}
+
+function mergeWithAi(base, aiSections) {
+  const aiMap = {}
+  ;(aiSections || []).forEach(sec => { if (sec && sec.id) aiMap[sec.id] = sec })
+  return base.map(sec => {
+    const ai = aiMap[sec.id] || {}
+    return {
+      ...sec,
+      tag: ai.tag || sec.tag || '无需修改',
+      suggested: typeof ai.suggested === 'string' ? ai.suggested : sec.original,
+      bullets_suggested: Array.isArray(ai.bullets_suggested) && ai.bullets_suggested.length ? ai.bullets_suggested : sec.bullets_original,
+      highlights: Array.isArray(ai.highlights) ? ai.highlights : [],
+      alert: ai.alert || null,
+      matched_jd_items: Array.isArray(ai.matched_jd_items) ? ai.matched_jd_items : [],
+      weak_wording: Array.isArray(ai.weak_wording) ? ai.weak_wording : [],
+      hard_gaps: Array.isArray(ai.hard_gaps) ? ai.hard_gaps : []
+    }
+  })
+}
+
+function renderSections(sections){
+  const left = document.getElementById('left-sections')
+  const right = document.getElementById('right-sections')
+  left.innerHTML = ''; right.innerHTML = ''
+
+  sections.forEach(sec=>{
+    const leftBodyLines = []
+    if (sec.original) leftBodyLines.push(`<div class="line">${applyHighlights(sec.original, sec.highlights, false)}</div>`)
+    ;(sec.bullets_original||[]).forEach(b=>leftBodyLines.push(`<div class="bullet"><div class="dot"></div><div>${applyHighlights(b, sec.highlights, false)}</div></div>`))
+    const leftAlert = sec.alert ? `<div class="alert ${alertClass(sec.alert.type)}">${esc(sec.alert.text)}</div>` : ''
+    left.innerHTML += `<div class="section" data-id="${esc(sec.id)}"><div class="sec-head">${esc(sec.title)} <span class="tag ${typeTagClass(sec.tag)}">${esc(sec.tag||'无需修改')}</span></div><div class="sec-body">${leftBodyLines.join('')}${leftAlert}</div></div>`
+
+    const rightBodyLines = []
+    if (sec.suggested) rightBodyLines.push(`<div class="line editable" contenteditable="true" data-field="suggested">${applyHighlights(sec.suggested, sec.highlights, true)}</div>`)
+    ;(sec.bullets_suggested||[]).forEach((b,i)=>rightBodyLines.push(`<div class="bullet"><div class="dot"></div><div class="editable" contenteditable="true" data-field="bullet" data-idx="${i}">${applyHighlights(b, sec.highlights, true)}</div></div>`))
+    const rightAlert = sec.alert ? `<div class="alert ${alertClass(sec.alert.type)}">${esc(sec.alert.text)}</div>` : ''
+    const greenList = (sec.matched_jd_items||[]).map(i => `<div>• ${esc(i)}</div>`).join('') || '<div>• 暂无</div>'
+    const redMerged = []
+    ;(sec.weak_wording||[]).forEach(i => redMerged.push(`【修改建议】${i}`))
+    ;(sec.hard_gaps||[]).forEach(i => redMerged.push(`【硬缺口】${i}`))
+    const redList = redMerged.map(i => `<div>• ${esc(i)}</div>`).join('') || '<div>• 暂无</div>'
+    const triPanel = `
+      <div class="panel-3">
+        <div class="panel-3-item p3-green"><h5>区域1 · 已匹配（绿色）</h5>${greenList}</div>
+        <div class="panel-3-item p3-red"><h5>区域2 · 必须修改（红色）</h5>${redList}</div>
+      </div>`
+    right.innerHTML += `<div class="section" data-id="${esc(sec.id)}"><div class="sec-head">${esc(sec.title)} <span class="tag ${typeTagClass(sec.tag)}">${esc(sec.tag||'无需修改')}</span></div><div class="sec-body">${rightBodyLines.join('')}${rightAlert}${triPanel}</div></div>`
+  })
+}
+
+function updateMatch(before, after){
+  document.getElementById('current-match').textContent = `当前匹配度 ${before}%`
+  document.getElementById('after-match').textContent = `修改后 ${after}%`
+  document.getElementById('match-before').textContent = `${before}%`
+  document.getElementById('match-after').textContent = `→ ${after}%`
+  document.getElementById('bar-before').style.width = `${Math.max(0,Math.min(100,before))}%`
+  setTimeout(()=>{document.getElementById('bar-after').style.width=`${Math.max(0,Math.min(100,after))}%`},150)
+}
+
+function readEditedSections(){
+  if (!currentPayload || !Array.isArray(currentPayload.sections)) return []
+  const map = {}
+  document.querySelectorAll('#right-sections .section').forEach(sec=>{
+    const id = sec.getAttribute('data-id')
+    map[id] = { suggested:'', bullets_suggested:[] }
+    const s = sec.querySelector('[data-field="suggested"]')
+    if (s) map[id].suggested = s.innerText.trim()
+    sec.querySelectorAll('[data-field="bullet"]').forEach(b=>map[id].bullets_suggested.push(b.innerText.trim()))
+  })
+  return currentPayload.sections.map(sec=>({ ...sec, ...map[sec.id] }))
+}
+
+async function callClaude(apiKey, resumeData, jdText){
+  const system = `你是简历缺口分析与改写助手。不要编造事实，不要新增不存在经历。
+目标：不是简单替换词，而是按两层标准输出：
+- 绿色=已匹配（包含原文已匹配 + AI补充后更贴合JD的内容）
+- 红色=必须修改（包含措辞/拼写/表达错误建议 + JD硬缺口）
+
+严格返回JSON：
+{
+  "matchBefore": 52,
+  "matchAfter": 75,
+  "sections": [
+    {
+      "id":"summary",
+      "tag":"改写",
+      "suggested":"修改后文本",
+      "bullets_suggested":[],
+      "highlights":[{"text":"xxx","type":"yellow","reason":"xxx"}],
+      "alert":{"type":"blue","text":"xxx"},
+      "matched_jd_items":["JD原文条目..."],
+      "weak_wording":["红色修改建议：原文X -> 建议Y，原因..."],
+      "hard_gaps":["缺失项 + 建议补充文字；若无真实经历，提示在cover letter解释"]
+    }
+  ]
+}
+要求：
+1) 只允许使用传入resumeData原文做改写标注，不得新增或替换事实。
+2) experience必须保留原公司/职位/时间，不新增删除工作经历。
+3) 返回sections id必须来自用户提供的sectionIds。
+4) 必须检查并覆盖以下红色硬缺口（若在简历中缺失）：
+   - Team Leadership / Supervises staff
+   - Open Space Strategy / Policy Development
+   - Community Consultation Leadership
+   - Victorian Planning Framework / Local Government legislation
+   - Working with Children Check + Victorian Driver Licence
+5) 对每个红色缺口，给出可直接加进简历的一句建议文本；若无真实经历，明确写“需在cover letter解释”。
+6) 本任务不需要黄色分区输出，所有“待修改建议”统一归入 red（weak_wording/hard_gaps）。`
+  const sectionIds = buildBaseSections(resumeData).map(s=>s.id)
+  const user = `【resumeData】\n${JSON.stringify(resumeData)}\n\n【JD全文】\n${jdText}\n\n【sectionIds】\n${JSON.stringify(sectionIds)}`
+  const postJson = async (bodyObj, timeoutMs = CLAUDE_TIMEOUT_MS) => {
+    const controller = new AbortController()
+    const timer = setTimeout(() => controller.abort(), timeoutMs)
+    try {
+      const response = await fetch(CLAUDE_URL, {
+        method:'POST',
+        signal: controller.signal,
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-calls':'true'
+        },
+        body: JSON.stringify(bodyObj)
+      })
+      return response
+    } catch (err) {
+      if (err && err.name === 'AbortError') {
+        throw new Error(`AI请求超时（>${Math.floor(timeoutMs/1000)}秒），请检查网络后重试`)
+      }
+      throw err
+    } finally {
+      clearTimeout(timer)
+    }
+  }
+
+  const res = await postJson({
+    model:'claude-sonnet-4-20250514',
+    max_tokens:3200,
+    system,
+    messages:[{role:'user', content:user}]
+  })
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||`API错误 ${res.status}`)}
+  const data = await res.json()
+  const txt = getClaudeText(data)
+  let parsed = parseAiJson(txt)
+  if (parsed) return parsed
+
+  // 自动修复一次：让模型只做JSON纠错，不改语义
+  const repairRes = await postJson({
+    model:'claude-sonnet-4-20250514',
+    max_tokens:1400,
+    system:'你是JSON修复器。把用户提供内容修复为合法JSON，只返回JSON对象本体，不要解释。',
+    messages:[{role:'user', content:`请修复成合法JSON：\n${txt.slice(0, 12000)}`}]
+  }, 90000)
+  if (!repairRes.ok) throw new Error(`AI返回格式异常，且修复失败(${repairRes.status})`)
+  const repairData = await repairRes.json()
+  const repairTxt = getClaudeText(repairData)
+  parsed = parseAiJson(repairTxt)
+  if (parsed) return parsed
+
+  // 最后兜底一次：按目标结构重建（允许缺省字段）
+  const rebuildRes = await postJson({
+    model:'claude-sonnet-4-20250514',
+    max_tokens:1800,
+    system:'你是JSON重建器。把用户提供内容重建为合法JSON，字段必须包含 matchBefore/matchAfter/sections，sections 中每项至少有 id/tag/suggested/bullets_suggested/highlights/alert/matched_jd_items/weak_wording/hard_gaps。只返回JSON对象本体。',
+    messages:[{role:'user', content:`可用sectionIds: ${JSON.stringify(sectionIds)}\n请基于这段内容重建JSON：\n${(repairTxt || txt).slice(0, 12000)}`}]
+  }, 90000)
+  if (!rebuildRes.ok) throw new Error(`AI返回格式异常，且重建失败(${rebuildRes.status})`)
+  const rebuildData = await rebuildRes.json()
+  const rebuildTxt = getClaudeText(rebuildData)
+  parsed = parseAiJson(rebuildTxt)
+  if (!parsed) {
+    // 兜底：即使AI返回持续异常，也给出可编辑版本，避免整页失败
+    return buildFallbackPayload(resumeData, jdText, sectionIds)
+  }
+  return parsed
+}
+
+function getClaudeText(data){
+  const parts = Array.isArray(data?.content) ? data.content : []
+  return parts
+    .map(p => (p && typeof p.text === 'string') ? p.text : '')
+    .join('\n')
+    .trim()
+}
+
+function extractJsonCandidates(raw){
+  const src = String(raw || '')
+    .replace(/\uFEFF/g, '')
+    .replace(/```json\s*/gi, '')
+    .replace(/```/g, '')
+    .trim()
+
+  const out = []
+  // 1) 直接整段
+  if (src.startsWith('{') && src.endsWith('}')) out.push(src)
+
+  // 2) 平衡大括号扫描，提取所有对象候选
+  let start = -1
+  let depth = 0
+  let inStr = false
+  let escp = false
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i]
+    if (inStr) {
+      if (escp) escp = false
+      else if (ch === '\\') escp = true
+      else if (ch === '"') inStr = false
+      continue
+    }
+    if (ch === '"') { inStr = true; continue }
+    if (ch === '{') {
+      if (depth === 0) start = i
+      depth++
+    } else if (ch === '}') {
+      if (depth > 0) depth--
+      if (depth === 0 && start >= 0) {
+        out.push(src.slice(start, i + 1))
+        start = -1
+      }
+    }
+  }
+
+  // 3) 旧逻辑兜底：首尾大括号切片
+  const s = src.indexOf('{')
+  const e = src.lastIndexOf('}')
+  if (s >= 0 && e > s) out.push(src.slice(s, e + 1))
+
+  // 去重
+  return [...new Set(out)]
+}
+
+function normalizeCandidate(txt){
+  return String(txt || '')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '')
+    .replace(/,\s*([}\]])/g, '$1')
+    .trim()
+}
+
+function isValidAiPayload(obj){
+  return !!(obj && typeof obj === 'object' && Array.isArray(obj.sections))
+}
+
+function buildFallbackPayload(resumeData, jdText, sectionIds){
+  const base = buildBaseSections(resumeData)
+  const sections = base
+    .filter(s => sectionIds.includes(s.id))
+    .map(s => ({
+      id: s.id,
+      tag: s.tag || '无需修改',
+      suggested: s.original || '',
+      bullets_suggested: Array.isArray(s.bullets_original) ? s.bullets_original : [],
+      highlights: [],
+      alert: null,
+      matched_jd_items: [],
+      weak_wording: [
+        '建议把与JD最相关的职责关键词前置到Summary与前2段经历',
+        '将弱动词（participated/helped）改为强动词（led/delivered/coordinated）'
+      ],
+      hard_gaps: extractLikelyHardGaps(jdText)
+    }))
+  return {
+    _fallback: true,
+    matchBefore: 55,
+    matchAfter: 65,
+    sections
+  }
+}
+
+function extractLikelyHardGaps(jdText){
+  const t = String(jdText || '').toLowerCase()
+  const out = []
+  if (/team leadership|supervis/i.test(t)) out.push('Team Leadership：若无真实带队经历，需在cover letter解释')
+  if (/policy|strategy|open space/i.test(t)) out.push('Open Space Strategy / Policy：可在经历中补一条相关协作表述')
+  if (/community consultation|stakeholder consultation/i.test(t)) out.push('Community Consultation：强调与社区/利益相关方沟通协作经验')
+  if (/victorian planning|local government|legislation/i.test(t)) out.push('Victorian Planning Framework / Local Government legislation：建议补充熟悉度描述')
+  if (/working with children|driver licence|driver license/i.test(t)) out.push('Working with Children Check / Driver Licence：按真实情况补充证照信息')
+  return out.slice(0, 5)
+}
+
+function parseAiJson(raw){
+  if (!raw) return null
+  const candidates = extractJsonCandidates(raw)
+  for (const c of candidates) {
+    const clean = normalizeCandidate(c)
+    try {
+      const obj = JSON.parse(clean)
+      if (isValidAiPayload(obj)) return obj
+    } catch (_) {}
+  }
+  return null
+}
+
+async function init(){
+  showLoading(true)
+  try {
+    const resumeData = ensureResumeData()
+    baseSections = buildBaseSections(resumeData)
+    const jdText = (localStorage.getItem(CURRENT_JD_KEY) || '').trim()
+    const apiKey = (localStorage.getItem(API_KEY) || '').trim()
+    if (!jdText) throw new Error('未找到JD文本，请先在JD分析页点击进入Page3')
+    if (!apiKey) throw new Error('未设置API Key')
+    const ai = await callClaude(apiKey, resumeData, jdText)
+    currentPayload = {
+      matchBefore: Number(ai.matchBefore || 0),
+      matchAfter: Number(ai.matchAfter || 0),
+      sections: mergeWithAi(baseSections, ai.sections || [])
+    }
+    renderSections(currentPayload.sections)
+    updateMatch(currentPayload.matchBefore, currentPayload.matchAfter)
+    if (ai && ai._fallback) {
+      document.getElementById('current-match').textContent = '当前匹配度（基础模式）'
+      document.getElementById('after-match').textContent = '修改后（基础模式）'
+      toast('已切换基础可编辑版本（本次AI结构化结果异常）')
+    }
+  } catch (err) {
+    document.getElementById('left-sections').innerHTML = `<div class="section"><div class="sec-body" style="color:#991b1b">加载失败：${esc(err.message)}</div></div>`
+    document.getElementById('right-sections').innerHTML = ''
+  } finally {
+    showLoading(false)
+  }
+}
+
+async function exportWord(){
+  try {
+    const edited = readEditedSections()
+    if (!edited.length) return alert('暂无可导出内容')
+    const resumeData = ensureResumeData()
+    const jobTitle = (localStorage.getItem(CURRENT_JOB_TITLE_KEY) || 'Job').replace(/[^\w\u4e00-\u9fa5\- ]/g, '').trim() || 'Job'
+
+    if (!window.docx) await loadDocxLib()
+    const { Document, Packer, Paragraph, TextRun, BorderStyle } = window.docx
+    const children = []
+    const editMap = {}
+    edited.forEach(s => { if (s && s.id) editMap[s.id] = s })
+    const getSection = (id, fallbackText='', fallbackBullets=[]) => {
+      const s = editMap[id] || {}
+      return {
+        text: (s.suggested || fallbackText || '').trim(),
+        bullets: (Array.isArray(s.bullets_suggested) && s.bullets_suggested.length ? s.bullets_suggested : fallbackBullets).map(v => String(v || '').trim()).filter(Boolean)
+      }
+    }
+    const addHeader = (title) => children.push(new Paragraph({
+      spacing: { before: 220, after: 70 },
+      border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'cccccc', space: 3 } },
+      children: [new TextRun({ text: String(title || '').toUpperCase(), font: 'Calibri', size: 24, bold: true, color: '1a1916' })]
+    }))
+    const addLine = (txt, size=20, bold=false, italic=false, color='333333') => {
+      if (!txt) return
+      children.push(new Paragraph({ spacing: { before: 20, after: 40 }, children: [new TextRun({ text: txt, font: 'Calibri', size, bold, italics: italic, color })] }))
+    }
+    const addBullets = (list) => list.forEach(t => children.push(new Paragraph({
+      spacing: { before: 20, after: 20 },
+      indent: { left: 360 },
+      children: [
+        new TextRun({ text: '•  ', font: 'Calibri', size: 20, color: '999999' }),
+        new TextRun({ text: t, font: 'Calibri', size: 20, color: '333333' })
+      ]
+    })))
+
+    addLine(resumeData.name || 'Yuan Fang', 32, true, false, '1a1916')
+    addLine(resumeData.contact || '', 19, false, false, '666666')
+    addHeader('Summary')
+    addLine(getSection('summary', resumeData.summary).text)
+    addHeader('Education')
+    addLine(getSection('education', resumeData.education).text)
+
+    addHeader('Experience')
+    ;(resumeData.experience || []).forEach((exp, i) => {
+      addLine(`${exp.company} · ${exp.title} · ${exp.period}`, 22, true, false, '1a1916')
+      addLine(exp.location || '', 18, false, true, '888888')
+      addBullets(getSection(`experience_${i}`, '', exp.bullets || []).bullets)
+    })
+
+    addHeader('Skills')
+    addLine('Project Delivery', 20, true, false, '1a1916')
+    addBullets(getSection('skills_projectDelivery', '', resumeData.skills?.projectDelivery || []).bullets)
+    addLine('Software', 20, true, false, '1a1916')
+    addBullets(getSection('skills_software', '', resumeData.skills?.software || []).bullets)
+
+    addHeader('Fields Of Experience')
+    Object.keys(resumeData.fieldsOfExperience || {}).forEach(key => {
+      addLine(key, 20, true, false, '1a1916')
+      addBullets(getSection(`foe_${key}`, '', resumeData.fieldsOfExperience[key] || []).bullets)
+    })
+
+    const doc = new Document({
+      sections: [{
+        properties: { page: { size: { width: 11906, height: 16838 }, margin: { top: 900, right: 1100, bottom: 900, left: 1100 } } },
+        children
+      }]
+    })
+    const blob = await Packer.toBlob(doc)
+    const a = document.createElement('a')
+    const d = new Date().toISOString().slice(0,10)
+    const url = URL.createObjectURL(blob)
+    a.href = url
+    a.download = `Yuan_Fang_Resume_${jobTitle}_${d}.docx`
+    a.click()
+    URL.revokeObjectURL(url)
+  } catch (err) {
+    console.error(err)
+    alert('导出失败：' + (err && err.message ? err.message : '未知错误') + '\n请检查网络后重试。')
+  }
+}
+
+async function loadDocxLib() {
+  const cdns = [
+    'https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js',
+    'https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js',
+    'https://unpkg.com/docx@8.5.0/build/index.umd.js',
+  ]
+  let lastErr = null
+  for (const src of cdns) {
+    try {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement('script')
+        s.src = src
+        s.async = true
+        s.onload = resolve
+        s.onerror = reject
+        document.head.appendChild(s)
+      })
+      if (window.docx) return
+    } catch (e) {
+      lastErr = e
+    }
+  }
+  throw new Error('docx.js 加载失败，请检查网络或代理后重试')
+}
+
+init()
+</script>
+</body>
+</html>
