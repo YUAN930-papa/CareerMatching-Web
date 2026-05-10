@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JD 对比看板</title>
+<style>
+  :root {
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", "Liberation Mono", monospace;
+    --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--border:#e2dfd8;--border2:#d0cdc6;
+    --text:#1a1916;--text2:#6b6860;--text3:#9e9b96;--accent:#1a1916;
+    --green:#2d6a4f;--blue:#1e40af;--red:#991b1b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+  .topnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-weight:600;font-size:15px;letter-spacing:-0.3px;}
+  .nav-divider{width:1px;height:20px;background:var(--border);}
+  .nav-links{display:flex;gap:2px;}
+  .nav-link{padding:5px 10px;border-radius:6px;font-size:13px;color:var(--text2);cursor:pointer;border:none;background:none;font-family:inherit;transition:all .15s;}
+  .nav-link.active{background:var(--accent);color:white;}
+  .nav-left{display:flex;align-items:center;gap:8px;}
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+  .btn{padding:6px 12px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text);font-family:inherit;transition:all .15s;display:flex;align-items:center;gap:6px;}
+  .btn:hover{background:var(--surface2);border-color:var(--border2);}
+  .btn-dark{background:var(--accent);color:#fff;border-color:var(--accent);}
+  .btn-board-compare{background:#5b21b6;color:#fff;border-color:#5b21b6;font-weight:700;}
+  .btn-board-compare:hover{opacity:.9;}
+  .btn-board-tracking{background:#0f766e;color:#fff;border-color:#0f766e;font-weight:700;}
+  .btn-board-tracking:hover{opacity:.9;}
+  .btn-board-nav{height:32px;padding:0 14px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;}
+  .stats-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;gap:14px;align-items:center;}
+  .stat{display:flex;flex-direction:column;gap:1px;padding:6px 10px;border-radius:8px;cursor:pointer;border:1px solid transparent;}
+  .stat:hover{background:var(--surface2);}
+  .stat.active{border-color:var(--accent);background:#f1f5f9;}
+  .stat-num{font-size:20px;font-weight:700;line-height:1;}
+  .stat-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;}
+  .toolbar{padding:14px 24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .search-input,.filter-select{padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-family:inherit;color:var(--text);}
+  .search-input{width:230px;}
+  .table-wrap{padding:0 24px 24px;overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+  thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap;}
+  tbody tr{border-bottom:1px solid var(--border);}
+  tbody tr:last-child{border-bottom:none;}
+  tbody tr:hover{background:var(--surface2);}
+  tbody tr.dragging{
+    opacity:.5;
+    background:#fff;
+    box-shadow:0 10px 24px rgba(0,0,0,.16);
+  }
+  tbody tr.drag-over{background:#f8fafc;}
+  tbody tr.drag-over-before{box-shadow:inset 0 3px 0 #2563eb;}
+  tbody tr.drag-over-after{box-shadow:inset 0 -3px 0 #2563eb;}
+  td{padding:10px 14px;font-size:13px;vertical-align:middle;}
+  .drag{cursor:grab;color:#9ca3af;width:24px;text-align:center;user-select:none;}
+  .drag:hover{cursor:grab;color:#6b7280}
+  .menu-btn{width:28px;height:24px;border-radius:6px;border:1px solid var(--border2);background:#fff;cursor:pointer;line-height:1;color:#6b7280}
+  .menu-btn:hover{background:var(--surface2)}
+  .order{font-family:var(--font-mono);width:40px;color:#6b7280;}
+  .plus-btn{width:28px;height:24px;border-radius:6px;border:1px solid var(--border2);background:#fff;cursor:pointer;font-weight:700;line-height:1;}
+  .plus-btn.added{background:#dcfce7;border-color:#86efac;color:#166534;}
+  .grade{display:inline-flex;align-items:center;padding:2px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+  .gA{background:#d1fae5;color:#065f46}.gB{background:#dbeafe;color:#1e40af}.gC{background:#fef3c7;color:#92400e}.gD{background:#fee2e2;color:#991b1b}.gN{background:#f3f4f6;color:#374151}
+  .score{font-family:var(--font-mono);font-weight:600}
+  .td-url a{color:var(--blue);font-size:12px;text-decoration:none;font-family:var(--font-mono);}
+  .ctx{display:none;position:fixed;z-index:1000;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(0,0,0,.15);}
+  .ctx button{display:block;border:none;background:transparent;padding:8px 12px;text-align:left;cursor:pointer;width:120px}
+  .ctx button:hover{background:#f3f4f6}
+  .confirm-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.22);align-items:center;justify-content:center}
+  .confirm-box{width:min(520px,92vw);background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px 20px;box-shadow:0 12px 40px rgba(0,0,0,.22)}
+  .confirm-title{font-weight:700;margin-bottom:6px}
+  .confirm-msg{font-size:13px;color:var(--text2);line-height:1.6}
+  .confirm-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+  .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px;}
+  .toast{background:var(--accent);color:white;padding:10px 16px;border-radius:8px;font-size:13px;font-weight:500;}
+</style>
+</head>
+<body>
+<nav class="topnav">
+  <span class="nav-logo">求职助手</span>
+  <div class="nav-left">
+    <button class="btn btn-board-nav" onclick="goBackToJdAnalysis()">⬅️返回JD分析</button>
+  </div>
+  <div class="nav-right">
+    <button class="btn btn-board-nav btn-board-tracking" onclick="openTracking()">➡️追踪进度看板</button>
+  </div>
+</nav>
+<div class="stats-bar">
+  <div class="stat active" id="stat-ALL" onclick="setGradeFilter('ALL')">
+    <div class="stat-num" id="stat-total">0</div><div class="stat-label">总JD</div>
+  </div>
+  <div class="stat" id="stat-A" onclick="setGradeFilter('A')">
+    <div class="stat-num" id="stat-a" style="color:#065f46">0</div><div class="stat-label">A评级</div>
+  </div>
+  <div class="stat" id="stat-B" onclick="setGradeFilter('B')">
+    <div class="stat-num" id="stat-b" style="color:#1e40af">0</div><div class="stat-label">B评级</div>
+  </div>
+  <div class="stat" id="stat-CD" onclick="setGradeFilter('CD')">
+    <div class="stat-num" id="stat-cd" style="color:#92400e">0</div><div class="stat-label">C/D评级</div>
+  </div>
+</div>
+<div style="padding:0 24px 10px;display:flex;justify-content:flex-end;gap:8px;align-items:center">
+  <button class="btn" onclick="openTrash()">🗑 垃圾桶</button>
+</div>
+<div class="toolbar">
+  <select id="filter-type" class="filter-select" onchange="render()">
+    <option value="">全部方向</option>
+    <option value="Landscape/Urban Design">Landscape/Urban</option>
+    <option value="Project management">Project management</option>
+    <option value="Government">Government</option>
+    <option value="BIM">BIM</option>
+    <option value="Digital Visual">Digital Visual</option>
+    <option value="Admin">Admin</option>
+    <option value="AI">AI</option>
+  </select>
+  <input id="search-input" class="search-input" placeholder="搜索公司、职位、备注..." oninput="render()">
+  <span style="margin-left:auto;font-size:12px;color:var(--text3)" id="filter-count"></span>
+</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:34px"></th>
+        <th style="min-width:160px">添加入投递进度追踪看板</th>
+        <th>#</th>
+        <th>公司名称</th>
+        <th>职位名称</th>
+        <th>方向类型</th>
+        <th>AI投递评级</th>
+        <th>ATS</th>
+        <th>薪资</th>
+        <th>URL</th>
+        <th>AI评级备注</th>
+      </tr>
+    </thead>
+    <tbody id="table-body"></tbody>
+  </table>
+</div>
+<div id="ctx" class="ctx"><button onclick="deleteByContextMenu()">删除</button></div>
+<div id="confirm-overlay" class="confirm-overlay">
+  <div class="confirm-box">
+    <div class="confirm-title">操作确认</div>
+    <div id="confirm-msg" class="confirm-msg"></div>
+    <div class="confirm-actions">
+      <button class="btn" onclick="closeConfirm(false)">取消</button>
+      <button class="btn btn-dark" onclick="closeConfirm(true)">确认</button>
+    </div>
+  </div>
+</div>
+<div class="toast-wrap" id="toast-wrap"></div>
+<script>
+const COMPARE_KEY = 'career_compare_board_v1'
+const TRACKING_KEY = 'career_tracking_board_v1'
+const TRASH_KEY = 'career_compare_trash_v1'
+let jobs = []
+let contextId = null
+let dragId = null
+let suppressDragClickUntil = 0
+let dragRowEl = null
+let dropTargetId = null
+let dropPosition = 'before'
+let gradeFilter = 'ALL'
+let _confirmResolver = null
+
+function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function uid(){return 'j_'+Math.random().toString(36).slice(2,10)}
+function toast(msg){const w=document.getElementById('toast-wrap');const e=document.createElement('div');e.className='toast';e.textContent=msg;w.appendChild(e);setTimeout(()=>e.remove(),2200)}
+function goBackToJdAnalysis(){window.open('jd-analysis.html?forceP2=1#p2','_self')}
+function openTracking(){window.open('dashboard.html','career_tracking_dashboard')}
+function openTrash(){window.open('trash-dashboard.html','career_trash')}
+function openTrash(){window.open('trash-dashboard.html','career_trash')}
+function gradeBadge(g){const c=g==='A'?'gA':g==='B'?'gB':g==='C'?'gC':g==='D'?'gD':'gN';return `<span class="grade ${c}">${esc(g||'—')}</span>`}
+function inTracking(job){ return trackingIndex(job) >= 0 }
+function trackingIndex(job){
+  try{
+    const t=JSON.parse(localStorage.getItem(TRACKING_KEY)||'[]')
+    if(job.url){
+      const byUrl = t.findIndex(x=>x.url&&x.url===job.url)
+      if (byUrl >= 0) return byUrl
+    }
+    return t.findIndex(x=>(x.company||'')===(job.company||'')&&(x.role||'')===(job.role||''))
+  }catch(e){
+    return -1
+  }
+}
+function load(){ try{jobs=JSON.parse(localStorage.getItem(COMPARE_KEY)||'[]')}catch(e){jobs=[]} }
+function save(){ localStorage.setItem(COMPARE_KEY, JSON.stringify(jobs)) }
+
+function setGradeFilter(v){
+  gradeFilter = v
+  ;['ALL','A','B','CD'].forEach(k => document.getElementById(`stat-${k}`).classList.toggle('active', k===v))
+  render()
+}
+
+function filtered(){
+  const q=(document.getElementById('search-input').value||'').toLowerCase()
+  const ty=document.getElementById('filter-type').value
+  return jobs.filter(j=>{
+    if (gradeFilter==='A' && j.ai_grade!=='A') return false
+    if (gradeFilter==='B' && j.ai_grade!=='B') return false
+    if (gradeFilter==='CD' && !['C','D'].includes(j.ai_grade)) return false
+    if (ty && j.type!==ty) return false
+    const text = `${j.company||''} ${j.role||''} ${j.notes||''} ${j.ai_reasoning||''}`.toLowerCase()
+    if (q && !text.includes(q)) return false
+    return true
+  }).sort((a,b)=>(a.order||0)-(b.order||0))
+}
+
+function renderStats(){
+  document.getElementById('stat-total').textContent = jobs.length
+  document.getElementById('stat-a').textContent = jobs.filter(j=>j.ai_grade==='A').length
+  document.getElementById('stat-b').textContent = jobs.filter(j=>j.ai_grade==='B').length
+  document.getElementById('stat-cd').textContent = jobs.filter(j=>['C','D'].includes(j.ai_grade)).length
+}
+
+function render(){
+  renderStats()
+  const list = filtered()
+  document.getElementById('filter-count').textContent = `${list.length} / ${jobs.length} 条`
+  const tbody = document.getElementById('table-body')
+  if(!list.length){
+    const msg = gradeFilter === 'ALL' ? '暂无记录' : '目前没有该评级项目'
+    tbody.innerHTML=`<tr><td colspan="12" style="padding:40px;text-align:center;color:#9e9b96">${msg}</td></tr>`
+    return
+  }
+  tbody.innerHTML = list.map(j=>{
+    const added = inTracking(j)
+    const url = j.url ? `<a href="${esc(j.url)}" target="_blank">${esc(j.url.replace(/^https?:\/\//,'').slice(0,26))}…</a>` : ''
+    return `<tr data-id="${j.id}" ondragover="dragOver(event)" ondrop="drop('${j.id}',event)">
+      <td class="drag" draggable="true"
+          onclick="openContextMenuByDrag(event,'${j.id}')"
+          oncontextmenu="openContextMenu(event,'${j.id}')"
+          ondragstart="dragStart('${j.id}',event)"
+          ondragend="dragEnd(event)"
+          title="按住拖动排序；轻点删除">
+        ⠿
+      </td>
+      <td><button class="plus-btn ${added?'added':''}" title="${added?'已在2.1(2)':'加入2.1(2)'}" onclick="addOne('${j.id}')">${added?'✓':'+'}</button></td>
+      <td class="order">${j.order||''}</td>
+      <td>${esc(j.company)}</td>
+      <td>${esc(j.role)}</td>
+      <td>${esc(j.type||'')}</td>
+      <td>${gradeBadge(j.ai_grade)}</td>
+      <td class="score">${j.score ?? '—'}</td>
+      <td>${esc(j.salary||'')}</td>
+      <td class="td-url">${url}</td>
+      <td style="max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(j.ai_reasoning||j.notes||'')}</td>
+    </tr>`
+  }).join('')
+}
+
+function addOne(id){
+  const src = jobs.find(x=>x.id===id); if(!src) return
+  let t=[]; try{t=JSON.parse(localStorage.getItem(TRACKING_KEY)||'[]')}catch(e){t=[]}
+  const keyHit = src.url ? t.findIndex(x => x.url && x.url===src.url) : -1
+  const textHit = keyHit<0 ? t.findIndex(x => (x.company||'')===(src.company||'') && (x.role||'')===(src.role||'')) : -1
+  const idx = keyHit>=0?keyHit:textHit
+  if (idx >= 0) {
+    t.splice(idx, 1)
+    localStorage.setItem(TRACKING_KEY, JSON.stringify(t))
+    toast('已从 追踪看板 删除')
+    render()
+    return
+  }
+  const payload = {
+    id: uid(),
+    order: t.reduce((m,x)=>Math.max(m,x.order||0),0)+1,
+    company: src.company||'',
+    role: src.role||'',
+    location: src.location||'',
+    contract: src.contract||'',
+    salary: src.salary||'',
+    deadline: src.deadline||'',
+    applied_date: '',
+    status: '未申请',
+    type: src.type||'',
+    score: src.score ?? null,
+    url: src.url||'',
+    jd: src.jd||'',
+    resume_notes: '',
+    notes: '',
+    ai_grade: src.ai_grade||'',
+    ai_reasoning: src.ai_reasoning||'',
+    source_compare_id: src.id || ''
+  }
+  t.push(payload)
+  localStorage.setItem(TRACKING_KEY, JSON.stringify(t))
+  toast('已加入 追踪看板')
+  render()
+}
+
+function dragStart(id,e){
+  dragId=id
+  dragRowEl = e.currentTarget.closest('tr')
+  if (dragRowEl) dragRowEl.classList.add('dragging')
+  try {
+    const ghost = dragRowEl ? dragRowEl.cloneNode(true) : null
+    if (ghost) {
+      ghost.style.position = 'absolute'
+      ghost.style.top = '-9999px'
+      ghost.style.left = '-9999px'
+      ghost.style.width = `${dragRowEl.offsetWidth}px`
+      ghost.style.opacity = '0.9'
+      ghost.style.background = '#fff'
+      ghost.style.boxShadow = '0 12px 28px rgba(0,0,0,.22)'
+      ghost.style.pointerEvents = 'none'
+      document.body.appendChild(ghost)
+      e.dataTransfer.setDragImage(ghost, 24, 12)
+      setTimeout(() => ghost.remove(), 0)
+    }
+  } catch (_) {}
+}
+function dragOver(e){
+  e.preventDefault()
+  const tr = e.currentTarget
+  if (!tr) return
+  const rect = tr.getBoundingClientRect()
+  const y = e.clientY - rect.top
+  const nextPosition = y < rect.height / 2 ? 'before' : 'after'
+  document.querySelectorAll('#table-body tr.drag-over, #table-body tr.drag-over-before, #table-body tr.drag-over-after').forEach(el => {
+    if (el !== e.currentTarget) el.classList.remove('drag-over')
+    if (el !== e.currentTarget) el.classList.remove('drag-over-before')
+    if (el !== e.currentTarget) el.classList.remove('drag-over-after')
+  })
+  tr.classList.add('drag-over')
+  tr.classList.toggle('drag-over-before', nextPosition === 'before')
+  tr.classList.toggle('drag-over-after', nextPosition === 'after')
+  dropTargetId = tr.dataset.id || null
+  dropPosition = nextPosition
+}
+function dragEnd(e){
+  if (dragRowEl) dragRowEl.classList.remove('dragging')
+  document.querySelectorAll('#table-body tr.drag-over, #table-body tr.drag-over-before, #table-body tr.drag-over-after')
+    .forEach(el => el.classList.remove('drag-over','drag-over-before','drag-over-after'))
+  dragRowEl = null
+  dropTargetId = null
+  dropPosition = 'before'
+  suppressDragClickUntil = Date.now() + 180
+}
+function drop(targetId,e){
+  e.preventDefault()
+  const tr = e.currentTarget
+  if (tr) tr.classList.remove('drag-over','drag-over-before','drag-over-after')
+  if(!dragId) return
+  const actualTargetId = dropTargetId || targetId
+  if (!actualTargetId || dragId===actualTargetId) return
+  const sorted = [...jobs].sort((a,b)=>(a.order||0)-(b.order||0))
+  const srcIdx = sorted.findIndex(j => j.id === dragId)
+  const tgtIdx = sorted.findIndex(j => j.id === actualTargetId)
+  if (srcIdx < 0 || tgtIdx < 0) return
+  const [moving] = sorted.splice(srcIdx, 1)
+  let insertIdx = tgtIdx
+  if (dropPosition === 'after') insertIdx = tgtIdx + 1
+  if (srcIdx < tgtIdx) insertIdx -= 1
+  if (insertIdx < 0) insertIdx = 0
+  if (insertIdx > sorted.length) insertIdx = sorted.length
+  sorted.splice(insertIdx, 0, moving)
+  jobs = sorted.map((j, idx) => ({ ...j, order: idx + 1 }))
+  save(); render(); toast('顺序已更新')
+}
+
+function openContextMenu(e,id){
+  e.preventDefault()
+  e.stopPropagation()
+  if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation()
+  contextId=id
+  const m=document.getElementById('ctx')
+  m.style.display='block'
+  m.style.left=e.clientX+'px'
+  m.style.top=e.clientY+'px'
+  return false
+}
+function openContextMenuByDrag(e,id){
+  if (Date.now() < suppressDragClickUntil) return
+  openContextMenu(e,id)
+}
+function hideContextMenu(){
+  const m=document.getElementById('ctx')
+  if (m) m.style.display='none'
+  contextId=null
+}
+async function deleteByContextMenu(){
+  if(!contextId) return
+  const target = jobs.find(j => j.id === contextId)
+  if (!target) return
+  const ok = await showConfirm('确认删除这条【JD对比看板】记录？这会同步从【求上岸-投递进度追踪】移除，并写入垃圾桶。')
+  if (!ok) return
+  removeFromTrackingByCompare(target)
+  pushTrash(target)
+  jobs = jobs.filter(j => j.id !== contextId)
+  save(); render(); hideContextMenu(); toast('已删除并归档到垃圾桶')
+}
+
+function removeFromTrackingByCompare(job){
+  let t=[]; try{t=JSON.parse(localStorage.getItem(TRACKING_KEY)||'[]')}catch(e){t=[]}
+  t = t.filter(x => {
+    if ((x.source_compare_id || '') && (job.id || '') && x.source_compare_id === job.id) return false
+    if (job.url && x.url && x.url === job.url) return false
+    if ((x.company||'') === (job.company||'') && (x.role||'') === (job.role||'')) return false
+    return true
+  })
+  localStorage.setItem(TRACKING_KEY, JSON.stringify(t))
+}
+
+function pushTrash(job){
+  let trash=[]; try{trash=JSON.parse(localStorage.getItem(TRASH_KEY)||'[]')}catch(e){trash=[]}
+  trash.unshift({
+    id: 'trash_' + Math.random().toString(36).slice(2,10),
+    company: job.company || '',
+    role: job.role || '',
+    grade: job.ai_grade || '',
+    deleted_at: new Date().toISOString()
+  })
+  localStorage.setItem(TRASH_KEY, JSON.stringify(trash.slice(0, 500)))
+}
+
+document.addEventListener('click', (ev) => {
+  const m = document.getElementById('ctx')
+  if (m && m.style.display === 'block' && m.contains(ev.target)) return
+  hideContextMenu()
+})
+document.addEventListener('scroll', hideContextMenu, true)
+window.addEventListener('storage', ()=>{ load(); render() })
+load(); render()
+
+function showConfirm(message){
+  return new Promise(resolve => {
+    _confirmResolver = resolve
+    document.getElementById('confirm-msg').textContent = message
+    const overlay = document.getElementById('confirm-overlay')
+    overlay.style.display = 'flex'
+  })
+}
+function closeConfirm(result){
+  const overlay = document.getElementById('confirm-overlay')
+  overlay.style.display = 'none'
+  if (_confirmResolver) _confirmResolver(Boolean(result))
+  _confirmResolver = null
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>垃圾桶</title>
+  <style>
+    :root{
+      --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--border:#e2dfd8;--border2:#d0cdc6;
+      --text:#1a1916;--text3:#9e9b96;--accent:#1a1916;
+      --green:#2d6a4f;--red:#991b1b;--blue:#1e40af;--amber:#92400e;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px}
+    .topnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+    .nav-logo{font-weight:700}
+    .nav-right{margin-left:auto;display:flex;gap:8px}
+    .btn{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--text)}
+    .btn:hover{background:var(--surface2);border-color:var(--border2)}
+    .wrap{max-width:1100px;margin:18px auto;padding:0 16px}
+    table{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+    thead th{padding:10px 14px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);background:var(--surface2);border-bottom:1px solid var(--border);white-space:nowrap}
+    tbody td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
+    tbody tr:last-child td{border-bottom:none}
+    .gradeA{background:#d1fae5;color:#065f46;padding:2px 10px;border-radius:20px;font-weight:700;display:inline-block}
+    .gradeB{background:#dbeafe;color:#1e40af;padding:2px 10px;border-radius:20px;font-weight:700;display:inline-block}
+    .gradeC{background:#fef3c7;color:#92400e;padding:2px 10px;border-radius:20px;font-weight:700;display:inline-block}
+    .gradeD{background:#fee2e2;color:#991b1b;padding:2px 10px;border-radius:20px;font-weight:700;display:inline-block}
+    .muted{color:var(--text3);font-size:12px}
+    .toast-wrap{position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px}
+    .toast{background:var(--accent);color:#fff;padding:10px 14px;border-radius:8px;font-size:13px;font-weight:600}
+    .ctx{display:none;position:fixed;z-index:1000;background:#fff;border:1px solid var(--border);border-radius:8px;box-shadow:0 8px 22px rgba(0,0,0,.15);min-width:140px}
+    .ctx button{display:block;width:100%;border:none;background:transparent;padding:8px 12px;text-align:left;cursor:pointer}
+    .ctx button:hover{background:var(--surface2)}
+  </style>
+</head>
+<body>
+  <div class="topnav">
+    <span class="nav-logo">垃圾桶</span>
+    <div class="nav-right">
+      <button class="btn" onclick="location.href='compare-dashboard.html'">↩ 回对比看板</button>
+      <button class="btn" onclick="clearTrash()">🧹 清空垃圾桶</button>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="muted" id="count" style="margin-bottom:12px"></div>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>公司名称</th>
+          <th>职位名称</th>
+          <th>评级</th>
+          <th>删除时间</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+  <div class="toast-wrap" id="toast-wrap"></div>
+  <div id="trash-ctx" class="ctx" style="display:none">
+    <button onclick="restoreFromMenu()">恢复到JD对比看板</button>
+    <button onclick="trashDeleteFromMenu()">彻底删除</button>
+  </div>
+  <script>
+    const TRASH_KEY = 'career_compare_trash_v1'
+    const COMPARE_KEY = 'career_compare_board_v1'
+    let items = []
+    let trashMenuId = null
+    const tbody = document.getElementById('tbody')
+    const countEl = document.getElementById('count')
+
+    function toast(msg){
+      const w=document.getElementById('toast-wrap')
+      const e=document.createElement('div')
+      e.className='toast'
+      e.textContent=msg
+      w.appendChild(e)
+      setTimeout(()=>e.remove(),2200)
+    }
+
+    function confirmTwice(msg1,msg2){
+      if(!confirm(msg1)) return false
+      if(!confirm(msg2)) return false
+      return true
+    }
+
+    function load(){
+      try{ items = JSON.parse(localStorage.getItem(TRASH_KEY)||'[]') }catch(e){ items=[] }
+      items.sort((a,b)=> new Date(b.deleted_at||0) - new Date(a.deleted_at||0))
+      render()
+    }
+
+    function save(){ localStorage.setItem(TRASH_KEY, JSON.stringify(items)) }
+
+    function gradeBadge(g){
+      if(g==='A') return '<span class="gradeA">A</span>'
+      if(g==='B') return '<span class="gradeB">B</span>'
+      if(g==='C') return '<span class="gradeC">C</span>'
+      if(g==='D') return '<span class="gradeD">D</span>'
+      return '<span class="muted">—</span>'
+    }
+
+    function render(){
+      countEl.textContent = `共 ${items.length} 条已删除记录（只保留公司/职位/评级）`
+      if(!items.length){
+        tbody.innerHTML = '<tr><td colspan="6" style="padding:40px;text-align:center" class="muted">垃圾桶为空</td></tr>'
+        return
+      }
+      tbody.innerHTML = items.map((it,idx)=>`
+        <tr>
+          <td>${idx+1}</td>
+          <td>${escapeHtml(it.company||'')}</td>
+          <td>${escapeHtml(it.role||'')}</td>
+          <td>${gradeBadge(it.grade)}</td>
+          <td>${escapeHtml((it.deleted_at||'').slice(0,19).replace('T',' '))}</td>
+          <td style="white-space:nowrap">
+            <button class="btn" style="padding:4px 10px;border-color:var(--border2)" onclick="openTrashMenu(event,'${it.id}')">⋯</button>
+          </td>
+        </tr>
+      `).join('')
+    }
+
+    function permaDelete(id){
+      const it = items.find(x=>x.id===id)
+      if(!it) return
+      if(!confirmTwice('确认彻底删除这条垃圾桶记录？','二次确认：确定删除吗？')) return
+      items = items.filter(x=>x.id!==id)
+      save()
+      toast('已彻底删除')
+      render()
+    }
+
+    function clearTrash(){
+      if(!confirmTwice('确认清空整个垃圾桶？','二次确认：确定清空吗？')) return
+      items = []
+      save()
+      toast('已清空垃圾桶')
+      render()
+    }
+
+    function escapeHtml(s){
+      return String(s||'')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/\"/g,'&quot;')
+        .replace(/\'/g,'&#39;')
+    }
+
+    function openTrashMenu(e, id){
+      e.preventDefault()
+      e.stopPropagation()
+      trashMenuId = id
+      const m = document.getElementById('trash-ctx')
+      m.style.display = 'block'
+      m.style.left = e.clientX + 'px'
+      m.style.top = e.clientY + 'px'
+    }
+    function trashDeleteFromMenu(){
+      if(!trashMenuId) return
+      const id = trashMenuId
+      trashMenuId = null
+      document.getElementById('trash-ctx').style.display = 'none'
+      permaDelete(id)
+    }
+    function restoreFromMenu(){
+      if(!trashMenuId) return
+      const id = trashMenuId
+      trashMenuId = null
+      document.getElementById('trash-ctx').style.display = 'none'
+      restoreItem(id)
+    }
+    function restoreItem(id){
+      const it = items.find(x=>x.id===id)
+      if(!it) return
+      if(!confirm('恢复到JD对比看板？提示：恢复后仅包含公司名称和职位名称，不恢复detail信息。')) return
+      let compare=[]
+      try{compare=JSON.parse(localStorage.getItem(COMPARE_KEY)||'[]')}catch(e){compare=[]}
+      const exists = compare.find(x =>
+        (x.company||'') === (it.company||'') &&
+        (x.role||'') === (it.role||'')
+      )
+      if(!exists){
+        const maxOrder = compare.reduce((m,x)=>Math.max(m,x.order||0),0)
+        compare.push({
+          id: 'j_' + Math.random().toString(36).slice(2,10),
+          order: maxOrder + 1,
+          company: it.company || '',
+          role: it.role || '',
+          location: '',
+          contract: '',
+          salary: '',
+          deadline: '',
+          applied_date: '',
+          status: '准备中',
+          type: '',
+          score: null,
+          url: '',
+          jd: '',
+          resume_notes: '',
+          notes: '',
+          ai_grade: it.grade || '',
+          ai_reasoning: ''
+        })
+        localStorage.setItem(COMPARE_KEY, JSON.stringify(compare))
+      }
+      items = items.filter(x=>x.id!==id)
+      save()
+      toast('已恢复到JD对比看板（简版）')
+      render()
+    }
+
+    document.addEventListener('click', () => {
+      const m = document.getElementById('trash-ctx')
+      if (m) m.style.display = 'none'
+      trashMenuId = null
+    })
+
+    load()
+  </script>
+</body>
+</html>
+
