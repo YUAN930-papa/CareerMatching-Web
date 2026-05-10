@@ -7,6 +7,7 @@ import { P3_REWRITE_SYSTEM_PROMPT } from '@/lib/p3-rewrite-prompt'
 export const maxDuration = 300
 
 export async function POST(request: Request) {
+  console.log('P3 API被调用了', new Date().toISOString())
   // 输出在运行 `npm run dev` 的本机终端，不在浏览器 Console；Step3「生成优化简历」走此接口
   console.log('[p3-rewrite] POST', new Date().toISOString())
   try {
@@ -54,10 +55,11 @@ ${raw.slice(0, 7000)}`,
 
     const userContent = `${p2ctx}\n\n候选人原简历（必须严格按该结构改写）：\n${resumeSlice}\n\n目标JD：\n${jdSlice}\n\n请严格按"保守改写模式"生成，保持原简历结构与排版习惯。`
 
+    /** 输出含完整简历正文，过小易截断导致缺 [[/NEW_RESUME]]，前端解析不到右侧内容 */
     const text = await callClaudeMessage({
       system: P3_REWRITE_SYSTEM_PROMPT,
       user: userContent,
-      maxTokens: 3200,
+      maxTokens: 8192,
     })
 
     return NextResponse.json({ text })

@@ -39,6 +39,26 @@
   .btn:disabled{opacity:.4;cursor:not-allowed;}
   .btn-primary{background:var(--accent);color:white;border-color:var(--accent);}
   .btn-primary:hover:not(:disabled){opacity:.88;}
+  /** Step3 主 CTA：大号 + 青绿高亮（与黑色主按钮区分） */
+  .btn-p3-cta{
+    padding:14px 22px;
+    font-size:15px;
+    font-weight:700;
+    line-height:1.25;
+    background:linear-gradient(165deg,#14b8a6,#0d9488);
+    color:#fff!important;
+    border:2px solid #0f766e;
+    border-radius:10px;
+    box-shadow:0 4px 14px rgba(15,118,110,.38);
+  }
+  .btn-p3-cta:hover:not(:disabled){
+    filter:brightness(1.06);
+    border-color:#115e59;
+  }
+  .btn-p3-cta:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+  }
   .btn-green{background:var(--green);color:white;border-color:var(--green);}
   .btn-green:hover:not(:disabled){opacity:.88;}
   .btn-board-compare{background:#5b21b6;color:#fff;border-color:#5b21b6;font-weight:700;}
@@ -158,6 +178,61 @@
   .pill-amber{background:var(--amber-bg);color:var(--amber);}
   .pill-blue{background:var(--blue-bg);color:var(--blue);}
   .pill-red{background:var(--red-bg);color:var(--red);}
+  /* ── Page3 结构化双栏编辑器（对齐 page3-resume-editor.html） ── */
+  #page-p3.p3-structured-mode{overflow:hidden;}
+  #page-p3 .p3se-page-head{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 18px;flex-shrink:0;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  #page-p3 .p3se-legend{display:flex;gap:14px;margin-left:auto;flex-wrap:wrap;font-size:10px;color:var(--text2);}
+  #page-p3 .p3se-leg-item{display:flex;align-items:center;gap:5px;}
+  #page-p3 .p3se-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0;}
+  #page-p3 .p3se-main{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;}
+  #page-p3 .p3se-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 18px;flex:1;min-height:0;overflow:auto;max-width:1600px;margin:0 auto;width:100%;box-sizing:border-box;}
+  #page-p3 .p3se-col-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  #page-p3 .p3se-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+  #page-p3 .p3se-sec-head{padding:8px 12px;background:var(--surface2);border-bottom:1px solid var(--border);font-size:11px;color:var(--text2);text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  #page-p3 .p3se-sec-body{padding:10px 12px;line-height:1.75;font-size:12px;}
+  #page-p3 .p3se-line{margin-bottom:6px;}
+  #page-p3 .p3se-bullet{display:flex;gap:8px;margin-bottom:6px;}
+  #page-p3 .p3se-bullet-dot{width:4px;height:4px;border-radius:50%;background:var(--text3);margin-top:9px;flex-shrink:0;}
+  #page-p3 .p3se-tag{font-size:10px;padding:2px 7px;border-radius:4px;}
+  #page-p3 .p3se-tag-green{background:var(--green-bg);color:#085041;}
+  #page-p3 .p3se-tag-blue{background:var(--blue-bg);color:#0c447c;}
+  #page-p3 .p3se-tag-red{background:var(--red-bg);color:var(--red);}
+  #page-p3 .p3se-tag-gray{background:#eef0f2;color:#4b5563;}
+  #page-p3 .p3se-alert{margin-top:8px;padding:8px 10px;border-radius:7px;font-size:11px;}
+  #page-p3 .p3se-alert-blue{background:var(--blue-bg);color:#042c53;}
+  #page-p3 .p3se-alert-red{background:var(--red-bg);color:#501313;}
+  #page-p3 .p3se-alert-green{background:var(--green-bg);color:#085041;}
+  /* 右侧分析区：蓝（总体建议）→ 绿（已匹配）→ 红框（需行动 + 行为标签） */
+  #page-p3 .p3se-rx-blue{margin-top:10px;padding:8px 10px;border-radius:8px;background:var(--blue-bg);color:#042c53;font-size:11px;line-height:1.45;border-left:3px solid #2563eb;}
+  #page-p3 .p3se-rx-green{margin-top:8px;padding:8px 10px;border-radius:8px;background:#d8f3dc;border-left:3px solid #2d6a4f;font-size:11px;line-height:1.45;color:#173404;}
+  #page-p3 .p3se-rx-line{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:4px;}
+  #page-p3 .p3se-rx-line:last-child{margin-bottom:0;}
+  #page-p3 .p3se-rx-actions{margin-top:8px;padding:8px 10px;border-radius:8px;background:#fef2f2;border:1px solid #fecaca;border-left:3px solid #e24b4a;font-size:11px;line-height:1.45;}
+  #page-p3 .p3se-rx-muted{color:var(--text3);font-size:11px;}
+  #page-p3 .p3se-act-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px;min-height:1.35em;}
+  #page-p3 .p3se-act-row:last-child{margin-bottom:0;}
+  #page-p3 .p3se-act-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#43181a;}
+  #page-p3 .p3se-blabel{flex-shrink:0;font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600;white-space:nowrap;}
+  #page-p3 .p3se-blabel-matched{background:#d8f3dc;color:#14532d;}
+  #page-p3 .p3se-blabel-gap{background:#fee2e2;color:#991b1b;}
+  #page-p3 .p3se-blabel-emph{background:#ffedd5;color:#9a3412;}
+  #page-p3 .p3se-blabel-expand{background:#dbeafe;color:#1e3a8a;}
+  #page-p3 .p3se-blabel-del{background:#e5e7eb;color:#4b5563;text-decoration:line-through;}
+  #page-p3 .p3se-act-row-del .p3se-act-txt{text-decoration:line-through;color:var(--text3);}
+  #page-p3 .p3se-hl-red-del{background:#fee2e2;color:#a32d2d;padding:0 2px;border-radius:2px;text-decoration:line-through;}
+  #page-p3 .p3se-hl-need-action{background:#fee2e2;color:#7f1d1d;padding:0 2px;border-radius:2px;}
+  #page-p3 .p3se-hl-yellow{background:#fef3c7;color:#713f12;padding:0 2px;border-radius:2px;}
+  #page-p3 .p3se-hl-green{background:#d8f3dc;color:#14532d;padding:0 2px;border-radius:2px;text-decoration:underline;text-decoration-color:#2d6a4f;}
+  #page-p3 .p3se-hl-new{background:#d8f3dc;color:#14532d;padding:0 2px;border-radius:2px;border-left:2px solid #2d6a4f;}
+  #page-p3 .p3se-hl-rewrite{background:#dbeafe;color:#1e3a8a;padding:0 2px;border-radius:2px;border-left:2px solid #1e40af;}
+  #page-p3 .p3se-editable{outline:none;border-radius:4px;}
+  #page-p3 .p3se-editable:focus{background:#fffbe9;}
+  #page-p3 .p3se-action-bar{flex-shrink:0;background:var(--surface);border-top:1px solid var(--border);padding:10px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+  #page-p3 .p3se-bar-wrap{width:200px;height:8px;border-radius:4px;background:var(--surface2);overflow:hidden;position:relative;}
+  #page-p3 .p3se-bar-before,#page-p3 .p3se-bar-after{height:100%;position:absolute;top:0;left:0;border-radius:4px;}
+  #page-p3 .p3se-bar-before{background:#e24b4a;z-index:1;}
+  #page-p3 .p3se-bar-after{background:var(--green);z-index:2;transition:width .35s ease;}
+  #page-p3 textarea#p3-editor-fallback{position:absolute;left:-9999px;opacity:0;height:1px;width:1px;}
   .resume-list-host{font-size:13px;}
   .resume-row{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;background:var(--surface);}
   .resume-row:last-child{margin-bottom:0;}
@@ -202,7 +277,7 @@
 
     <div style="margin-bottom:28px;">
       <div style="font-size:20px;font-weight:600;letter-spacing:-.5px;margin-bottom:5px;">简历设置</div>
-      <div style="font-size:12px;color:var(--text3);">上传 <strong>PDF / Word（.docx）</strong> 后自动保存到本地列表；<strong>勾选</strong>要参与 JD 分析的简历（可多选）。上传/勾选后会自动同步到账户。请用底部<strong>「下一步：去分析 JD」</strong>进入 Step 2（顶部 Step 2/3 在此页不可直接点）。</div>
+      <div style="font-size:12px;color:var(--text3);">上传 <strong>PDF / Word（.docx）</strong> 后自动保存到本地列表；<strong>勾选</strong>要参与 JD 分析的简历（可多选）。上传/勾选后会自动同步到账户。简历就绪后可点顶部 <strong>Step 2</strong> 或底部<strong>「下一步：去分析 JD」</strong>；<strong>Step 3</strong> 仅能在 Step 2 分析后点击「下一步」进入。</div>
     </div>
 
     <!-- ① 上传 PDF / Word -->
@@ -470,88 +545,71 @@
       <!-- ACTION BAR -->
       <div class="action-bar">
         <span class="action-note" id="action-note">修改 JD 全文后直接点「分析这份 JD」即可自动重新评估并更新看板</span>
-        <button class="btn btn-primary" onclick="goToP3()" style="margin-left:auto;">优化简历 →</button>
+        <button class="btn btn-primary" onclick="goToP3()" style="margin-left:auto;">下一步</button>
       </div>
     </div>
 
   </div>
 </div>
 </div><!-- end page-p2 -->
-<!-- ══ PAGE 3 — 简历针对JD优化 ══ -->
-<div id="page-p3" style="display:none;height:calc(100vh - 52px);overflow:hidden;position:relative;flex-direction:column;">
+<!-- ══ PAGE 3 — 结构化简历对比编辑器（page3-resume-editor.html 迁移） ══ -->
+<div id="page-p3" class="p3-structured-mode" style="display:none;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;position:relative;">
 
-  <!-- 顶部：修改重点总结 + 匹配度 -->
-  <div id="p3-topbar" style="background:var(--surface);border-bottom:2px solid var(--border);padding:12px 22px;flex-shrink:0;">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:20px;">
-      <div style="flex:1;">
-        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:4px;">
-          基于 JD 分析结果 — 本次简历改写重点
-        </div>
-        <div id="p3-top-summary" style="font-size:12px;color:var(--text);line-height:1.6;">—</div>
+  <div class="p3se-page-head">
+    <strong style="font-size:14px;">Step 3 — 简历修改对比</strong>
+    <span class="pill pill-amber" id="p3se-pill-before">当前匹配度 --%</span>
+    <span class="pill pill-green" id="p3se-pill-after">修改后 --%</span>
+    <div class="p3se-legend" aria-hidden="true">
+      <span class="p3se-leg-item"><span class="p3se-dot" style="background:#d8f3dc;border:1px solid #6ee7b7"></span>绿 · 已匹配</span>
+      <span class="p3se-leg-item"><span class="p3se-dot" style="background:#dbeafe;border:1px solid #60a5fa"></span>蓝 · AI建议（回应JD）</span>
+      <span class="p3se-leg-item"><span class="p3se-dot" style="background:#fee2e2;border:1px solid #e24b4a"></span>红 · 需处理（含原黄/红）</span>
+    </div>
+  </div>
+
+  <div id="p3-top-summary" style="display:none;">—</div>
+  <div id="p3-score-before" style="display:none;">—</div>
+  <div id="p3-score-after" style="display:none;">—</div>
+  <div id="p3-score-delta" style="display:none;"></div>
+
+  <div class="p3se-main">
+    <div id="p3-generate-bar" style="padding:10px 18px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface2);">
+      <button type="button" class="btn btn-p3-cta" id="btn-p3-generate">开始分析并优化简历</button>
+      <span id="p3se-run-hint" style="font-size:11px;color:var(--text3);max-width:520px;line-height:1.45;">将请求 <code style="font-size:10px;">/api/p3-structured-editor</code>，按 Summary / Education / 各段经历 / Skills 分块返回；仅点击按钮时调用。</span>
+    </div>
+    <div class="p3se-grid">
+      <div style="min-width:0;">
+        <div class="p3se-col-label">原始简历（红=需处理 · 绿=已匹配）</div>
+        <div id="p3se-left-sections"></div>
       </div>
-      <div style="flex-shrink:0;text-align:right;">
-        <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:5px;">ATS 匹配度变化</div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div style="text-align:center;">
-            <div id="p3-score-before" style="font-size:22px;font-weight:600;font-family:var(--font-mono);color:var(--red);line-height:1;">—</div>
-            <div style="font-size:10px;color:var(--text3);">原简历</div>
-          </div>
-          <div style="font-size:16px;color:var(--text3);">→</div>
-          <div style="text-align:center;">
-            <div id="p3-score-after" style="font-size:22px;font-weight:600;font-family:var(--font-mono);color:var(--green);line-height:1;">—</div>
-            <div style="font-size:10px;color:var(--text3);">改写后</div>
-          </div>
-          <div id="p3-score-delta" style="font-size:14px;font-weight:700;display:none;"></div>
-        </div>
+      <div style="min-width:0;">
+        <div class="p3se-col-label">AI 建议（可编辑 · 下为蓝/绿/红对照）</div>
+        <div id="p3se-right-sections"></div>
       </div>
     </div>
   </div>
 
-  <!-- 主体 左右分栏 -->
-  <div style="display:grid;grid-template-columns:380px 1fr;height:calc(100% - 80px);overflow:hidden;">
-
-    <!-- LEFT: 改写原因面板 -->
-    <div style="background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;">
-      <div style="padding:10px 14px 8px;border-bottom:1px solid var(--border);flex-shrink:0;">
-        <div style="font-size:12px;font-weight:600;margin-bottom:1px;">改写说明</div>
-        <div style="font-size:10px;color:var(--text3);">🟢 必须改 — 直接影响通过率 &nbsp;·&nbsp; 🟡 加分项 — 可选择性采纳</div>
-      </div>
-      <div id="p3-generate-bar" style="padding:10px 14px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--surface2);">
-        <button type="button" class="btn btn-primary btn-sm" id="btn-p3-generate" onclick="p3Generate()">生成优化简历</button>
-        <span style="font-size:10px;color:var(--text3);line-height:1.4;">仅在点击按钮时请求 AI（Network 会出现 <code style="font-size:9px;">p3-rewrite</code>，不会出现 <code style="font-size:9px;">analyze-jd</code>）。</span>
-      </div>
-      <div id="p3-reasons-list" style="flex:1;overflow-y:auto;padding:12px 12px;display:flex;flex-direction:column;gap:8px;">
-        <div style="text-align:center;padding:30px 16px;color:var(--text3);font-size:12px;">请先点击上方「生成优化简历」</div>
+  <div class="p3se-action-bar">
+    <div>
+      <div style="font-size:11px;color:var(--text3);margin-bottom:4px;">匹配度进度</div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span id="p3se-match-before-lbl" style="color:var(--red);font-weight:600;font-family:var(--font-mono);">--%</span>
+        <div class="p3se-bar-wrap"><div class="p3se-bar-before" id="p3se-bar-before"></div><div class="p3se-bar-after" id="p3se-bar-after"></div></div>
+        <span id="p3se-match-after-lbl" style="color:var(--green);font-weight:600;font-family:var(--font-mono);">→ --%</span>
       </div>
     </div>
-
-    <!-- RIGHT: 改写后的简历 (可编辑) -->
-    <div style="background:var(--bg);display:flex;flex-direction:column;overflow:hidden;">
-      <div style="padding:10px 16px 8px;border-bottom:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;justify-content:space-between;align-items:center;">
-        <div>
-          <div style="font-size:12px;font-weight:600;margin-bottom:1px;">改写后的简历（可直接编辑）</div>
-          <div style="font-size:10px;color:var(--text3);">AI 基于 JD 整体改写 · 可手动调整 · 改完点「重新检测」</div>
-        </div>
-        <div style="display:flex;gap:6px;align-items:center;">
-          <span id="p3-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);"></span>
-          <button class="btn btn-sm" onclick="p3ResetToOriginal()" style="color:var(--text2);" title="退回未修改版本">↺ 退回原版</button>
-          <button class="btn btn-sm" onclick="p3CheckMatch()" style="border-color:var(--purple);color:var(--purple);font-weight:600;">🔄 重新检测匹配度</button>
-        </div>
-      </div>
-      <div style="flex:1;overflow:hidden;padding:12px 14px;">
-        <textarea id="p3-editor" style="width:100%;height:100%;padding:14px 16px;border:1px solid var(--border);border-radius:10px;font-size:12px;font-family:var(--font-mono);color:var(--text);background:var(--surface);resize:none;outline:none;line-height:1.9;" placeholder="点击左侧「生成优化简历」后，改写结果将出现在此处；也可先在此处粘贴简历草稿。" oninput="p3OnEdit()"></textarea>
-      </div>
-      <!-- 底部导出栏 -->
-      <div style="padding:10px 14px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;display:flex;gap:8px;align-items:center;">
-        <span id="p3-edit-note" style="font-size:11px;color:var(--text3);margin-right:auto;"></span>
-        <button class="btn btn-sm" onclick="p3SaveToResume()" style="background:var(--green);color:white;border-color:var(--green);">💾 保存为新简历</button>
-        <button onclick="p3ExportWord()" style="padding:6px 16px;border-radius:6px;background:#1e40af;color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:6px;">⬇ 导出 Word (.docx)</button>
-      </div>
+    <span id="p3-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);"></span>
+    <span id="p3-edit-note" style="font-size:11px;color:var(--text3);"></span>
+    <div style="margin-left:auto;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <button type="button" class="btn btn-sm" onclick="p3ResetToOriginal()" style="color:var(--text2);">↺ 恢复 AI 初稿</button>
+      <button type="button" class="btn btn-sm" onclick="p3CheckMatch()" style="border-color:var(--purple);color:var(--purple);font-weight:600;">🔄 重新检测匹配度</button>
+      <button type="button" onclick="p3ExportWord()" style="padding:8px 16px;border-radius:8px;background:#1e40af;color:white;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">⬇ 导出 Word（按段）</button>
     </div>
   </div>
+
+  <textarea id="p3-editor" tabindex="-1" aria-hidden="true"></textarea>
 
   <!-- 全屏加载遮罩 -->
-  <div id="p3-loading" style="display:none;position:absolute;inset:0;background:rgba(245,244,240,.92);backdrop-filter:blur(4px);z-index:50;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div id="p3-loading" style="display:none;position:absolute;left:0;right:0;top:0;bottom:0;background:rgba(245,244,240,.92);backdrop-filter:blur(4px);z-index:50;align-items:center;justify-content:center;flex-direction:column;gap:16px;pointer-events:none;">
     <div class="spinner"></div>
     <div id="p3-loading-text" style="font-size:13px;color:var(--text2);font-weight:500;">AI 正在生成改写版简历...</div>
     <div id="p3-loading-sub" style="font-size:11px;color:var(--text3);max-width:340px;text-align:center;line-height:1.5;">一般 30–120 秒；若长期无响应多为网络或 API 阻塞，届时将自动超时，也可点下方取消。</div>
@@ -585,8 +643,23 @@ const RESUME_UPLOAD_MAX_BYTES = 5 * 1024 * 1024
 const RESUME_UPLOAD_MAX_SLOTS = 2
 let currentPageId = 'p1'
 let step3AccessGrantedThisVisit = false
-/** 用户曾在 Step 2 点击「优化简历 →」进入过 Step 3；新一次「分析这份 JD」会清除，需再次点击优化简历 */
+/** 用户曾在 Step 2 点击「下一步」进入过 Step 3；新一次「分析这份 JD」会清除门禁，需再次点「下一步」 */
 const STEP3_GATE_KEY = 'career_step3_ready_v1'
+/** Step3 主按钮文案（与占位提示、keepState 顶栏检测一致；仅展示用，逻辑仍走 p3Generate） */
+const P3_CTA_MAIN = '开始分析并优化简历'
+const P3_CTA_REGEN = '再次分析并优化简历'
+/** Step3 成功生成改写正文后缓存，便于 F5 恢复与提示 */
+const P3_LAST_RESUME_KEY = 'career_p3_last_generated_v1'
+/** Step3 结构化双栏 JSON 缓存（page3-resume-editor 迁移） */
+const P3_STRUCTURED_CACHE_KEY = 'career_p3_structured_payload_v1'
+
+/** API 或旧会话可能缺 matchPct，与 Step2 展示、Console 诊断一致 */
+function ensureMatchPctOnResult(r) {
+  if (!r || typeof r !== 'object') return
+  if ((r.matchPct == null || r.matchPct === '') && r.atsScore != null && r.atsScore !== '') {
+    r.matchPct = r.atsScore
+  }
+}
 
 function hasCompletedJDAnalysisForStep3() {
   return !!(
@@ -616,7 +689,7 @@ document.getElementById('jd-text').addEventListener('input', function() {
   const text = this.value
   document.getElementById('char-count').textContent = text.length + ' 字'
   syncField('jd', text, { persist: false })
-  saveP2Session('editing')
+  if (hasCompletedJDAnalysisForStep3()) saveP2Session('editing')
 })
 
 // ── RESUME CONTEXT ────────────────────────────────────────────────────────
@@ -838,13 +911,21 @@ function hasSavedResume() {
 function updateStepGuards() {
   const navP2 = document.getElementById('nav-p2')
   const navP3 = document.getElementById('nav-p3')
-  if (navP2) navP2.classList.toggle('disabled', currentPageId === 'p1')
+  const mergeLen = countResumeBodyChars(getMergedRawTextFromSelection().trim())
+  const blockP2FromP1 = currentPageId === 'p1' && mergeLen < 40
+  if (navP2) navP2.classList.toggle('disabled', blockP2FromP1)
   if (navP3) {
-    const step3Ok =
-      hasCompletedJDAnalysisForStep3() && hasStep3OptimizeGate()
-    const blockP3 =
-      currentPageId === 'p3' ? false : !step3Ok
-    navP3.classList.toggle('disabled', blockP3)
+    const onP1 = currentPageId === 'p1'
+    const onP2 = currentPageId === 'p2'
+    const analyzed = hasCompletedJDAnalysisForStep3()
+    const gated = hasStep3OptimizeGate()
+    const onP3 = currentPageId === 'p3'
+    /** Step3 顶部入口：在 Step2 须先点结果区「下一步」解锁；在 Step1 始终不可点 */
+    const hardBlock =
+      onP1 ||
+      (!onP3 && !analyzed) ||
+      (onP2 && analyzed && !gated)
+    navP3.classList.toggle('disabled', hardBlock)
   }
 }
 
@@ -857,21 +938,26 @@ function getSavedResumeCharCount() {
 }
 
 function updateNavStatus() {
-  let count = 0
+  /** DB_KEY：本地「JD 对比看板」职位条数（与 Step2「添加入 JD 对比看板」写入同一列表，非简历条数） */
+  let boardCount = 0
   try {
-    count = JSON.parse(localStorage.getItem(DB_KEY) || '[]').length
-  } catch(e) {}
+    boardCount = JSON.parse(localStorage.getItem(DB_KEY) || '[]').length
+  } catch (e) {}
   const savedChars = getSavedResumeCharCount()
   const draftLen = countResumeBodyChars(getMergedRawTextFromSelection().trim())
   let resumeLine = '未设置简历'
   if (hasSavedResume()) {
-    if (savedChars >= 40) resumeLine = `简历已保存 · ${savedChars}字`
-    else if (savedChars > 0) resumeLine = `简历已保存 · ${savedChars}字`
+    if (savedChars >= 40) resumeLine = '简历已保存'
+    else if (savedChars > 0) resumeLine = '简历已保存'
     else resumeLine = '简历已保存 · 请补充正文'
   } else if (draftLen > 0) {
-    resumeLine = `编辑中 · ${draftLen}字（未保存）`
+    resumeLine = '编辑中（未保存）'
   }
-  const status = [resumeLine, `已录入${count}条`]
+  const boardLine =
+    boardCount > 0
+      ? `JD对比看板 ${boardCount} 个职位`
+      : 'JD对比看板暂无职位'
+  const status = [resumeLine, boardLine]
   document.getElementById('nav-status').textContent = status.join(' · ')
   updateStepGuards()
 }
@@ -891,6 +977,10 @@ function parseResultFromApi(data, jdText) {
   copy.skillsScore = clamp(copy.skillsScore)
   copy.careerFit = clamp(copy.careerFit)
   copy.switchScore = clamp(copy.switchScore)
+  copy.matchPct =
+    copy.matchPct != null && copy.matchPct !== ''
+      ? clamp(copy.matchPct)
+      : clamp(copy.atsScore)
   copy.jdText = jdText
   copy.url = document.getElementById('jd-url').value.trim()
   copy.analyzedAt = new Date().toISOString()
@@ -952,6 +1042,7 @@ async function analyze() {
     saveP2Session('results')
     step3AccessGrantedThisVisit = false
     try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
+    clearP3GeneratedCache()
 
   } catch(err) {
     console.error(err)
@@ -993,8 +1084,12 @@ function mergeAbortSignals(a, b) {
 
 // ── RENDER RESULTS ────────────────────────────────────────────────────────
 function renderResults(r, animate=true) {
-  // ① 匹配程度
-  const matchPct = r.matchPct || Math.round(((r.atsScore||0)+(r.skillsScore||0))/2)
+  // ① 匹配程度（matchPct 缺省用 atsScore，避免 undefined 导致展示/逻辑异常）
+  const rawM = r.matchPct ?? r.atsScore
+  const matchPct =
+    rawM != null && rawM !== '' && Number.isFinite(Number(rawM))
+      ? Math.max(0, Math.min(100, Math.round(Number(rawM))))
+      : Math.round(((Number(r.atsScore) || 0) + (Number(r.skillsScore) || 0)) / 2)
   document.getElementById('r-match-pct').textContent = matchPct + '%'
   playMatchPctWobble(900)
   document.getElementById('r-match-label').textContent = r.matchLabel || '综合匹配度'
@@ -1196,6 +1291,7 @@ function clearAndReset() {
   try { localStorage.removeItem(P2_SESSION_KEY) } catch(e) {}
   step3AccessGrantedThisVisit = false
   try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
+  clearP3GeneratedCache()
   updateStepGuards()
 }
 
@@ -1265,7 +1361,7 @@ function syncField(field, value, options = {}) {
   ind.style.display = 'block'
   clearTimeout(window._syncTimer)
   window._syncTimer = setTimeout(() => { ind.style.display = 'none' }, 1500)
-  saveP2Session('editing')
+  if (hasCompletedJDAnalysisForStep3()) saveP2Session('editing')
 }
 
 function updateLiveJob() {
@@ -1321,6 +1417,121 @@ function readLeftFields() {
   }
 }
 
+function getP3OptimizeFingerprint() {
+  const jd = (document.getElementById('jd-text') || { value: '' }).value.trim()
+  const lf = readLeftFields()
+  const c = lf.company || (currentResult && currentResult.company) || ''
+  const r = lf.role || (currentResult && currentResult.role) || ''
+  const g = currentResult && currentResult.grade != null ? String(currentResult.grade) : ''
+  const ats =
+    currentResult && currentResult.atsScore != null ? String(currentResult.atsScore) : ''
+  return [c, r, g, ats, String(jd.length), jd.slice(0, 120)].join('\u001f')
+}
+
+function compareBoardHasCurrentAnalyzedJob() {
+  if (!hasCompletedJDAnalysisForStep3()) return false
+  try {
+    const jobs = JSON.parse(localStorage.getItem(DB_KEY) || '[]')
+    const lf = readLeftFields()
+    const jd = (document.getElementById('jd-text') || { value: '' }).value.trim()
+    const url = (lf.url || (currentResult && currentResult.url) || '').trim()
+    const company = (lf.company || (currentResult && currentResult.company) || '').trim()
+    const role = (lf.role || (currentResult && currentResult.role) || '').trim()
+    let jid = ''
+    try {
+      jid = (localStorage.getItem(CURRENT_JOB_ID_KEY) || '').trim()
+    } catch (e) {}
+    if (jid && jobs.some((j) => j.id === jid)) return true
+    if (url && jobs.some((j) => (j.url || '').trim() === url)) return true
+    if (
+      company &&
+      role &&
+      jobs.some(
+        (j) =>
+          (j.company || '').trim() === company && (j.role || '').trim() === role
+      )
+    )
+      return true
+    if (jd.length >= 80) {
+      const head = jd.slice(0, 160)
+      if (jobs.some((j) => (j.jd || '').slice(0, 160) === head)) return true
+    }
+    return false
+  } catch (e) {
+    return false
+  }
+}
+
+function clearP3GeneratedCache() {
+  try {
+    localStorage.removeItem(P3_LAST_RESUME_KEY)
+    localStorage.removeItem(P3_STRUCTURED_CACHE_KEY)
+  } catch (e) {}
+}
+
+function saveP3GeneratedCache(text) {
+  try {
+    const fp = getP3OptimizeFingerprint()
+    const t = String(text || '').trim()
+    if (!fp || t.length < 80) return
+    localStorage.setItem(
+      P3_LAST_RESUME_KEY,
+      JSON.stringify({ fp, text: t, savedAt: new Date().toISOString() })
+    )
+  } catch (e) {}
+}
+
+function tryRestoreP3EditorFromCache() {
+  try {
+    const raw = localStorage.getItem(P3_LAST_RESUME_KEY)
+    if (!raw) return false
+    const o = JSON.parse(raw)
+    if (!o || !o.fp || !o.text) return false
+    if (o.fp !== getP3OptimizeFingerprint()) return false
+    const editor = document.getElementById('p3-editor')
+    if (!editor) return false
+    if (editor.value.trim().length > 80) return true
+    editor.value = o.text
+    const cc = document.getElementById('p3-char-count')
+    if (cc) cc.textContent = o.text.length + ' 字'
+    const btn = document.getElementById('btn-p3-generate')
+    if (btn) btn.textContent = P3_CTA_REGEN
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+function maybeShowPostRefreshHints() {
+  try {
+    if (currentPageId === 'p2' && hasCompletedJDAnalysisForStep3()) {
+      if (compareBoardHasCurrentAnalyzedJob()) {
+        toast('该JD已分析并已经录入JD对比看板', 'ℹ')
+      }
+      return
+    }
+    if (currentPageId !== 'p3') return
+    try {
+      const raw = localStorage.getItem(P3_STRUCTURED_CACHE_KEY)
+      if (!raw) return
+      const o = JSON.parse(raw)
+      const fp = (function () {
+        try {
+          return [
+            String((document.getElementById('jd-text') || { value: '' }).value || '').slice(0, 240),
+            String(getResumeContentGen() || ''),
+          ].join('|')
+        } catch (e) {
+          return ''
+        }
+      })()
+      if (o && o.fp === fp && o.payload && Array.isArray(o.payload.sections) && o.payload.sections.length) {
+        toast('该职位已经优化简历，可直接下载', 'ℹ')
+      }
+    } catch (e) {}
+  } catch (e) {}
+}
+
 function clearLeftFields() {
   ['f-company','f-role','f-salary','f-deadline','jd-url'].forEach(id => {
     document.getElementById(id).value = ''
@@ -1365,6 +1576,7 @@ function clearCurrentInputs() {
   step3AccessGrantedThisVisit = false
   try { localStorage.removeItem(STEP3_GATE_KEY) } catch(e) {}
   try { localStorage.removeItem(P2_SESSION_KEY) } catch(e) {}
+  clearP3GeneratedCache()
   updateStepGuards()
 }
 
@@ -1478,17 +1690,21 @@ function localExtractFromJD(text) {
 
 // ── PAGE SWITCH ──────────────────────────────────────────────────────────
 function navGoPage(p) {
-  if (p === 'p2' && currentPageId === 'p1') {
-    toast('请使用页面底部「下一步：去分析 JD」进入 Step 2', '⚠')
+  if (p === 'p3' && currentPageId === 'p1') {
+    toast('请先在 Step 2 完成 JD 分析，并点击结果区「下一步」进入 Step 3', '⚠')
     return
   }
-  if (p === 'p3' && (currentPageId === 'p1' || currentPageId === 'p2')) {
+  if (p === 'p2' && currentPageId === 'p1') {
+    void goToStep2FromP1()
+    return
+  }
+  if (p === 'p3' && currentPageId === 'p2') {
     if (!hasCompletedJDAnalysisForStep3()) {
       toast('请先在 Step 2 点击「分析这份 JD」完成分析', '⚠')
       return
     }
     if (!hasStep3OptimizeGate()) {
-      toast('请先在 Step 2 结果区点击「优化简历 →」；之后可从顶部随时进入 Step 3', '⚠')
+      toast('请先在 Step 2 结果区点击「下一步」；之后可从顶部进入 Step 3', '⚠')
       return
     }
   }
@@ -1516,16 +1732,30 @@ function goPage(p) {
     currentPageId = 'p2'
     syncP2ResultsIfResumeStale()
   } else if (p === 'p3') {
-    document.getElementById('page-p3').style.display = 'block'
-    loadP3()
+    const p3 = document.getElementById('page-p3')
+    if (p3) {
+      p3.style.display = 'flex'
+      p3.style.flexDirection = 'column'
+    }
+    try {
+      loadP3()
+    } catch (e) {
+      console.error('loadP3', e)
+      toast('Step 3 加载出错，请刷新页面重试', '✗')
+    }
     currentPageId = 'p3'
   }
   updateProgressNav(p)
   togglePage2BoardButtons(p === 'p2')
-  // 入口统一从Step1开始，不再恢复到Step3；仅记录到Step2用于体验优化
-  if (p === 'p2') {
-    try { localStorage.setItem(LAST_PAGE_KEY, p) } catch(e) {}
+  try {
+    localStorage.setItem(LAST_PAGE_KEY, p)
+  } catch (e) {}
+  const compareNav = document.getElementById('btn-open-compare')
+  const compareDiv = document.getElementById('nav-board-divider')
+  if (compareNav) {
+    compareNav.style.display = p === 'p1' ? 'none' : 'inline-flex'
   }
+  if (compareDiv) compareDiv.style.display = p === 'p1' ? 'none' : 'block'
   try {
     const base = window.location.pathname + window.location.search
     history.replaceState(null, '', base + '#' + p)
@@ -1576,9 +1806,9 @@ function togglePage2BoardButtons(show) {
   const a = document.getElementById('btn-open-compare')
   const b = document.getElementById('btn-open-tracking')
   const d = document.getElementById('nav-board-divider')
-  if (a) a.style.display = 'inline-flex'
+  if (a && currentPageId !== 'p1') a.style.display = 'inline-flex'
   if (b) b.style.display = show ? 'inline-flex' : 'none'
-  if (d) d.style.display = 'block'
+  if (d && currentPageId !== 'p1') d.style.display = 'block'
 }
 function saveAndOpenCompare() {
   addToDashboard()
@@ -2046,22 +2276,328 @@ function buildResumeContext() {
 }
 
 
-// ── PAGE 3 LOGIC ──────────────────────────────────────────────────────────
+// ── PAGE 3 LOGIC — 结构化双栏（page3-resume-editor + /api/p3-structured-editor）────────
 let p3CurrentJD = ''
 let p3OriginalResume = ''
 let p3OriginalScore = 0
 let p3OriginalText = ''
+let p3StructuredPayload = null
+let p3StructuredBaseline = null
+
+function getP3StructuredCacheFingerprint() {
+  try {
+    return [
+      String((document.getElementById('jd-text') || { value: '' }).value || '').slice(0, 240),
+      String(getResumeContentGen() || ''),
+    ].join('|')
+  } catch (e) {
+    return ''
+  }
+}
+
+function tryRestoreP3StructuredCache() {
+  try {
+    const raw = localStorage.getItem(P3_STRUCTURED_CACHE_KEY)
+    if (!raw) return null
+    const o = JSON.parse(raw)
+    if (!o || o.fp !== getP3StructuredCacheFingerprint()) return null
+    if (!o.payload || !Array.isArray(o.payload.sections)) return null
+    return {
+      payload: o.payload,
+      baseline:
+        o.baseline && Array.isArray(o.baseline.sections)
+          ? o.baseline
+          : JSON.parse(JSON.stringify(o.payload)),
+    }
+  } catch (e) {
+    return null
+  }
+}
+
+function saveP3StructuredCache() {
+  try {
+    if (!p3StructuredPayload || !Array.isArray(p3StructuredPayload.sections)) return
+    localStorage.setItem(
+      P3_STRUCTURED_CACHE_KEY,
+      JSON.stringify({
+        fp: getP3StructuredCacheFingerprint(),
+        payload: p3StructuredPayload,
+        baseline: p3StructuredBaseline || p3StructuredPayload,
+        savedAt: new Date().toISOString(),
+      })
+    )
+  } catch (e) {}
+}
+
+function p3seTypeTagClass(tag) {
+  if (tag === '新增') return 'p3se-tag-green'
+  if (tag === '改写' || tag === '强化') return 'p3se-tag-blue'
+  if (tag === '精简') return 'p3se-tag-red'
+  return 'p3se-tag-gray'
+}
+
+function p3seAlertClass(type) {
+  if (type === 'red') return 'p3se-alert-red'
+  if (type === 'green') return 'p3se-alert-green'
+  return 'p3se-alert-blue'
+}
+
+function p3seHighlightClass(type, isRight) {
+  if (isRight) {
+    if (type === 'green') return 'p3se-hl-new'
+    if (type === 'blue') return 'p3se-hl-rewrite'
+    return 'p3se-hl-rewrite'
+  }
+  if (type === 'red' || type === 'yellow') return 'p3se-hl-need-action'
+  return 'p3se-hl-green'
+}
+
+function p3seNormalizeOneLine(s) {
+  return String(s || '')
+    .replace(/\s+/g, ' ')
+    .replace(/^[\s•·\-]+/, '')
+    .trim()
+}
+
+function p3seBuildActionItems(sec) {
+  const raw = sec.action_items
+  if (Array.isArray(raw) && raw.length) {
+    return raw.map(p3seNormalizeOneLine).filter(Boolean)
+  }
+  const out = []
+  ;(sec.hard_gaps || []).forEach((i) => {
+    const t = p3seNormalizeOneLine(i)
+    if (!t) return
+    out.push(/^【/.test(t) ? t : '【缺口】' + t)
+  })
+  ;(sec.yellow_improvements || []).forEach((i) => {
+    const t = p3seNormalizeOneLine(i)
+    if (!t) return
+    out.push(/^【/.test(t) ? t : '【强调】' + t)
+  })
+  ;(sec.weak_wording || []).forEach((i) => {
+    const t = p3seNormalizeOneLine(i)
+    if (!t) return
+    out.push(/^【/.test(t) ? t : '【强调】' + t)
+  })
+  return out
+}
+
+function p3seActionRowHtml(line) {
+  const t = p3seNormalizeOneLine(line)
+  if (!t) return ''
+  const tags = [
+    ['【已匹配】', 'p3se-blabel-matched'],
+    ['【缺口】', 'p3se-blabel-gap'],
+    ['【强调】', 'p3se-blabel-emph'],
+    ['【扩展】', 'p3se-blabel-expand'],
+    ['【删除】', 'p3se-blabel-del'],
+  ]
+  for (let i = 0; i < tags.length; i++) {
+    const [prefix, kind] = tags[i]
+    if (t.startsWith(prefix)) {
+      const body = t.slice(prefix.length).trim()
+      const rowCls = prefix === '【删除】' ? 'p3se-act-row p3se-act-row-del' : 'p3se-act-row'
+      return (
+        '<div class="' +
+        rowCls +
+        '"><span class="p3se-blabel ' +
+        kind +
+        '">' +
+        esc(prefix) +
+        '</span><span class="p3se-act-txt">' +
+        esc(body) +
+        '</span></div>'
+      )
+    }
+  }
+  return (
+    '<div class="p3se-act-row"><span class="p3se-blabel p3se-blabel-emph">【强调】</span><span class="p3se-act-txt">' +
+    esc(t) +
+    '</span></div>'
+  )
+}
+
+function p3seApplyHighlights(text, highlights, isRight) {
+  const list = Array.isArray(highlights) ? highlights : []
+  let out = esc(text || '')
+  list.forEach((h) => {
+    const t = esc(h.text || '')
+    if (!t) return
+    const cls = p3seHighlightClass(h.type, isRight)
+    const safeRe = t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+    try {
+      out = out.replace(new RegExp(safeRe, 'g'), (m) => {
+        return `<span class="${cls}" title="${esc(h.reason || '')}">${m}</span>`
+      })
+    } catch (e) {
+      out = out.replace(t, `<span class="${cls}" title="${esc(h.reason || '')}">${t}</span>`)
+    }
+  })
+  return out
+}
+
+function p3seRenderSections(sections) {
+  const left = document.getElementById('p3se-left-sections')
+  const right = document.getElementById('p3se-right-sections')
+  if (!left || !right) return
+  left.innerHTML = ''
+  right.innerHTML = ''
+  ;(sections || []).forEach((sec) => {
+    const leftBodyLines = []
+    if (sec.original)
+      leftBodyLines.push(
+        `<div class="p3se-line">${p3seApplyHighlights(sec.original, sec.highlights, false)}</div>`
+      )
+    ;(sec.bullets_original || []).forEach((b) => {
+      leftBodyLines.push(
+        `<div class="p3se-bullet"><div class="p3se-bullet-dot"></div><div>${p3seApplyHighlights(
+          b,
+          sec.highlights,
+          false
+        )}</div></div>`
+      )
+    })
+    const leftAlert = sec.alert
+      ? `<div class="p3se-alert ${p3seAlertClass(sec.alert.type)}">${esc(sec.alert.text)}</div>`
+      : ''
+    left.innerHTML += `<div class="p3se-section" data-id="${esc(
+      sec.id
+    )}"><div class="p3se-sec-head">${esc(sec.title)} <span class="p3se-tag ${p3seTypeTagClass(
+      sec.tag
+    )}">${esc(sec.tag || '无需修改')}</span></div><div class="p3se-sec-body">${leftBodyLines.join(
+      ''
+    )}${leftAlert}</div></div>`
+
+    const rightBodyLines = []
+    if (sec.suggested)
+      rightBodyLines.push(
+        `<div class="p3se-line p3se-editable" contenteditable="true" data-field="suggested">${p3seApplyHighlights(
+          sec.suggested,
+          sec.highlights,
+          true
+        )}</div>`
+      )
+    ;(sec.bullets_suggested || []).forEach((b, i) => {
+      rightBodyLines.push(
+        `<div class="p3se-bullet"><div class="p3se-bullet-dot"></div><div class="p3se-editable" contenteditable="true" data-field="bullet" data-idx="${i}">${p3seApplyHighlights(
+          b,
+          sec.highlights,
+          true
+        )}</div></div>`
+      )
+    })
+    const blueText = (function () {
+      if (!sec.alert || !sec.alert.text) return ''
+      return p3seNormalizeOneLine(sec.alert.text)
+    })()
+    const analysisBlue = blueText
+      ? `<div class="p3se-rx-blue">${esc(blueText)}</div>`
+      : `<div class="p3se-rx-blue p3se-rx-muted">针对本 section 的 JD 回应建议：暂无（可重新生成）</div>`
+
+    const greenLines = (sec.matched_jd_items || []).map(p3seNormalizeOneLine).filter(Boolean)
+    const greenInner =
+      greenLines.length > 0
+        ? greenLines.map((i) => `<div class="p3se-rx-line">• ${esc(i)}</div>`).join('')
+        : `<div class="p3se-rx-line p3se-rx-muted">暂无</div>`
+    const analysisGreen = `<div class="p3se-rx-green">${greenInner}</div>`
+
+    const actionItems = p3seBuildActionItems(sec)
+    const actionsInner =
+      actionItems.length > 0
+        ? actionItems.map(p3seActionRowHtml).join('')
+        : `<div class="p3se-rx-muted">暂无</div>`
+    const analysisActions = `<div class="p3se-rx-actions">${actionsInner}</div>`
+
+    const analysisStack = analysisBlue + analysisGreen + analysisActions
+    right.innerHTML += `<div class="p3se-section" data-id="${esc(
+      sec.id
+    )}"><div class="p3se-sec-head">${esc(sec.title)} <span class="p3se-tag ${p3seTypeTagClass(
+      sec.tag
+    )}">${esc(sec.tag || '无需修改')}</span></div><div class="p3se-sec-body">${rightBodyLines.join(
+      ''
+    )}${analysisStack}</div></div>`
+  })
+}
+
+function p3seUpdateMatchBar(before, after) {
+  const pb = document.getElementById('p3se-pill-before')
+  const pa = document.getElementById('p3se-pill-after')
+  const lb = document.getElementById('p3se-match-before-lbl')
+  const la = document.getElementById('p3se-match-after-lbl')
+  const bbf = document.getElementById('p3se-bar-before')
+  const baf = document.getElementById('p3se-bar-after')
+  if (before == null || after == null || Number.isNaN(before) || Number.isNaN(after)) {
+    if (pb) pb.textContent = '当前匹配度 --%'
+    if (pa) pa.textContent = '修改后 --%'
+    if (lb) lb.textContent = '--%'
+    if (la) la.textContent = '→ --%'
+    if (bbf) bbf.style.width = '0%'
+    if (baf) baf.style.width = '0%'
+    return
+  }
+  const b = Math.max(0, Math.min(100, Math.round(Number(before))))
+  const a = Math.max(0, Math.min(100, Math.round(Number(after))))
+  if (pb) pb.textContent = '当前匹配度 ' + b + '%'
+  if (pa) pa.textContent = '修改后 ' + a + '%'
+  if (lb) lb.textContent = b + '%'
+  if (la) la.textContent = '→ ' + a + '%'
+  if (bbf) bbf.style.width = b + '%'
+  if (baf) {
+    baf.style.width = '0%'
+    setTimeout(() => {
+      baf.style.width = a + '%'
+    }, 120)
+  }
+}
+
+function p3seReadEditedSections() {
+  if (!p3StructuredPayload || !Array.isArray(p3StructuredPayload.sections)) return []
+  const map = {}
+  document.querySelectorAll('#p3se-right-sections .p3se-section').forEach((secEl) => {
+    const id = secEl.getAttribute('data-id')
+    map[id] = { suggested: '', bullets_suggested: [] }
+    const s = secEl.querySelector('[data-field="suggested"]')
+    if (s) map[id].suggested = s.innerText.trim()
+    secEl.querySelectorAll('[data-field="bullet"]').forEach((b) => {
+      map[id].bullets_suggested.push(b.innerText.trim())
+    })
+  })
+  return p3StructuredPayload.sections.map((sec) => ({ ...sec, ...(map[sec.id] || {}) }))
+}
+
+function p3SyncEditorMirrorFromStructured() {
+  const parts = []
+  p3seReadEditedSections().forEach((sec) => {
+    parts.push('## ' + (sec.title || sec.id))
+    if (sec.suggested) parts.push(sec.suggested)
+    ;(sec.bullets_suggested || []).forEach((b) => {
+      if (b && String(b).trim()) parts.push('• ' + String(b).trim())
+    })
+    parts.push('')
+  })
+  const t = parts.join('\n').trim()
+  const ta = document.getElementById('p3-editor')
+  if (ta) ta.value = t
+  const cc = document.getElementById('p3-char-count')
+  if (cc) cc.textContent = t ? t.length + ' 字（合并预览）' : ''
+}
 
 function loadP3() {
-  document.getElementById('p3-loading').style.display = 'none'
+  const _ld = document.getElementById('p3-loading')
+  if (_ld) {
+    _ld.style.display = 'none'
+    _ld.style.pointerEvents = 'none'
+  }
   const genBar = document.getElementById('p3-generate-bar')
   const jdEl = document.getElementById('jd-text')
   p3CurrentJD = jdEl ? jdEl.value.trim() : ''
+  const leftBox = document.getElementById('p3se-left-sections')
+  const rightBox = document.getElementById('p3se-right-sections')
   try {
     const selected = getSelectedResumeRecords()
-    p3OriginalResume = selected.map(x => (x.rawText || '').trim()).filter(Boolean).join('\n\n---\n\n')
-  } catch(e) {}
-  // 兜底：同一会话里用户刚上传但还未点击“保存”时，也允许进入P3生成
+    p3OriginalResume = selected.map((x) => (x.rawText || '').trim()).filter(Boolean).join('\n\n---\n\n')
+  } catch (e) {}
   if (!p3OriginalResume) {
     const draft = getMergedRawTextFromSelection()
     if (draft.trim().length > 100) p3OriginalResume = draft.trim()
@@ -2069,50 +2605,86 @@ function loadP3() {
   p3OriginalText = p3OriginalResume
   if (currentResult && currentResult.atsScore != null) {
     p3OriginalScore = currentResult.atsScore
-    document.getElementById('p3-score-before').textContent = p3OriginalScore + '%'
+    const _sb = document.getElementById('p3-score-before')
+    if (_sb) _sb.textContent = p3OriginalScore + '%'
   } else {
     p3OriginalScore = 0
-    document.getElementById('p3-score-before').textContent = '—'
+    const _sb = document.getElementById('p3-score-before')
+    if (_sb) _sb.textContent = '—'
   }
-  document.getElementById('p3-edit-note').textContent = '确认满意后保存或导出'
+  const noteEl = document.getElementById('p3-edit-note')
+  if (noteEl) noteEl.textContent = '确认满意后保存或导出'
 
   if (!p3CurrentJD || !p3OriginalResume) {
     if (genBar) genBar.style.display = 'none'
-    const list = document.getElementById('p3-reasons-list')
-    if (!p3CurrentJD) list.innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 请先在「JD 分析」页分析一份 JD</div>'
-    else list.innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 请先在「简历设置」上传并勾选简历（将自动保存）</div>'
-    document.getElementById('p3-top-summary').textContent = '—'
+    p3StructuredPayload = null
+    p3StructuredBaseline = null
+    p3seUpdateMatchBar(null, null)
+    const miss =
+      !p3CurrentJD
+        ? '⚠ 请先在「JD 分析」页分析一份 JD'
+        : '⚠ 请先在「简历设置」上传并勾选简历（将自动保存）'
+    if (leftBox)
+      leftBox.innerHTML =
+        '<div class="p3se-section"><div class="p3se-sec-body" style="color:var(--red);font-size:12px;">' +
+        esc(miss) +
+        '</div></div>'
+    if (rightBox) rightBox.innerHTML = ''
+    const btn0 = document.getElementById('btn-p3-generate')
+    if (btn0) {
+      btn0.disabled = true
+      btn0.textContent = P3_CTA_MAIN
+    }
     return
   }
 
   if (genBar) genBar.style.display = 'flex'
-  const editor = document.getElementById('p3-editor')
-  const editorLen = (editor && editor.value.trim().length) || 0
   const btn = document.getElementById('btn-p3-generate')
-  if (btn) {
-    btn.disabled = false
-    btn.textContent = editorLen > 80 ? '重新生成优化简历' : '生成优化简历'
+  if (btn) btn.disabled = false
+
+  const restored = tryRestoreP3StructuredCache()
+  if (restored && restored.payload.sections.length) {
+    p3StructuredPayload = restored.payload
+    p3StructuredBaseline = restored.baseline
+    p3seRenderSections(p3StructuredPayload.sections)
+    p3seUpdateMatchBar(p3StructuredPayload.matchBefore, p3StructuredPayload.matchAfter)
+    p3SyncEditorMirrorFromStructured()
+    if (btn) btn.textContent = P3_CTA_REGEN
+    if (noteEl) noteEl.textContent = '已从本机缓存恢复分栏结果'
+    return
   }
 
-  const top = document.getElementById('p3-top-summary')
-  const reasons = document.getElementById('p3-reasons-list')
-  const keepState =
-    editorLen > 80 &&
-    top.textContent &&
-    top.textContent.trim().length > 15 &&
-    top.textContent.indexOf('请先点击左侧「生成优化简历」') < 0
-
-  if (!keepState) {
-    top.textContent =
-      '请先点击左侧「生成优化简历」。仅在点击按钮时请求 AI，进入本页不会自动调用。'
-    reasons.innerHTML =
-      '<div style="text-align:center;padding:24px;color:var(--text3);font-size:12px;">等待生成…</div>'
-  }
+  p3StructuredPayload = null
+  p3StructuredBaseline = null
+  let selectedNames = ''
+  try {
+    selectedNames = getSelectedResumeRecords()
+      .map((x) => String(x.fileName || '未命名简历').trim())
+      .filter(Boolean)
+      .slice(0, 2)
+      .join('、')
+  } catch (e) {}
+  if (!selectedNames) selectedNames = '已勾选简历'
+  if (leftBox)
+    leftBox.innerHTML =
+      '<div class="p3se-section"><div class="p3se-sec-body" style="font-size:12px;color:var(--text2);line-height:1.6;">请点击上方「<strong>' +
+      esc(P3_CTA_MAIN) +
+      '</strong>」生成分栏对照与 AI 建议。当前：<strong>' +
+      esc(selectedNames) +
+      '</strong></div></div>'
+  if (rightBox) rightBox.innerHTML = ''
+  p3seUpdateMatchBar(null, null)
+  const ta = document.getElementById('p3-editor')
+  if (ta) ta.value = ''
+  const cc = document.getElementById('p3-char-count')
+  if (cc) cc.textContent = ''
+  if (btn) btn.textContent = P3_CTA_MAIN
 }
 
 function p3OnEdit() {
-  const val = document.getElementById('p3-editor').value
-  document.getElementById('p3-char-count').textContent = val.length + ' 字'
+  const val = (document.getElementById('p3-editor') || { value: '' }).value
+  const cc = document.getElementById('p3-char-count')
+  if (cc) cc.textContent = val && val.length ? val.length + ' 字（合并预览）' : ''
 }
 
 function cancelP3Generate() {
@@ -2123,51 +2695,79 @@ function cancelP3Generate() {
 }
 
 function p3ResetToOriginal() {
-  if (!confirm('退回到原始简历？当前编辑将丢失。')) return
-  document.getElementById('p3-editor').value = p3OriginalText
-  document.getElementById('p3-char-count').textContent = p3OriginalText.length + ' 字'
-  document.getElementById('p3-score-after').textContent = '—'
-  document.getElementById('p3-score-delta').style.display = 'none'
-  document.getElementById('p3-edit-note').textContent = '已退回原始版本'
-  toast('已退回原始简历', '↺')
+  if (!p3StructuredBaseline || !Array.isArray(p3StructuredBaseline.sections)) {
+    toast('暂无可恢复的 AI 初稿，请先生成', '⚠')
+    return
+  }
+  if (!confirm('恢复为本次生成的 AI 初稿？右侧手动编辑将丢失。')) return
+  p3StructuredPayload = JSON.parse(JSON.stringify(p3StructuredBaseline))
+  p3seRenderSections(p3StructuredPayload.sections)
+  p3seUpdateMatchBar(p3StructuredPayload.matchBefore, p3StructuredPayload.matchAfter)
+  p3SyncEditorMirrorFromStructured()
+  const note = document.getElementById('p3-edit-note')
+  if (note) note.textContent = '已恢复 AI 初稿'
+  toast('已恢复 AI 初稿', '↺')
 }
 
 async function p3Generate() {
-  console.info('[Step3] 已点击「生成优化简历」，正在校验简历与 JD…')
-  // 兜底：如果原来简历为空，用右侧编辑框内容（用户可能直接粘贴在那里）
   if (!p3OriginalResume) {
-    const editorVal = (document.getElementById('p3-editor') || {value:''}).value.trim()
+    const editorVal = (document.getElementById('p3-editor') || { value: '' }).value.trim()
     if (editorVal.length > 100) {
       p3OriginalResume = editorVal
       p3OriginalText = editorVal
     }
   }
   if (!p3OriginalResume) {
-    document.getElementById('p3-reasons-list').innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 简历内容为空。请在右侧编辑框粘贴你的简历，再点「重新检测匹配度」。</div>'
-    toast('未检测到简历正文：请回 Step 1 勾选简历，或在右侧大框粘贴后再点生成', '⚠')
+    const left = document.getElementById('p3se-left-sections')
+    if (left)
+      left.innerHTML =
+        '<div class="p3se-section"><div class="p3se-sec-body" style="color:var(--red);font-size:12px;">⚠ 简历内容为空。请回 Step 1 勾选简历，或粘贴完整正文后再试。</div></div>'
+    toast('未检测到简历正文', '⚠')
     return
   }
 
-  const p2ctx = currentResult ? `JD分析结果：ATS匹配率${currentResult.atsScore}%，评级${currentResult.grade}（${currentResult.priorityLabel}）。缺失关键词：${(currentResult.gapKeywords||[]).slice(0,6).join('、')}。可迁移技能：${(currentResult.weakKeywords||[]).slice(0,4).join('、')}。` : ''
+  const p2ctx = currentResult
+    ? `JD分析结果：ATS匹配率${currentResult.atsScore}%，评级${currentResult.grade}（${currentResult.priorityLabel}）。缺失关键词：${(currentResult.gapKeywords || []).slice(0, 6).join('、')}。可迁移技能：${(currentResult.weakKeywords || []).slice(0, 4).join('、')}。`
+    : ''
 
-  const cleanedResume = normalizeExtractedText(p3OriginalResume)
+  let cleanedResume
+  try {
+    cleanedResume = normalizeExtractedText(p3OriginalResume)
+  } catch (e) {
+    console.error(e)
+    toast('简历预处理失败，请重试或缩短正文', '✗')
+    return
+  }
   if (!isResumeTextUsable(cleanedResume)) {
-    document.getElementById('p3-reasons-list').innerHTML = '<div style="padding:16px;color:var(--red);font-size:12px;">⚠ 简历文本质量不足。请回到「简历设置」重新上传或调整勾选。</div>'
-    toast('简历内容无法用于 AI 改写：请回到 Step 1 上传可读正文，或右侧粘贴完整简历', '⚠')
+    const left = document.getElementById('p3se-left-sections')
+    if (left)
+      left.innerHTML =
+        '<div class="p3se-section"><div class="p3se-sec-body" style="color:var(--red);font-size:12px;">⚠ 简历文本质量不足。请回到「简历设置」重新上传或调整勾选。</div></div>'
+    toast('简历内容无法用于 AI 改写', '⚠')
     return
   }
+
+  const matchBefore =
+    currentResult && currentResult.atsScore != null ? currentResult.atsScore : null
 
   const btnGen = document.getElementById('btn-p3-generate')
   if (btnGen) {
     btnGen.disabled = true
     btnGen.style.opacity = '0.75'
   }
-  document.getElementById('p3-loading').style.display = 'flex'
-  document.getElementById('p3-loading-text').textContent = 'AI 正在生成改写版简历...'
-  document.getElementById('p3-loading-sub').textContent =
-    '一般 30–120 秒；超过 ' +
-    Math.round(P3_REWRITE_FETCH_TIMEOUT_MS / 1000) +
-    ' 秒未返回将自动停止，请检查终端/网络或稍后重试。'
+  const _p3ld = document.getElementById('p3-loading')
+  if (_p3ld) {
+    _p3ld.style.display = 'flex'
+    _p3ld.style.pointerEvents = 'auto'
+  }
+  const _p3lt = document.getElementById('p3-loading-text')
+  const _p3ls = document.getElementById('p3-loading-sub')
+  if (_p3lt) _p3lt.textContent = 'AI 正在生成分栏结构化对照…'
+  if (_p3ls)
+    _p3ls.textContent =
+      '一般 30–120 秒；超过 ' +
+      Math.round(P3_REWRITE_FETCH_TIMEOUT_MS / 1000) +
+      ' 秒未返回将自动停止。'
 
   p3RewriteAbortController = new AbortController()
   const timeoutCtrl = new AbortController()
@@ -2175,100 +2775,91 @@ async function p3Generate() {
   const combined = mergeAbortSignals(p3RewriteAbortController.signal, timeoutCtrl.signal)
 
   try {
-    console.info(
-      '[求职助手] 即将请求 POST /api/p3-rewrite — 请在 Network 筛选「p3-rewrite」；服务端日志在 next dev 终端（[p3-rewrite] POST）'
-    )
-    const genRes = await fetch('/api/p3-rewrite', {
+    const genRes = await fetch('/api/p3-structured-editor', {
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        mode: 'generate',
+        resumeText: cleanedResume,
+        jdText: p3CurrentJD,
         p2ctx,
-        resumeSlice: cleanedResume.slice(0, 3000),
-        jdSlice: p3CurrentJD.slice(0, 1000),
+        matchBefore,
       }),
       signal: combined,
     })
     const genPayload = await genRes.json().catch(() => ({}))
     if (!genRes.ok) {
-      let msg = genPayload.error || ('请求失败 (' + genRes.status + ')')
+      let msg = genPayload.error || '请求失败 (' + genRes.status + ')'
       if (genRes.status === 401) msg = '请先登录后再使用简历改写'
       throw new Error(formatAiErrorForUi(msg))
     }
-    const raw = String(genPayload.text || '')
-    let r = parseP3StructuredResponse(raw)
-    if (!r) {
-      const repairRes = await fetch('/api/p3-rewrite', {
-        method: 'POST',
-        credentials: 'same-origin',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'repair', raw: raw.slice(0, 7000) }),
-        signal: combined,
-      })
-      const repairPayload = await repairRes.json().catch(() => ({}))
-      if (!repairRes.ok) {
-        let msg = repairPayload.error || ('修复请求失败 (' + repairRes.status + ')')
-        if (repairRes.status === 401) msg = '请先登录后再使用简历改写'
-        throw new Error(formatAiErrorForUi(msg))
-      }
-      r = parseP3StructuredResponse(String(repairPayload.text || ''))
-    }
-    if (!r) throw new Error('AI返回结构不完整，请重试')
-    if (/(无法读取|未读取到|看不到|无法访问|PDF|文档内容不可用)/i.test(r.newResume || '')) {
-      throw new Error('模型未读取到有效简历文本，请先在Page1手动粘贴完整简历后再试')
+    const sections = genPayload.sections
+    if (!Array.isArray(sections) || !sections.length) {
+      throw new Error('AI 返回缺少 sections，请重试')
     }
 
-    // 渲染顶部
-    document.getElementById('p3-top-summary').textContent = r.topSummary || ''
-    document.getElementById('p3-score-after').textContent = (r.scoreAfter || '—') + (r.scoreAfter ? '%' : '')
-    const delta = (r.scoreAfter || 0) - p3OriginalScore
-    if (delta > 0) {
-      const el = document.getElementById('p3-score-delta')
-      el.style.display = 'inline'; el.textContent = '↑ +' + delta + '%'; el.style.color = 'var(--green)'
-    }
+    const coercedBefore = (function () {
+      const a = genPayload.matchBefore
+      if (a != null && a !== '' && !Number.isNaN(Number(a))) return Math.round(Number(a))
+      if (matchBefore != null && matchBefore !== '' && !Number.isNaN(Number(matchBefore)))
+        return Math.round(Number(matchBefore))
+      if (p3OriginalScore != null && p3OriginalScore !== '' && !Number.isNaN(Number(p3OriginalScore)))
+        return Math.round(Number(p3OriginalScore))
+      return null
+    })()
+    let coercedAfter = genPayload.matchAfter
+    if (coercedAfter == null || coercedAfter === '' || Number.isNaN(Number(coercedAfter)))
+      coercedAfter = coercedBefore
+    else coercedAfter = Math.round(Number(coercedAfter))
 
-    // 渲染左栏改写说明
-    let html = ''
-    if ((r.mustReasons||[]).length) {
-      html += `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--green);margin-bottom:3px;">🟢 必须改动 — 直接影响ATS通过率</div>`
-      html += (r.mustReasons||[]).map(m => `
-        <div style="background:#f0fdf4;border:1.5px solid #86efac;border-radius:9px;padding:10px 13px;">
-          <div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:5px;">${esc(m.title)}</div>
-          <div style="font-size:11px;color:#2d6a4f;line-height:1.6;">${esc(m.reason)}</div>
-        </div>`).join('')
+    p3StructuredPayload = {
+      matchBefore: coercedBefore,
+      matchAfter: coercedAfter,
+      sections,
     }
-    if ((r.niceReasons||[]).length) {
-      html += `<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#92400e;margin-top:8px;margin-bottom:3px;">🟡 加分项 — 可选择性采纳</div>`
-      html += (r.niceReasons||[]).map(m => `
-        <div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:9px;padding:10px 13px;">
-          <div style="font-size:12px;font-weight:600;color:#92400e;margin-bottom:5px;">${esc(m.title)}</div>
-          <div style="font-size:11px;color:#78350f;line-height:1.6;">${esc(m.reason)}</div>
-        </div>`).join('')
-    }
-    document.getElementById('p3-reasons-list').innerHTML = html
+    p3StructuredBaseline = JSON.parse(JSON.stringify(p3StructuredPayload))
+    p3seRenderSections(sections)
+    p3seUpdateMatchBar(coercedBefore, coercedAfter)
+    p3SyncEditorMirrorFromStructured()
+    saveP3StructuredCache()
+    try {
+      localStorage.removeItem(P3_LAST_RESUME_KEY)
+    } catch (e) {}
 
-    // 渲染右栏简历
-    const editor = document.getElementById('p3-editor')
-    editor.value = r.newResume || ''
-    document.getElementById('p3-char-count').textContent = (r.newResume||'').length + ' 字'
-    document.getElementById('p3-loading').style.display = 'none'
+    const _ldOk = document.getElementById('p3-loading')
+    if (_ldOk) {
+      _ldOk.style.display = 'none'
+      _ldOk.style.pointerEvents = 'none'
+    }
     if (btnGen) {
       btnGen.disabled = false
       btnGen.style.opacity = ''
-      btnGen.textContent = '重新生成优化简历'
+      btnGen.textContent = P3_CTA_REGEN
     }
-    toast('改写版简历已生成！', '✓')
-  } catch(err) {
+    const note = document.getElementById('p3-edit-note')
+    if (note) note.textContent = '✓ 分栏结果已生成，可编辑右侧并导出'
+    toast('结构化简历对照已生成', '✓')
+  } catch (err) {
     console.error('p3Generate', err)
-    document.getElementById('p3-loading').style.display = 'none'
+    const _ldErr = document.getElementById('p3-loading')
+    if (_ldErr) {
+      _ldErr.style.display = 'none'
+      _ldErr.style.pointerEvents = 'none'
+    }
     const msg =
       err.name === 'AbortError'
         ? '已取消或请求超时（' +
           Math.round(P3_REWRITE_FETCH_TIMEOUT_MS / 1000) +
-          ' 秒内未返回）。请查看本机运行 next dev 的终端是否有报错，或稍后重试。'
+          ' 秒内未返回）。请检查终端/网络或稍后重试。'
         : formatAiErrorForUi(err.message || '')
-    document.getElementById('p3-reasons-list').innerHTML = `<div style="padding:12px;color:var(--red);font-size:12px;">⚠ 生成失败：${esc(msg)}</div>`
+    const left = document.getElementById('p3se-left-sections')
+    const right = document.getElementById('p3se-right-sections')
+    const errHtml =
+      '<div class="p3se-section"><div class="p3se-sec-body" style="color:var(--red);font-size:12px;">⚠ 生成失败：' +
+      esc(msg) +
+      '</div></div>'
+    if (left) left.innerHTML = errHtml
+    if (right) right.innerHTML = ''
     toast('AI 请求失败：' + msg, '✗')
   } finally {
     clearTimeout(tid)
@@ -2285,6 +2876,23 @@ function pickSection(text, tag) {
   const re = new RegExp(`\\[\\[${tag}\\]\\]([\\s\\S]*?)\\[\\[\\/${tag}\\]\\]`, 'i')
   const m = String(text || '').match(re)
   return m ? m[1].trim() : ''
+}
+
+/** 兼容模型未写闭合标签或输出被截断：有闭合用闭合，否则读到下一个 [[XXX]] 或全文末尾 */
+function pickSectionFlexible(text, tag) {
+  const s = String(text || '')
+  const reOpen = new RegExp(`\\[\\[${tag}\\]\\]`, 'i')
+  const mo = s.match(reOpen)
+  if (!mo || mo.index === undefined) return ''
+  const start = mo.index + mo[0].length
+  const rest = s.slice(start)
+  const reClose = new RegExp(`\\[\\[\\/${tag}\\]\\]`, 'i')
+  const mc = rest.match(reClose)
+  if (mc && mc.index !== undefined) return rest.slice(0, mc.index).trim()
+  const nextTag = rest.search(/\[\[[A-Za-z_][A-Za-z0-9_]*\]\]/)
+  if (nextTag === 0) return ''
+  if (nextTag > 0) return rest.slice(0, nextTag).trim()
+  return rest.trim()
 }
 
 function parseReasonLines(block, maxItems) {
@@ -2307,36 +2915,53 @@ function parseReasonLines(block, maxItems) {
 }
 
 function parseP3StructuredResponse(raw) {
-  if (!raw) return null
-  const topSummary = pickSection(raw, 'TOP_SUMMARY')
-  const scoreRaw = pickSection(raw, 'SCORE_AFTER')
-  const mustRaw = pickSection(raw, 'MUST_REASONS')
-  const niceRaw = pickSection(raw, 'NICE_REASONS')
-  const resume = pickSection(raw, 'NEW_RESUME')
-  if (!topSummary || !resume) return null
-  const scoreNum = Math.max(0, Math.min(100, parseInt((scoreRaw.match(/\d+/) || ['0'])[0], 10) || 0))
+  if (!raw || !String(raw).trim()) return null
+  const topSummary =
+    pickSectionFlexible(raw, 'TOP_SUMMARY') || pickSection(raw, 'TOP_SUMMARY')
+  const scoreRaw =
+    pickSectionFlexible(raw, 'SCORE_AFTER') || pickSection(raw, 'SCORE_AFTER')
+  const mustRaw =
+    pickSectionFlexible(raw, 'MUST_REASONS') || pickSection(raw, 'MUST_REASONS')
+  const niceRaw =
+    pickSectionFlexible(raw, 'NICE_REASONS') || pickSection(raw, 'NICE_REASONS')
+  let resume =
+    pickSectionFlexible(raw, 'NEW_RESUME') || pickSection(raw, 'NEW_RESUME')
+  if (!resume || resume.length < 15) return null
+  const top =
+    topSummary ||
+    '（模型未返回 TOP_SUMMARY，可直接使用右侧改写正文；若格式异常可复制到 Word 再排版）'
+  const scoreNum = Math.max(
+    0,
+    Math.min(100, parseInt((String(scoreRaw).match(/\d+/) || ['0'])[0], 10) || 0)
+  )
   return {
-    topSummary,
+    topSummary: top,
     scoreAfter: scoreNum,
     mustReasons: parseReasonLines(mustRaw, 4),
     niceReasons: parseReasonLines(niceRaw, 3),
-    newResume: resume
+    newResume: resume,
   }
 }
 
 async function p3CheckMatch() {
   if (!p3CurrentJD) { toast('请先在「JD 分析」页分析一份 JD', '⚠'); return }
+  p3SyncEditorMirrorFromStructured()
   const newResume = document.getElementById('p3-editor').value.trim()
-  if (!newResume) { toast('请先在右侧编辑框粘贴简历内容', '⚠'); return }
-  // 如果原来没有简历，用编辑框内容作为原始基准
+  if (!newResume) { toast('请先生成分栏结果，或在隐藏合并区有内容后再检测', '⚠'); return }
   if (!p3OriginalResume && newResume.length > 100) {
     p3OriginalResume = newResume
     p3OriginalText = newResume
     toast('已将编辑框内容设为简历基准', '✓')
   }
-  document.getElementById('p3-loading').style.display = 'flex'
-  document.getElementById('p3-loading-text').textContent = '重新检测匹配度...'
-  document.getElementById('p3-loading-sub').textContent = '对比修改后简历与 JD'
+  const _chkLd = document.getElementById('p3-loading')
+  if (_chkLd) {
+    _chkLd.style.display = 'flex'
+    _chkLd.style.pointerEvents = 'auto'
+  }
+  const _lt = document.getElementById('p3-loading-text')
+  const _ls = document.getElementById('p3-loading-sub')
+  if (_lt) _lt.textContent = '重新检测匹配度...'
+  if (_ls) _ls.textContent = '对比修改后简历与 JD'
   try {
     const res = await fetch('/api/p3-check-ats', {
       method: 'POST',
@@ -2359,23 +2984,45 @@ async function p3CheckMatch() {
     if (i0 < 0 || i1 < i0) throw new Error('返回格式异常')
     const parsed = JSON.parse(raw.slice(i0, i1 + 1))
     const score = parsed.atsScore || 0
-    document.getElementById('p3-score-after').textContent = score + '%'
+    const sa = document.getElementById('p3-score-after')
+    if (sa) sa.textContent = score + '%'
     const delta = score - p3OriginalScore
     const el = document.getElementById('p3-score-delta')
-    el.style.display = 'inline'
-    el.textContent = delta > 0 ? '↑ +'+delta+'%' : delta < 0 ? '↓ '+delta+'%' : '→ 持平'
-    el.style.color = delta > 0 ? 'var(--green)' : delta < 0 ? 'var(--red)' : 'var(--text3)'
-    document.getElementById('p3-edit-note').textContent = '✓ 检测完成，匹配度 ' + score + '%'
-    document.getElementById('p3-loading').style.display = 'none'
+    if (el) {
+      el.style.display = 'inline'
+      el.textContent = delta > 0 ? '↑ +' + delta + '%' : delta < 0 ? '↓ ' + delta + '%' : '→ 持平'
+      el.style.color = delta > 0 ? 'var(--green)' : delta < 0 ? 'var(--red)' : 'var(--text3)'
+    }
+    const beforeBar =
+      p3StructuredPayload != null && p3StructuredPayload.matchBefore != null
+        ? p3StructuredPayload.matchBefore
+        : p3OriginalScore
+    p3seUpdateMatchBar(beforeBar, score)
+    if (p3StructuredPayload) {
+      p3StructuredPayload.matchAfter = score
+      saveP3StructuredCache()
+    }
+    const note = document.getElementById('p3-edit-note')
+    if (note) note.textContent = '✓ 检测完成，匹配度 ' + score + '%'
+    const _chkOk = document.getElementById('p3-loading')
+    if (_chkOk) {
+      _chkOk.style.display = 'none'
+      _chkOk.style.pointerEvents = 'none'
+    }
     toast('匹配度：' + score + '%', '✓')
   } catch(e) {
-    document.getElementById('p3-loading').style.display = 'none'
+    const _chkErr = document.getElementById('p3-loading')
+    if (_chkErr) {
+      _chkErr.style.display = 'none'
+      _chkErr.style.pointerEvents = 'none'
+    }
     const msg = e.name === 'AbortError' ? '检测超时，请重试' : (e.message || '检测失败')
     toast(msg, '✗')
   }
 }
 
 function p3SaveToResume() {
+  p3SyncEditorMirrorFromStructured()
   const text = document.getElementById('p3-editor').value.trim()
   if (!text) { toast('没有内容', '⚠'); return }
   try {
@@ -2401,141 +3048,100 @@ function p3SaveToResume() {
   } catch(e) { toast('保存失败', '✗') }
 }
 
-async function p3ExportWord() {
-  const text = document.getElementById('p3-editor').value.trim()
-  if (!text) { toast('没有内容可导出', '⚠'); return }
-  toast('正在生成 Word 文件...', '⏳')
+/** Step3 Word：服务端 /api/export-resume（避免 CDN 加载 docx 失败） */
+async function p3DownloadExportResume(payload, fallbackName) {
+  toast('正在生成 Word…', '⏳')
   try {
-    if (!window.docx) {
-      await new Promise((resolve, reject) => {
-        const s = document.createElement('script')
-        s.src = 'https://cdnjs.cloudflare.com/ajax/libs/docx/8.5.0/docx.umd.min.js'
-        s.onload = resolve; s.onerror = reject
-        document.head.appendChild(s)
-      })
-    }
-    const { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TabStopPosition, TabStopType } = window.docx
-
-    const lines = text.split('\n')
-    const children = []
-
-    // 分析每一行的类型
-    for (let i = 0; i < lines.length; i++) {
-      const raw = lines[i]
-      const t = raw.trim()
-      const isEmpty = t === ''
-
-      // 检测行类型
-      const isSectionHeader = !isEmpty && t === t.toUpperCase() && t.length > 2 && t.length < 50 && !/[•\-·]/.test(t) && /^[A-Z\s&]+$/.test(t)
-      const isBullet = /^[•\-·]\s/.test(t)
-      const isNameLine = i <= 2 && !isEmpty && !isSectionHeader && !isBullet && t.length < 60 && /^[A-Z]/.test(t) && !/[@·•\-]/.test(t)
-      const isContactLine = !isEmpty && !isSectionHeader && !isBullet && (t.includes('@') || t.includes('·') || /\d{4,}/.test(t)) && t.length < 120
-      const isCompanyLine = !isEmpty && !isSectionHeader && !isBullet && !isContactLine && (
-        /\b(20\d{2})\b/.test(t) && (/[–—-]/.test(t) || /present/i.test(t))
-      )
-
-      if (isEmpty) {
-        children.push(new Paragraph({ spacing: { before: 40, after: 40 }, children: [] }))
-        continue
-      }
-
-      // 姓名行：大字号，粗体
-      if (isNameLine) {
-        children.push(new Paragraph({
-          alignment: AlignmentType.LEFT,
-          spacing: { before: 0, after: 60 },
-          children: [new TextRun({ text: t, font: 'Calibri', size: 36, bold: true, color: '1a1916' })]
-        }))
-        continue
-      }
-
-      // 联系信息行
-      if (isContactLine) {
-        children.push(new Paragraph({
-          alignment: AlignmentType.LEFT,
-          spacing: { before: 0, after: 100 },
-          children: [new TextRun({ text: t, font: 'Calibri', size: 20, color: '555555' })]
-        }))
-        continue
-      }
-
-      // SECTION HEADER：粗体 + 下划线 + 上方有间距
-      if (isSectionHeader) {
-        children.push(new Paragraph({
-          spacing: { before: 240, after: 80 },
-          border: { bottom: { style: BorderStyle.SINGLE, size: 1, color: 'cccccc', space: 2 } },
-          children: [new TextRun({ text: t, font: 'Calibri', size: 24, bold: true, color: '1a1916' })]
-        }))
-        continue
-      }
-
-      // 公司/职位行：粗体
-      if (isCompanyLine) {
-        // 拆分公司名和日期
-        const parts = t.split(/\s*[·]\s*/)
-        const runs = []
-        parts.forEach((part, idx) => {
-          if (idx > 0) runs.push(new TextRun({ text: ' · ', font: 'Calibri', size: 22, color: '666666' }))
-          const isDate = /20\d{2}/.test(part)
-          runs.push(new TextRun({
-            text: part.trim(),
-            font: 'Calibri',
-            size: 22,
-            bold: !isDate,
-            italics: isDate,
-            color: isDate ? '666666' : '1a1916'
-          }))
-        })
-        children.push(new Paragraph({
-          spacing: { before: 160, after: 40 },
-          children: runs
-        }))
-        continue
-      }
-
-      // Bullet point
-      if (isBullet) {
-        const bulletText = t.replace(/^[•\-·]\s*/, '')
-        children.push(new Paragraph({
-          spacing: { before: 20, after: 20 },
-          indent: { left: 360 },
-          children: [
-            new TextRun({ text: '•  ', font: 'Calibri', size: 21, color: '888888' }),
-            new TextRun({ text: bulletText, font: 'Calibri', size: 21, color: '333333' })
-          ]
-        }))
-        continue
-      }
-
-      // 普通文字
-      children.push(new Paragraph({
-        spacing: { before: 40, after: 40 },
-        children: [new TextRun({ text: t, font: 'Calibri', size: 21, color: '333333' })]
-      }))
-    }
-
-    const doc = new Document({
-      sections: [{
-        properties: {
-          page: {
-            size: { width: 11906, height: 16838 },
-            margin: { top: 900, right: 1100, bottom: 900, left: 1100 }
-          }
-        },
-        children
-      }]
+    const res = await fetch('/api/export-resume', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
     })
-
-    const buffer = await Packer.toBuffer(doc)
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' })
+    if (!res.ok) {
+      let msg = '导出失败 (' + res.status + ')'
+      try {
+        const j = await res.json()
+        if (j.error) msg = j.error
+      } catch (e) {}
+      if (res.status === 401) msg = '请先登录后再导出 Word'
+      toast(msg, '✗')
+      return
+    }
+    const blob = await res.blob()
+    const cd = res.headers.get('Content-Disposition')
+    let fname = fallbackName || 'Resume_Updated.docx'
+    if (cd) {
+      const mStar = /filename\*=UTF-8''([^;\n]+)/i.exec(cd)
+      if (mStar) {
+        try {
+          fname = decodeURIComponent(mStar[1].trim())
+        } catch (e) {}
+      } else {
+        const m = /filename="([^"]+)"/i.exec(cd)
+        if (m) fname = m[1]
+      }
+    }
+    const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
-    a.href = URL.createObjectURL(blob)
-    a.download = 'resume_for_JD_' + new Date().toISOString().slice(0,10) + '.docx'
-    a.click(); URL.revokeObjectURL(a.href)
-    toast('Word 文件已导出！', '✓')
-  } catch(err) {
-    toast('Word 导出失败：' + err.message, '✗')
+    a.href = url
+    a.download = fname
+    a.click()
+    URL.revokeObjectURL(url)
+    toast('Word 已导出', '✓')
+  } catch (err) {
+    console.error(err)
+    toast('导出失败：' + (err.message || '网络错误'), '✗')
   }
+}
+
+async function p3ExportWordStructured() {
+  const edited = p3seReadEditedSections()
+  if (!edited.length) {
+    toast('没有可导出的分段内容', '⚠')
+    return
+  }
+  const role =
+    ((document.getElementById('f-role') || { value: '' }).value || '').trim() ||
+    (function () {
+      try {
+        return (localStorage.getItem(CURRENT_JOB_TITLE_KEY) || '').trim()
+      } catch (e) {
+        return ''
+      }
+    })() ||
+    'Job'
+  const slug =
+    'Resume_Structured_' +
+    String(role).replace(/[^\w\u4e00-\u9fa5\- ]/g, '_').slice(0, 40) +
+    '_' +
+    new Date().toISOString().slice(0, 10) +
+    '.docx'
+  const sections = edited.map((sec) => ({
+    id: sec.id,
+    title: sec.title,
+    suggested: sec.suggested,
+    bullets_suggested: sec.bullets_suggested,
+  }))
+  await p3DownloadExportResume({ sections, filename: slug }, slug)
+}
+
+async function p3ExportWord() {
+  p3SyncEditorMirrorFromStructured()
+  if (
+    p3StructuredPayload &&
+    Array.isArray(p3StructuredPayload.sections) &&
+    p3StructuredPayload.sections.length
+  ) {
+    return p3ExportWordStructured()
+  }
+  const text = document.getElementById('p3-editor').value.trim()
+  if (!text) {
+    toast('没有内容可导出', '⚠')
+    return
+  }
+  const fname = 'resume_for_JD_' + new Date().toISOString().slice(0, 10) + '.docx'
+  await p3DownloadExportResume({ resumeText: text, filename: fname }, fname)
 }
 
 
@@ -2694,12 +3300,12 @@ function syncP2ResultsIfResumeStale() {
 function hydrateFromDashboardQuery() {
   const params = new URLSearchParams(window.location.search)
   const jobId = params.get('jobId')
-  if (!jobId) return
+  if (!jobId) return false
   try {
     const compareJobs = JSON.parse(localStorage.getItem(DB_KEY) || '[]')
     const trackingJobs = JSON.parse(localStorage.getItem(TRACKING_KEY) || '[]')
     const job = compareJobs.find(j => j.id === jobId) || trackingJobs.find(j => j.id === jobId)
-    if (!job) return
+    if (!job) return false
     document.getElementById('f-company').value = job.company || ''
     document.getElementById('f-role').value = job.role || ''
     document.getElementById('f-salary').value = job.salary || ''
@@ -2710,14 +3316,23 @@ function hydrateFromDashboardQuery() {
     document.getElementById('char-count').textContent = (job.jd || '').length + ' 字'
     liveJobId = job.id
     currentResult = { ...(currentResult || {}), ...job, jd: job.jd || '' }
+    ensureMatchPctOnResult(currentResult)
     analysisResultResumeGen = getResumeContentGen()
     goPage('p2')
     toast('已从看板回填职位信息', '↩')
+    return true
   } catch(e) {}
+  return false
 }
 
 function saveP2Session(mode='editing') {
   try {
+    if (mode === 'editing' && !hasCompletedJDAnalysisForStep3()) {
+      try {
+        localStorage.removeItem(P2_SESSION_KEY)
+      } catch (e) {}
+      return
+    }
     let prev = {}
     try {
       prev = JSON.parse(localStorage.getItem(P2_SESSION_KEY) || '{}')
@@ -2780,6 +3395,7 @@ function restoreP2Session() {
     document.getElementById('f-deadline').value = f.deadline || ''
     document.getElementById('jd-url').value = f.url || ''
     currentResult = p.currentResult || null
+    ensureMatchPctOnResult(currentResult)
     analysisResultResumeGen = null
     if (currentResult) {
       if (!('resultResumeGen' in p)) {
@@ -2814,34 +3430,66 @@ function restoreP2Session() {
 setState('empty')
 step3AccessGrantedThisVisit = false
 const initialHash = (window.location.hash || '').trim().toLowerCase()
+const urlParams = new URLSearchParams(window.location.search)
+let initialRouteHandled = false
 try {
-  const urlParams = new URLSearchParams(window.location.search)
-  const wantsP2 = urlParams.get('forceP2') === '1'
-  if (wantsP2) {
+  if (urlParams.get('forceP2') === '1') {
     goPage('p2')
+    initialRouteHandled = true
     try {
       const u = new URL(window.location.href)
       u.searchParams.delete('forceP2')
       history.replaceState(null, '', u.pathname + (u.hash || ''))
     } catch (e) {}
-  } else {
-    // 产品策略：默认从 Step 1 进入
-    goPage('p1')
   }
-} catch(e) { goPage('p1') }
-hydrateFromDashboardQuery()
-if (!new URLSearchParams(window.location.search).get('jobId')) {
+} catch (e) {}
+if (!initialRouteHandled && hydrateFromDashboardQuery()) {
+  initialRouteHandled = true
+}
+if (!urlParams.get('jobId')) {
   restoreP2Session()
 }
-// 直达 #p3：刷新后仍打开 Step 3（须已具备分析与「优化简历」门禁）
-if (
-  initialHash === '#p3' &&
-  hasCompletedJDAnalysisForStep3() &&
-  hasStep3OptimizeGate()
-) {
-  goPage('p3')
+if (!initialRouteHandled) {
+  const p3Ok =
+    hasCompletedJDAnalysisForStep3() && hasStep3OptimizeGate()
+  let last = ''
+  try {
+    last = (localStorage.getItem(LAST_PAGE_KEY) || '').trim()
+  } catch (e) {}
+  if (initialHash === '#p3' && p3Ok) {
+    goPage('p3')
+  } else if (initialHash === '#p2') {
+    goPage('p2')
+  } else if (last === 'p3' && p3Ok) {
+    goPage('p3')
+  } else if (last === 'p2') {
+    goPage('p2')
+  } else {
+    goPage('p1')
+  }
 }
 updateNavStatus()
+maybeShowPostRefreshHints()
+
+// Step3「开始分析并优化简历」：用 addEventListener 绑定，避免内联 onclick 在部分环境下不触发
+;(function bindP3GenerateButton() {
+  const btn = document.getElementById('btn-p3-generate')
+  if (!btn || typeof p3Generate !== 'function') {
+    console.warn('Step3: 未找到 #btn-p3-generate 或 p3Generate 未定义，请检查 HTML/脚本顺序')
+    return
+  }
+  btn.addEventListener('click', function (e) {
+    e.preventDefault()
+    console.log('[Step3] 按钮 click 已触发 → 调用 p3Generate()')
+    p3Generate()
+  })
+  const right = document.getElementById('p3se-right-sections')
+  if (right && typeof p3SyncEditorMirrorFromStructured === 'function') {
+    right.addEventListener('input', function () {
+      p3SyncEditorMirrorFromStructured()
+    })
+  }
+})()
 
 </script>
 <div class="toast-wrap" id="toast-wrap"></div>

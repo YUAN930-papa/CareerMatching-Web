@@ -144,6 +144,14 @@ function enrichJdAnalysisForUi(p: Record<string, unknown>): Record<string, unkno
     p.type = ''
   }
 
+  /** 前端 Step2/Step3 依赖 matchPct；模型 JSON 无此字段时用 atsScore */
+  const ats = clampScore0to100(p.atsScore)
+  if (p.matchPct == null || p.matchPct === '') {
+    p.matchPct = ats
+  } else {
+    p.matchPct = clampScore0to100(p.matchPct)
+  }
+
   return p
 }
 
@@ -342,7 +350,10 @@ export async function POST(request: Request) {
       )
     }
 
-    return NextResponse.json(parsed)
+    return NextResponse.json({
+      ...parsed,
+      matchPct: parsed.matchPct ?? parsed.atsScore,
+    })
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error'
     return NextResponse.json({ error: message }, { status: 500 })
