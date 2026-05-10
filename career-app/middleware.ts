@@ -2,6 +2,15 @@ import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  const protectedPaths = ['/dashboard', '/kanban', '/resume']
+  const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
+
+  // 仅保护业务页面，避免根路由和公开页面被中间件拦截
+  if (!isProtected) {
+    return NextResponse.next()
+  }
+
   let supabaseResponse = NextResponse.next({ request })
 
   const supabase = createServerClient(
@@ -27,12 +36,6 @@ export async function middleware(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser()
 
-  // 保护需要登录的路由
-  const protectedPaths = ['/dashboard', '/kanban', '/resume']
-  const isProtected = protectedPaths.some(path =>
-    request.nextUrl.pathname.startsWith(path)
-  )
-
   if (isProtected && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
@@ -44,6 +47,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/dashboard/:path*',
+    '/kanban/:path*',
+    '/resume/:path*',
   ],
 }
