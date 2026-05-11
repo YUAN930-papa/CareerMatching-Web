@@ -32,95 +32,103 @@ export default function LoginPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&family=DM+Serif+Display&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 
-        /* ── PAGE BACKGROUND ── */
-        .login-root {
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── SCENE: warm blobs on cream ── */
+        .scene {
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 24px;
-          font-family: 'DM Sans', -apple-system, sans-serif;
+          font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
           position: relative;
           overflow: hidden;
-          /* warm gradient scene */
-          background:
-            radial-gradient(ellipse 70% 60% at 15% 85%, rgba(220,100,20,0.55) 0%, transparent 55%),
-            radial-gradient(ellipse 55% 55% at 85% 15%, rgba(255,220,170,0.6) 0%, transparent 50%),
-            radial-gradient(ellipse 80% 70% at 50% 50%, rgba(245,170,90,0.35) 0%, transparent 60%),
-            linear-gradient(160deg, #fce8d0 0%, #f5c090 50%, #e89050 100%);
+          background: #f0d9c0;
         }
 
-        /* page-level grain */
-        .login-root::before {
-          content: '';
+        /* blob 1 – deep orange bottom-left */
+        .blob1 {
+          position: fixed;
+          width: 600px; height: 600px;
+          border-radius: 50%;
+          background: radial-gradient(circle, #e8602a 0%, transparent 70%);
+          bottom: -150px; left: -100px;
+          filter: blur(80px);
+          opacity: 0.75;
+          pointer-events: none;
+        }
+
+        /* blob 2 – soft peach top-right */
+        .blob2 {
+          position: fixed;
+          width: 500px; height: 500px;
+          border-radius: 50%;
+          background: radial-gradient(circle, #f5b07a 0%, transparent 70%);
+          top: -100px; right: -80px;
+          filter: blur(90px);
+          opacity: 0.65;
+          pointer-events: none;
+        }
+
+        /* blob 3 – warm tan center */
+        .blob3 {
+          position: fixed;
+          width: 400px; height: 400px;
+          border-radius: 50%;
+          background: radial-gradient(circle, #d4956a 0%, transparent 70%);
+          top: 40%; left: 40%;
+          transform: translate(-50%, -50%);
+          filter: blur(100px);
+          opacity: 0.45;
+          pointer-events: none;
+        }
+
+        /* grain overlay */
+        .grain {
           position: fixed;
           inset: 0;
           pointer-events: none;
-          z-index: 0;
-          opacity: 0.5;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-          background-size: 180px 180px;
-          mix-blend-mode: multiply;
+          z-index: 1;
+          opacity: 0.38;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
+          background-size: 200px 200px;
+          mix-blend-mode: overlay;
         }
 
-        /* ── LIQUID GLASS CARD ── */
-        /* Step 1+2: white 15% base + backdrop blur */
-        .login-card {
+        /* ── GLASS CARD ── */
+        .card {
           position: relative;
-          z-index: 1;
+          z-index: 2;
           display: flex;
           width: 100%;
-          max-width: 820px;
-          min-height: 520px;
-          border-radius: 28px;
+          max-width: 800px;
+          min-height: 500px;
+          border-radius: 24px;
           overflow: hidden;
 
-          /* Step 1: white semi-transparent base */
-          background: rgba(255, 255, 255, 0.15);
+          /* liquid glass base */
+          background: rgba(255, 255, 255, 0.40);
+          backdrop-filter: blur(32px) saturate(1.6);
+          -webkit-backdrop-filter: blur(32px) saturate(1.6);
 
-          /* Step 2: backdrop blur — core soul */
-          backdrop-filter: blur(32px) saturate(1.8) brightness(1.08);
-          -webkit-backdrop-filter: blur(32px) saturate(1.8) brightness(1.08);
+          /* 1px white border = glass edge refraction */
+          border: 1px solid rgba(255, 255, 255, 0.65);
 
-          /* Step 3: inner shadows for glass thickness */
-          /* Step 4: gradient stroke via box-shadow outline trick + pseudo */
           box-shadow:
-            /* Step 3a: top highlight — light hitting glass edge */
-            inset 0 1px 0 rgba(255,255,255,0.40),
-            /* Step 3b: structural perimeter */
-            inset 0 0 0 1px rgba(255,255,255,0.15),
+            /* top highlight rim */
+            inset 0 1.5px 0 rgba(255,255,255,0.80),
+            /* bottom shadow rim */
+            inset 0 -1px 0 rgba(0,0,0,0.06),
             /* outer depth */
-            0 40px 100px rgba(140,60,10,0.22),
-            0 8px 32px rgba(0,0,0,0.08);
-        }
-
-        /* Step 4: gradient stroke border via pseudo-element */
-        .login-card::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 28px;
-          padding: 1.5px;
-          background: linear-gradient(
-            135deg,
-            rgba(255,255,255,0.50) 0%,
-            rgba(255,255,255,0.10) 40%,
-            rgba(255,255,255,0.08) 60%,
-            rgba(255,255,255,0.45) 100%
-          );
-          -webkit-mask:
-            linear-gradient(#fff 0 0) content-box,
-            linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          pointer-events: none;
-          z-index: 10;
+            0 32px 80px rgba(120,50,10,0.18),
+            0 8px 24px rgba(0,0,0,0.08);
         }
 
         /* ── LEFT PANEL ── */
-        .login-left {
+        .left {
           flex: 1;
           position: relative;
           overflow: hidden;
@@ -128,302 +136,249 @@ export default function LoginPage() {
           flex-direction: column;
           justify-content: flex-end;
           padding: 36px 32px;
-          /* soft warm gradient — NOT solid orange */
-          background: linear-gradient(160deg,
-            rgba(255,220,170,0.55) 0%,
-            rgba(240,150,80,0.5) 45%,
-            rgba(200,80,20,0.45) 100%
-          );
+
+          /* slightly less opaque than card — lets blobs show more */
+          background: rgba(255, 255, 255, 0.10);
+          border-right: 1px solid rgba(255, 255, 255, 0.35);
         }
 
-        /* left panel grain — heavy */
-        .login-left::before {
+        /* grain on left panel */
+        .left::after {
           content: '';
           position: absolute;
           inset: 0;
           pointer-events: none;
-          z-index: 1;
-          opacity: 0.75;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23g)' opacity='1'/%3E%3C/svg%3E");
-          background-size: 150px 150px;
+          opacity: 0.55;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.70' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+          background-size: 160px 160px;
           mix-blend-mode: soft-light;
         }
 
-        /* the blurry, faded orb */
-        .orb {
-          position: absolute;
-          width: 360px;
-          height: 360px;
-          border-radius: 50%;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -58%);
-          z-index: 0;
-          /* very transparent, heavily blurred */
-          background: radial-gradient(circle at 36% 32%,
-            rgba(255, 235, 195, 0.22) 0%,
-            rgba(235, 130, 55, 0.15) 40%,
-            rgba(170, 55, 5, 0.10) 65%,
-            transparent 78%
-          );
-          filter: blur(40px);
-          opacity: 0.75;
-        }
-
-        .login-left-text {
+        .left-label {
           position: relative;
-          z-index: 2;
-        }
-
-        .login-left-label {
-          font-size: 11px;
-          font-weight: 400;
-          color: rgba(255,255,255,0.55);
-          letter-spacing: 0.12em;
+          z-index: 1;
+          font-size: 10px;
+          font-weight: 500;
+          color: rgba(60,30,10,0.5);
+          letter-spacing: 0.14em;
           text-transform: uppercase;
           margin-bottom: 10px;
         }
 
-        .login-left-headline {
-          font-family: 'DM Serif Display', Georgia, serif;
-          font-size: 26px;
-          font-weight: 400;
-          color: rgba(255,255,255,0.92);
+        .left-headline {
+          position: relative;
+          z-index: 1;
+          font-size: 24px;
+          font-weight: 600;
+          color: rgba(30,15,5,0.85);
           line-height: 1.4;
-          letter-spacing: -0.01em;
-          text-shadow: 0 2px 24px rgba(0,0,0,0.12);
-        }
-
-        /* ── RIGHT PANEL: also a glass layer ── */
-        .login-right {
-          flex: 1.15;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 52px 48px;
-          /* Step 1+2 applied again for right panel */
-          background: rgba(255, 252, 248, 0.22);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-left: 1.5px solid rgba(255,255,255,0.28);
-          /* Step 3: inner shadow on right panel */
-          box-shadow: inset 1px 0 0 rgba(255,255,255,0.35);
-        }
-
-        .login-eyebrow {
-          font-size: 12px;
-          color: #c04810;
-          font-weight: 500;
-          letter-spacing: 0.06em;
-          margin-bottom: 10px;
-        }
-
-        .login-heading {
-          font-family: 'DM Serif Display', Georgia, serif;
-          font-size: 30px;
-          font-weight: 400;
-          color: #1c1610;
-          margin-bottom: 6px;
           letter-spacing: -0.02em;
         }
 
-        .login-sub {
+        /* ── RIGHT PANEL ── */
+        .right {
+          flex: 1.2;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 52px 44px;
+          /* slightly more opaque right side for readability */
+          background: rgba(255, 255, 255, 0.28);
+        }
+
+        .eyebrow {
+          font-size: 11px;
+          font-weight: 500;
+          color: #c04810;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+        }
+
+        .heading {
+          font-size: 28px;
+          font-weight: 600;
+          color: #000;
+          margin-bottom: 6px;
+          letter-spacing: -0.025em;
+        }
+
+        .subtext {
           font-size: 13px;
-          color: #907060;
+          color: rgba(0,0,0,0.45);
           margin-bottom: 32px;
           line-height: 1.6;
+          font-weight: 400;
         }
 
-        /* tabs: also glass */
-        .login-tabs {
-          display: flex;
-          background: rgba(255,255,255,0.18);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-          border: 1px solid rgba(255,255,255,0.32);
-          border-radius: 12px;
+        /* tab switcher */
+        .tabs {
+          display: inline-flex;
+          background: rgba(0,0,0,0.07);
+          border: 1px solid rgba(255,255,255,0.5);
+          border-radius: 999px;
           padding: 3px;
           margin-bottom: 28px;
-          width: fit-content;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.4);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
         }
 
-        .login-tab {
-          padding: 7px 24px;
+        .tab {
+          padding: 6px 22px;
           font-size: 13px;
           font-weight: 500;
-          border-radius: 10px;
+          border-radius: 999px;
           cursor: pointer;
-          color: #907060;
-          transition: all 0.2s ease;
+          color: rgba(0,0,0,0.45);
+          transition: all 0.18s ease;
           border: none;
           background: transparent;
           font-family: inherit;
+          letter-spacing: 0.01em;
         }
 
-        .login-tab.active {
-          background: rgba(255,255,255,0.75);
-          color: #1c1610;
-          box-shadow:
-            0 1px 8px rgba(0,0,0,0.08),
-            inset 0 1px 0 rgba(255,255,255,0.9);
+        .tab.active {
+          background: rgba(255,255,255,0.82);
+          color: #000;
+          box-shadow: 0 1px 6px rgba(0,0,0,0.10);
         }
 
-        .login-label {
-          font-size: 12px;
+        /* field label */
+        .label {
+          font-size: 11px;
           font-weight: 500;
-          color: #8a7060;
+          color: rgba(0,0,0,0.5);
           display: block;
-          margin-bottom: 7px;
-          letter-spacing: 0.03em;
+          margin-bottom: 6px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
         }
 
-        /* inputs: glass treatment */
-        .login-input {
+        /* glass input */
+        .input {
           width: 100%;
           padding: 12px 16px;
           font-size: 14px;
-          /* Step 1: white ~15% */
-          background: rgba(255, 255, 255, 0.18);
-          /* Step 4: gradient border via outline workaround */
-          border: 1px solid rgba(255,255,255,0.35);
+          font-family: inherit;
+          font-weight: 400;
+          background: rgba(255, 255, 255, 0.42);
+          border: 1px solid rgba(255, 255, 255, 0.60);
           border-radius: 12px;
           outline: none;
-          color: #1c1610;
-          margin-bottom: 18px;
-          font-family: inherit;
+          color: #000;
+          margin-bottom: 16px;
           transition: all 0.18s;
-          /* Step 3: inner shadow */
           box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.5),
-            inset 0 0 0 1px rgba(255,255,255,0.12);
+            inset 0 1px 0 rgba(255,255,255,0.70),
+            inset 0 -1px 0 rgba(0,0,0,0.04);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
         }
 
-        .login-input::placeholder { color: rgba(160,130,110,0.7); }
-
-        .login-input:focus {
-          border-color: rgba(200,90,20,0.35);
-          background: rgba(255,255,255,0.28);
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.6),
-            0 0 0 3px rgba(200,90,20,0.08);
+        .input::placeholder {
+          color: rgba(0,0,0,0.28);
+          font-weight: 300;
         }
 
-        /* button: dark solid for contrast */
-        .login-btn {
+        .input:focus {
+          background: rgba(255,255,255,0.62);
+          border-color: rgba(255,255,255,0.80);
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.80),
+            0 0 0 3px rgba(0,0,0,0.06);
+        }
+
+        /* pill black button */
+        .btn {
           width: 100%;
           padding: 14px;
           font-size: 14px;
-          font-weight: 500;
-          background: rgba(28,22,16,0.88);
+          font-weight: 600;
+          font-family: inherit;
+          letter-spacing: 0.02em;
+          background: #000;
           color: #fff;
           border: none;
-          border-radius: 14px;
+          border-radius: 999px;
           cursor: pointer;
-          font-family: inherit;
-          letter-spacing: 0.03em;
-          transition: all 0.2s ease;
-          margin-top: 4px;
+          margin-top: 8px;
+          transition: all 0.18s ease;
           box-shadow:
-            0 4px 20px rgba(0,0,0,0.25),
+            0 4px 16px rgba(0,0,0,0.22),
             inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
-        .login-btn:hover:not(:disabled) {
-          background: rgba(28,22,16,0.95);
+        .btn:hover:not(:disabled) {
+          background: #1a1a1a;
           transform: translateY(-1px);
-          box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.28);
         }
 
-        .login-btn:active:not(:disabled) { transform: translateY(0); }
-        .login-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .btn:active:not(:disabled) {
+          transform: translateY(0);
+          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
 
-        .login-msg {
+        .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        .msg {
           padding: 11px 14px;
           border-radius: 10px;
           font-size: 13px;
-          margin-bottom: 16px;
-          border: 1px solid transparent;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          margin-bottom: 14px;
+          font-weight: 400;
         }
-        .login-msg.success {
-          background: rgba(16,185,129,0.12);
-          color: #065f46;
-          border-color: rgba(16,185,129,0.2);
-        }
-        .login-msg.error {
-          background: rgba(200,80,20,0.1);
-          color: #7a2808;
-          border-color: rgba(200,80,20,0.2);
-        }
+        .msg.ok  { background: rgba(16,185,129,0.12); color: #065f46; border: 1px solid rgba(16,185,129,0.2); }
+        .msg.err { background: rgba(220,60,10,0.10);  color: #7a2808; border: 1px solid rgba(220,60,10,0.18); }
 
-        @media (max-width: 620px) {
-          .login-left { display: none; }
-          .login-right { padding: 40px 28px; }
+        @media (max-width: 600px) {
+          .left { display: none; }
+          .right { padding: 40px 28px; }
         }
       `}</style>
 
-      <div className="login-root">
-        <div className="login-card">
+      <div className="scene">
+        {/* background blobs */}
+        <div className="blob1" />
+        <div className="blob2" />
+        <div className="blob3" />
+        {/* grain */}
+        <div className="grain" />
 
-          {/* Left panel */}
-          <div className="login-left">
-            <div className="orb" />
-            <div className="login-left-text">
-              <div className="login-left-label">求职助手 · AI Platform</div>
-              <div className="login-left-headline">用 AI 精准匹配<br />你的下一份工作</div>
-            </div>
+        {/* glass card */}
+        <div className="card">
+
+          {/* left */}
+          <div className="left">
+            <div className="left-label">求职助手 · AI Platform</div>
+            <div className="left-headline">用 AI 精准匹配<br />你的下一份工作</div>
           </div>
 
-          {/* Right panel */}
-          <div className="login-right">
-            <div className="login-eyebrow">✦ 欢迎回来</div>
-            <div className="login-heading">
-              {mode === 'login' ? '登录账号' : '创建账号'}
-            </div>
-            <div className="login-sub">
+          {/* right */}
+          <div className="right">
+            <div className="eyebrow">Welcome back</div>
+            <div className="heading">{mode === 'login' ? '登录账号' : '创建账号'}</div>
+            <div className="subtext">
               {mode === 'login' ? 'AI 驱动的个性化求职规划平台' : '开始你的 AI 求职之旅'}
             </div>
 
-            <div className="login-tabs">
-              <button
-                className={`login-tab${mode === 'login' ? ' active' : ''}`}
-                onClick={() => setMode('login')}
-              >登录</button>
-              <button
-                className={`login-tab${mode === 'signup' ? ' active' : ''}`}
-                onClick={() => setMode('signup')}
-              >注册</button>
+            <div className="tabs">
+              <button className={`tab${mode === 'login' ? ' active' : ''}`} onClick={() => setMode('login')}>登录</button>
+              <button className={`tab${mode === 'signup' ? ' active' : ''}`} onClick={() => setMode('signup')}>注册</button>
             </div>
 
             <form onSubmit={handleSubmit}>
-              <label className="login-label">邮箱</label>
-              <input
-                className="login-input"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="your@email.com"
-                required
-              />
-              <label className="login-label">密码</label>
-              <input
-                className="login-input"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="至少 6 位"
-                required
-              />
+              <label className="label">邮箱</label>
+              <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" required />
+
+              <label className="label">密码</label>
+              <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="至少 6 位" required />
+
               {message && (
-                <div className={`login-msg ${message.includes('成功') ? 'success' : 'error'}`}>
-                  {message}
-                </div>
+                <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
               )}
-              <button className="login-btn" type="submit" disabled={loading}>
+
+              <button className="btn" type="submit" disabled={loading}>
                 {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}
               </button>
             </form>
