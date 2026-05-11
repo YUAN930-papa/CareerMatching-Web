@@ -43,24 +43,20 @@ export default function LoginPage() {
           font-family: 'DM Sans', -apple-system, sans-serif;
           position: relative;
           overflow: hidden;
-
-          /* warm gradient background */
-          background:
-            radial-gradient(ellipse 80% 60% at 20% 80%, #f0a06a 0%, transparent 55%),
-            radial-gradient(ellipse 60% 70% at 80% 20%, #fce8d4 0%, transparent 50%),
-            #f2e0cc;
+          background: linear-gradient(160deg, #fce8d8 0%, #f5c9a0 40%, #e8a06a 100%);
         }
 
-        /* grain overlay on background */
-        .login-root::before {
+        /* grain on entire page */
+        .login-root::after {
           content: '';
           position: fixed;
           inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-          background-size: 200px 200px;
-          opacity: 0.55;
           pointer-events: none;
           z-index: 0;
+          opacity: 0.45;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+          background-size: 200px 200px;
+          mix-blend-mode: multiply;
         }
 
         .login-card {
@@ -68,90 +64,67 @@ export default function LoginPage() {
           z-index: 1;
           display: flex;
           width: 100%;
-          max-width: 840px;
-          min-height: 540px;
-
-          /* liquid glass effect */
-          background: rgba(255, 252, 248, 0.52);
-          backdrop-filter: blur(40px) saturate(1.8);
-          -webkit-backdrop-filter: blur(40px) saturate(1.8);
-
+          max-width: 820px;
+          min-height: 520px;
           border-radius: 28px;
           overflow: hidden;
-
-          /* layered borders for glass rim effect */
-          border: 1px solid rgba(255, 255, 255, 0.95);
+          background: rgba(255, 248, 240, 0.38);
+          backdrop-filter: blur(48px) saturate(1.6) brightness(1.05);
+          -webkit-backdrop-filter: blur(48px) saturate(1.6) brightness(1.05);
+          border: 1.5px solid rgba(255, 255, 255, 0.75);
           box-shadow:
-            inset 0 1.5px 0 rgba(255,255,255,1),
-            inset 0 -1px 0 rgba(200,150,100,0.15),
-            inset 1px 0 0 rgba(255,255,255,0.8),
-            0 32px 80px rgba(160, 80, 20, 0.18),
-            0 8px 24px rgba(0,0,0,0.08),
-            0 2px 4px rgba(0,0,0,0.04);
+            inset 0 2px 0 rgba(255,255,255,0.9),
+            inset 0 -1px 0 rgba(180,120,60,0.12),
+            0 40px 100px rgba(160,70,10,0.2),
+            0 8px 32px rgba(0,0,0,0.07);
         }
 
         .login-left {
           flex: 1;
           position: relative;
           overflow: hidden;
-          min-height: 480px;
           display: flex;
           flex-direction: column;
           justify-content: flex-end;
           padding: 36px 32px;
-
+          /* soft warm gradient, NOT solid orange */
           background:
-            radial-gradient(ellipse 90% 70% at 50% 100%, rgba(180,60,10,0.7) 0%, transparent 60%),
-            radial-gradient(ellipse 100% 100% at 50% 50%, #f5a06a 0%, #e8651a 50%, #c8440a 100%);
+            radial-gradient(ellipse 110% 90% at 50% 110%, rgba(200,80,10,0.55) 0%, transparent 55%),
+            radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,220,180,0.4) 0%, transparent 50%),
+            linear-gradient(170deg, #f9ddc0 0%, #f0a86a 45%, #d4622a 100%);
         }
 
-        /* grain on left panel */
-        .login-left::before {
+        /* heavy grain on left panel */
+        .login-left::after {
           content: '';
           position: absolute;
           inset: 0;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
-          background-size: 180px 180px;
-          opacity: 0.7;
           pointer-events: none;
           z-index: 1;
-          mix-blend-mode: overlay;
+          opacity: 0.55;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+          background-size: 180px 180px;
+          mix-blend-mode: soft-light;
         }
 
-        .login-left-orb {
+        /* the soft blurry orb */
+        .orb {
           position: absolute;
-          width: 340px;
-          height: 340px;
+          width: 380px;
+          height: 380px;
           border-radius: 50%;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -58%);
+          transform: translate(-50%, -56%);
           z-index: 0;
-
-          /* layered radial gradients for soft orb with rim light */
-          background:
-            radial-gradient(circle at 32% 28%, rgba(255,220,180,0.9) 0%, transparent 35%),
-            radial-gradient(circle at 65% 70%, rgba(140,30,0,0.5) 0%, transparent 40%),
-            radial-gradient(circle at 50% 50%, #f08040 0%, #d04a0a 55%, #8b2800 100%);
-
-          box-shadow:
-            inset 0 -20px 60px rgba(80,10,0,0.4),
-            inset 0 20px 40px rgba(255,200,140,0.3),
-            0 20px 80px rgba(180,60,0,0.35);
-
-          filter: blur(0.5px);
-        }
-
-        /* grain on orb */
-        .login-left-orb::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 50%;
-          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.15'/%3E%3C/svg%3E");
-          background-size: 128px 128px;
-          opacity: 0.9;
-          mix-blend-mode: soft-light;
+          /* key: very blurred, semi-transparent, NOT solid */
+          background: radial-gradient(circle at 38% 35%,
+            rgba(255, 230, 190, 0.7) 0%,
+            rgba(230, 130, 60, 0.55) 35%,
+            rgba(180, 60, 10, 0.4) 65%,
+            transparent 80%
+          );
+          filter: blur(22px);
         }
 
         .login-left-text {
@@ -163,19 +136,19 @@ export default function LoginPage() {
           font-size: 11px;
           font-weight: 400;
           color: rgba(255,255,255,0.6);
-          letter-spacing: 0.1em;
+          letter-spacing: 0.12em;
           text-transform: uppercase;
-          margin-bottom: 12px;
+          margin-bottom: 10px;
         }
 
         .login-left-headline {
           font-family: 'DM Serif Display', Georgia, serif;
-          font-size: 27px;
+          font-size: 26px;
           font-weight: 400;
-          color: #fff;
-          line-height: 1.35;
+          color: rgba(255,255,255,0.95);
+          line-height: 1.4;
           letter-spacing: -0.01em;
-          text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+          text-shadow: 0 2px 20px rgba(0,0,0,0.15);
         }
 
         .login-right {
@@ -184,14 +157,15 @@ export default function LoginPage() {
           flex-direction: column;
           justify-content: center;
           padding: 52px 48px;
-
-          /* subtle right panel glass tint */
-          background: rgba(255, 253, 250, 0.6);
+          background: rgba(255, 252, 248, 0.45);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-left: 1px solid rgba(255,255,255,0.5);
         }
 
         .login-eyebrow {
           font-size: 12px;
-          color: #e05c1a;
+          color: #d05010;
           font-weight: 500;
           letter-spacing: 0.06em;
           margin-bottom: 10px;
@@ -216,11 +190,11 @@ export default function LoginPage() {
         .login-tabs {
           display: flex;
           background: rgba(0,0,0,0.05);
+          border: 1px solid rgba(200,170,140,0.2);
           border-radius: 12px;
           padding: 3px;
           margin-bottom: 28px;
           width: fit-content;
-          border: 1px solid rgba(200,170,140,0.2);
         }
 
         .login-tab {
@@ -239,7 +213,7 @@ export default function LoginPage() {
         .login-tab.active {
           background: rgba(255,255,255,0.9);
           color: #1c1610;
-          box-shadow: 0 1px 8px rgba(0,0,0,0.1), 0 0 0 0.5px rgba(200,170,140,0.3);
+          box-shadow: 0 1px 8px rgba(0,0,0,0.1);
         }
 
         .login-label {
@@ -255,25 +229,23 @@ export default function LoginPage() {
           width: 100%;
           padding: 12px 16px;
           font-size: 14px;
-          background: rgba(255, 255, 255, 0.65);
-          border: 1px solid rgba(200, 170, 140, 0.28);
+          background: rgba(255, 255, 255, 0.55);
+          border: 1px solid rgba(200, 170, 140, 0.3);
           border-radius: 12px;
           outline: none;
           color: #1c1610;
           margin-bottom: 18px;
           font-family: inherit;
           transition: all 0.18s;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
           box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
         }
 
         .login-input::placeholder { color: #c0aea0; }
 
         .login-input:focus {
-          border-color: rgba(224, 92, 26, 0.4);
-          background: rgba(255, 255, 255, 0.88);
-          box-shadow: 0 0 0 3px rgba(224, 92, 26,0.09), inset 0 1px 3px rgba(0,0,0,0.02);
+          border-color: rgba(200, 90, 20, 0.38);
+          background: rgba(255, 255, 255, 0.82);
+          box-shadow: 0 0 0 3px rgba(200,90,20,0.08);
         }
 
         .login-btn {
@@ -290,18 +262,17 @@ export default function LoginPage() {
           letter-spacing: 0.03em;
           transition: all 0.2s ease;
           margin-top: 4px;
-          box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.22);
         }
 
         .login-btn:hover:not(:disabled) {
           background: #2e2418;
           transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.22);
+          box-shadow: 0 8px 28px rgba(0,0,0,0.24);
         }
 
         .login-btn:active:not(:disabled) {
           transform: translateY(0);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
 
         .login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -313,18 +284,8 @@ export default function LoginPage() {
           margin-bottom: 16px;
           border: 1px solid transparent;
         }
-
-        .login-msg.success {
-          background: rgba(16,185,129,0.07);
-          color: #065f46;
-          border-color: rgba(16,185,129,0.16);
-        }
-
-        .login-msg.error {
-          background: rgba(224,92,26,0.07);
-          color: #9a3412;
-          border-color: rgba(224,92,26,0.16);
-        }
+        .login-msg.success { background: rgba(16,185,129,0.07); color: #065f46; border-color: rgba(16,185,129,0.16); }
+        .login-msg.error { background: rgba(200,80,20,0.07); color: #9a3412; border-color: rgba(200,80,20,0.16); }
 
         @media (max-width: 620px) {
           .login-left { display: none; }
@@ -334,25 +295,18 @@ export default function LoginPage() {
 
       <div className="login-root">
         <div className="login-card">
-
           <div className="login-left">
-            <div className="login-left-orb" />
+            <div className="orb" />
             <div className="login-left-text">
               <div className="login-left-label">求职助手 · AI Platform</div>
-              <div className="login-left-headline">
-                用 AI 精准匹配<br />你的下一份工作
-              </div>
+              <div className="login-left-headline">用 AI 精准匹配<br />你的下一份工作</div>
             </div>
           </div>
 
           <div className="login-right">
             <div className="login-eyebrow">✦ 欢迎回来</div>
-            <div className="login-heading">
-              {mode === 'login' ? '登录账号' : '创建账号'}
-            </div>
-            <div className="login-sub">
-              {mode === 'login' ? 'AI 驱动的个性化求职规划平台' : '开始你的 AI 求职之旅'}
-            </div>
+            <div className="login-heading">{mode === 'login' ? '登录账号' : '创建账号'}</div>
+            <div className="login-sub">{mode === 'login' ? 'AI 驱动的个性化求职规划平台' : '开始你的 AI 求职之旅'}</div>
 
             <div className="login-tabs">
               <button className={`login-tab${mode === 'login' ? ' active' : ''}`} onClick={() => setMode('login')}>登录</button>
@@ -362,20 +316,14 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit}>
               <label className="login-label">邮箱</label>
               <input className="login-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="your@email.com" required />
-
               <label className="login-label">密码</label>
               <input className="login-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="至少 6 位" required />
-
-              {message && (
-                <div className={`login-msg ${message.includes('成功') ? 'success' : 'error'}`}>{message}</div>
-              )}
-
+              {message && <div className={`login-msg ${message.includes('成功') ? 'success' : 'error'}`}>{message}</div>}
               <button className="login-btn" type="submit" disabled={loading}>
                 {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}
               </button>
             </form>
           </div>
-
         </div>
       </div>
     </>
