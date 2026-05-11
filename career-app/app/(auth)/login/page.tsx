@@ -110,21 +110,13 @@ export default function LoginPage() {
           overflow: hidden;
 
           /* liquid glass base */
-          background: rgba(255, 255, 255, 0.40);
-          backdrop-filter: blur(32px) saturate(1.6);
-          -webkit-backdrop-filter: blur(32px) saturate(1.6);
-
-          /* 1px white border = glass edge refraction */
-          border: 1px solid rgba(255, 255, 255, 0.65);
-
-          box-shadow:
-            /* top highlight rim */
-            inset 0 1.5px 0 rgba(255,255,255,0.80),
-            /* bottom shadow rim */
-            inset 0 -1px 0 rgba(0,0,0,0.06),
-            /* outer depth */
-            0 32px 80px rgba(120,50,10,0.18),
-            0 8px 24px rgba(0,0,0,0.08);
+          background:
+            linear-gradient(rgba(255,255,255,0.20), rgba(255,255,255,0.12)) padding-box,
+            linear-gradient(135deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.10) 52%, rgba(255,255,255,0.50) 100%) border-box;
+          backdrop-filter: blur(34px) saturate(1.55);
+          -webkit-backdrop-filter: blur(34px) saturate(1.55);
+          border: 1.2px solid transparent;
+          box-shadow: none;
         }
 
         /* ── LEFT PANEL ── */
@@ -229,7 +221,7 @@ export default function LoginPage() {
           font-weight: 500;
           border-radius: 999px;
           cursor: pointer;
-          color: rgba(0,0,0,0.45);
+          color: #000;
           transition: all 0.18s ease;
           border: none;
           background: transparent;
@@ -240,7 +232,7 @@ export default function LoginPage() {
         .tab.active {
           background: rgba(255,255,255,0.82);
           color: #000;
-          box-shadow: 0 1px 6px rgba(0,0,0,0.10);
+          box-shadow: none;
         }
 
         /* field label */
@@ -268,9 +260,7 @@ export default function LoginPage() {
           color: #000;
           margin-bottom: 16px;
           transition: all 0.18s;
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.70),
-            inset 0 -1px 0 rgba(0,0,0,0.04);
+          box-shadow: none;
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
         }
@@ -283,9 +273,7 @@ export default function LoginPage() {
         .input:focus {
           background: rgba(255,255,255,0.62);
           border-color: rgba(255,255,255,0.80);
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.80),
-            0 0 0 3px rgba(0,0,0,0.06);
+          box-shadow: none;
         }
 
         /* pill black button */
@@ -304,19 +292,19 @@ export default function LoginPage() {
           margin-top: 8px;
           transition: all 0.18s ease;
           box-shadow:
-            0 4px 16px rgba(0,0,0,0.22),
+            0 3px 5px rgba(0,0,0,0.42),
             inset 0 1px 0 rgba(255,255,255,0.08);
         }
 
         .btn:hover:not(:disabled) {
           background: #1a1a1a;
           transform: translateY(-1px);
-          box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+          box-shadow: 0 4px 6px rgba(0,0,0,0.46);
         }
 
         .btn:active:not(:disabled) {
           transform: translateY(0);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 3px rgba(0,0,0,0.36);
         }
 
         .btn:disabled { opacity: 0.35; cursor: not-allowed; }
