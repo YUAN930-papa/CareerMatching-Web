@@ -46,16 +46,15 @@ export default function LoginPage() {
           background: linear-gradient(160deg, #fce8d8 0%, #f5c9a0 40%, #e8a06a 100%);
         }
 
-        /* grain on entire page */
         .login-root::after {
           content: '';
           position: fixed;
           inset: 0;
           pointer-events: none;
           z-index: 0;
-          opacity: 0.45;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-          background-size: 200px 200px;
+          opacity: 0.5;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+          background-size: 180px 180px;
           mix-blend-mode: multiply;
         }
 
@@ -87,27 +86,21 @@ export default function LoginPage() {
           flex-direction: column;
           justify-content: flex-end;
           padding: 36px 32px;
-          /* soft warm gradient, NOT solid orange */
-          background:
-            radial-gradient(ellipse 110% 90% at 50% 110%, rgba(200,80,10,0.55) 0%, transparent 55%),
-            radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,220,180,0.4) 0%, transparent 50%),
-            linear-gradient(170deg, #f9ddc0 0%, #f0a86a 45%, #d4622a 100%);
+          background: linear-gradient(170deg, #fce0c0 0%, #f5b080 40%, #e87840 100%);
         }
 
-        /* heavy grain on left panel */
         .login-left::after {
           content: '';
           position: absolute;
           inset: 0;
           pointer-events: none;
           z-index: 1;
-          opacity: 0.55;
+          opacity: 0.85;
           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.68' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-          background-size: 180px 180px;
-          mix-blend-mode: soft-light;
+          background-size: 150px 150px;
+          mix-blend-mode: overlay;
         }
 
-        /* the soft blurry orb */
         .orb {
           position: absolute;
           width: 380px;
@@ -117,14 +110,14 @@ export default function LoginPage() {
           left: 50%;
           transform: translate(-50%, -56%);
           z-index: 0;
-          /* key: very blurred, semi-transparent, NOT solid */
           background: radial-gradient(circle at 38% 35%,
-            rgba(255, 230, 190, 0.7) 0%,
-            rgba(230, 130, 60, 0.55) 35%,
-            rgba(180, 60, 10, 0.4) 65%,
+            rgba(255, 230, 190, 0.28) 0%,
+            rgba(230, 130, 60, 0.18) 40%,
+            rgba(160, 50, 0, 0.12) 65%,
             transparent 80%
           );
-          filter: blur(22px);
+          filter: blur(38px);
+          opacity: 0.7;
         }
 
         .login-left-text {
@@ -271,10 +264,7 @@ export default function LoginPage() {
           box-shadow: 0 8px 28px rgba(0,0,0,0.24);
         }
 
-        .login-btn:active:not(:disabled) {
-          transform: translateY(0);
-        }
-
+        .login-btn:active:not(:disabled) { transform: translateY(0); }
         .login-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
         .login-msg {
