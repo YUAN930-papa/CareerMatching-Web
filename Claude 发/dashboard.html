@@ -229,6 +229,28 @@
   button:hover:not(:disabled),.btn:hover:not(:disabled){
     box-shadow:0 4px 6px rgba(0,0,0,.46) !important;
   }
+  /* Minimal warm backdrop: one gradient orb */
+  body{
+    background:linear-gradient(180deg,#f8efe3 0%, #f4d8b8 56%, #e5a35f 100%) !important;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:'';
+    position:fixed;
+    width:min(64vw,780px);
+    aspect-ratio:1;
+    border-radius:50%;
+    left:50%;
+    top:16%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle at 36% 34%, rgba(255,245,230,.96) 0%, rgba(255,224,182,.60) 40%, rgba(239,155,78,.52) 72%, rgba(226,129,36,.22) 100%);
+    filter:blur(22px);
+    opacity:.78;
+    pointer-events:none;
+    z-index:0;
+  }
+  body > *{position:relative;z-index:1;}
 </style>
 </head>
 <body>

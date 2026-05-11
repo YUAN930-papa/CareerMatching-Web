@@ -32,347 +32,120 @@ export default function LoginPage() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        /* ── SCENE: warm blobs on cream ── */
-        .scene {
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 24px;
-          font-family: 'Inter', -apple-system, 'SF Pro Display', sans-serif;
-          position: relative;
-          overflow: hidden;
-          background: #f0d9c0;
+        .scene{
+          min-height:100vh;
+          font-family: Inter, -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
+          position:relative;
+          overflow:hidden;
+          padding:26px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          background: linear-gradient(180deg, #f8eee4 0%, #f6d8b2 58%, #e7a15f 100%);
         }
-
-        /* blob 1 – deep orange bottom-left */
-        .blob1 {
-          position: fixed;
-          width: 600px; height: 600px;
-          border-radius: 50%;
-          background: radial-gradient(circle, #e8602a 0%, transparent 70%);
-          bottom: -150px; left: -100px;
-          filter: blur(80px);
-          opacity: 0.75;
-          pointer-events: none;
+        .grain{
+          position:absolute;
+          inset:0;
+          pointer-events:none;
+          z-index:1;
+          opacity:1;
+          background:radial-gradient(circle at 36% 34%, rgba(255,245,230,.96) 0%, rgba(255,224,182,.60) 40%, rgba(239,155,78,.52) 72%, rgba(226,129,36,.22) 100%);
+          filter:blur(22px);
         }
-
-        /* blob 2 – soft peach top-right */
-        .blob2 {
-          position: fixed;
-          width: 500px; height: 500px;
-          border-radius: 50%;
-          background: radial-gradient(circle, #f5b07a 0%, transparent 70%);
-          top: -100px; right: -80px;
-          filter: blur(90px);
-          opacity: 0.65;
-          pointer-events: none;
-        }
-
-        /* blob 3 – warm tan center */
-        .blob3 {
-          position: fixed;
-          width: 400px; height: 400px;
-          border-radius: 50%;
-          background: radial-gradient(circle, #d4956a 0%, transparent 70%);
-          top: 40%; left: 40%;
-          transform: translate(-50%, -50%);
-          filter: blur(100px);
-          opacity: 0.45;
-          pointer-events: none;
-        }
-
-        /* grain overlay */
-        .grain {
-          position: fixed;
-          inset: 0;
-          pointer-events: none;
-          z-index: 1;
-          opacity: 0.38;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='250' height='250'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='250' height='250' filter='url(%23n)'/%3E%3C/svg%3E");
-          background-size: 200px 200px;
-          mix-blend-mode: overlay;
-        }
-
-        /* ── GLASS CARD ── */
-        .card {
-          position: relative;
-          z-index: 2;
-          display: flex;
-          width: 100%;
-          max-width: 800px;
-          min-height: 500px;
-          border-radius: 24px;
-          overflow: hidden;
-
-          /* liquid glass base */
+        .dome,.orb,.stone,.cactus{display:none;}
+        .layout{position:relative;z-index:2;width:min(760px, 94vw);}
+        .glass{
           background:
-            linear-gradient(rgba(255,255,255,0.20), rgba(255,255,255,0.12)) padding-box,
-            linear-gradient(135deg, rgba(255,255,255,0.30) 0%, rgba(255,255,255,0.10) 52%, rgba(255,255,255,0.50) 100%) border-box;
-          backdrop-filter: blur(34px) saturate(1.55);
-          -webkit-backdrop-filter: blur(34px) saturate(1.55);
-          border: 1.2px solid transparent;
-          box-shadow: none;
+            linear-gradient(rgba(255,255,255,.50), rgba(255,250,244,.46)) padding-box,
+            linear-gradient(135deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.10) 48%, rgba(255,255,255,.50) 100%) border-box;
+          border:1.2px solid transparent;border-radius:28px;
+          backdrop-filter:blur(34px) saturate(140%);-webkit-backdrop-filter:blur(34px) saturate(140%);
+          box-shadow:inset 0 1px 0 rgba(255,255,255,.4), inset 0 0 0 1px rgba(255,255,255,.15), 0 22px 44px rgba(63,36,10,.18);
         }
-
-        /* ── LEFT PANEL ── */
-        .left {
-          flex: 1;
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          padding: 36px 32px;
-
-          /* slightly less opaque than card — lets blobs show more */
-          background: rgba(255, 255, 255, 0.10);
-          border-right: 1px solid rgba(255, 255, 255, 0.35);
+        .account{padding:24px;display:grid;grid-template-columns:1.02fr 1.08fr;min-height:560px;overflow:hidden;}
+        .account-left{
+          border-radius:20px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;color:#16120c;
+          background:
+            radial-gradient(circle at 72% 70%, rgba(243,148,66,.55) 0%, rgba(243,148,66,.16) 36%, rgba(255,255,255,.04) 70%),
+            linear-gradient(180deg, rgba(255,255,255,.58) 0%, rgba(255,245,233,.54) 100%);
+          border:1px solid rgba(255,255,255,.46);
         }
-
-        /* grain on left panel */
-        .left::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          opacity: 0.55;
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.70' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
-          background-size: 160px 160px;
-          mix-blend-mode: soft-light;
+        .brand{font-size:14px;font-weight:600;}
+        .account-copy{font-size:40px;font-weight:650;line-height:1.12;letter-spacing:-.02em;}
+        .account-copy small{display:block;font-size:20px;font-weight:500;opacity:.78;}
+        .account-right{padding:4px 2px 4px 24px;display:flex;flex-direction:column;justify-content:center;}
+        .asterisk{font-size:34px;color:#c77a48;line-height:1;margin-bottom:4px;}
+        .heading{font-size:44px;font-weight:640;letter-spacing:-.02em;color:#111;margin-bottom:4px;}
+        .sub{font-size:13px;color:#645c51;line-height:1.5;margin-bottom:20px;}
+        .mode-line{display:flex;gap:12px;margin-bottom:14px;}
+        .mode-link{border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:600;color:#14110c;opacity:.55;}
+        .mode-link.active{opacity:1;text-decoration:underline;}
+        .label{display:block;font-size:12px;color:#4f473d;margin-bottom:6px;}
+        .input{
+          width:100%;height:44px;border-radius:12px;border:1px solid rgba(228,216,200,.9);
+          background:#fff;padding:0 14px;font-size:14px;color:#121212;margin-bottom:12px;outline:none;
         }
-
-        .left-label {
-          position: relative;
-          z-index: 1;
-          font-size: 10px;
-          font-weight: 500;
-          color: rgba(60,30,10,0.5);
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          margin-bottom: 10px;
+        .input:focus{border-color:#c78c58;}
+        .submit{
+          width:100%;margin-top:8px;height:44px;border:none;border-radius:11px;background:#060606;color:#fff;
+          font-size:14px;font-weight:620;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.32);
         }
-
-        .left-headline {
-          position: relative;
-          z-index: 1;
-          font-size: 24px;
-          font-weight: 600;
-          color: rgba(30,15,5,0.85);
-          line-height: 1.4;
-          letter-spacing: -0.02em;
-        }
-
-        /* ── RIGHT PANEL ── */
-        .right {
-          flex: 1.2;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 52px 44px;
-          /* slightly more opaque right side for readability */
-          background: rgba(255, 255, 255, 0.28);
-        }
-
-        .eyebrow {
-          font-size: 11px;
-          font-weight: 500;
-          color: #c04810;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          margin-bottom: 10px;
-        }
-
-        .heading {
-          font-size: 28px;
-          font-weight: 600;
-          color: #000;
-          margin-bottom: 6px;
-          letter-spacing: -0.025em;
-        }
-
-        .subtext {
-          font-size: 13px;
-          color: rgba(0,0,0,0.45);
-          margin-bottom: 32px;
-          line-height: 1.6;
-          font-weight: 400;
-        }
-
-        /* tab switcher */
-        .tabs {
-          display: inline-flex;
-          background: rgba(0,0,0,0.07);
-          border: 1px solid rgba(255,255,255,0.5);
-          border-radius: 999px;
-          padding: 3px;
-          margin-bottom: 28px;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-
-        .tab {
-          padding: 6px 22px;
-          font-size: 13px;
-          font-weight: 500;
-          border-radius: 999px;
-          cursor: pointer;
-          color: #000;
-          transition: all 0.18s ease;
-          border: none;
-          background: transparent;
-          font-family: inherit;
-          letter-spacing: 0.01em;
-        }
-
-        .tab.active {
-          background: rgba(255,255,255,0.82);
-          color: #000;
-          box-shadow: none;
-        }
-
-        /* field label */
-        .label {
-          font-size: 11px;
-          font-weight: 500;
-          color: rgba(0,0,0,0.5);
-          display: block;
-          margin-bottom: 6px;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
-        }
-
-        /* glass input */
-        .input {
-          width: 100%;
-          padding: 12px 16px;
-          font-size: 14px;
-          font-family: inherit;
-          font-weight: 400;
-          background: rgba(255, 255, 255, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.60);
-          border-radius: 12px;
-          outline: none;
-          color: #000;
-          margin-bottom: 16px;
-          transition: all 0.18s;
-          box-shadow: none;
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
-        }
-
-        .input::placeholder {
-          color: rgba(0,0,0,0.28);
-          font-weight: 300;
-        }
-
-        .input:focus {
-          background: rgba(255,255,255,0.62);
-          border-color: rgba(255,255,255,0.80);
-          box-shadow: none;
-        }
-
-        /* pill black button */
-        .btn {
-          width: 100%;
-          padding: 14px;
-          font-size: 14px;
-          font-weight: 600;
-          font-family: inherit;
-          letter-spacing: 0.02em;
-          background: #000;
-          color: #fff;
-          border: none;
-          border-radius: 999px;
-          cursor: pointer;
-          margin-top: 8px;
-          transition: all 0.18s ease;
-          box-shadow:
-            0 3px 5px rgba(0,0,0,0.42),
-            inset 0 1px 0 rgba(255,255,255,0.08);
-        }
-
-        .btn:hover:not(:disabled) {
-          background: #1a1a1a;
-          transform: translateY(-1px);
-          box-shadow: 0 4px 6px rgba(0,0,0,0.46);
-        }
-
-        .btn:active:not(:disabled) {
-          transform: translateY(0);
-          box-shadow: 0 2px 3px rgba(0,0,0,0.36);
-        }
-
-        .btn:disabled { opacity: 0.35; cursor: not-allowed; }
-
-        .msg {
-          padding: 11px 14px;
-          border-radius: 10px;
-          font-size: 13px;
-          margin-bottom: 14px;
-          font-weight: 400;
-        }
-        .msg.ok  { background: rgba(16,185,129,0.12); color: #065f46; border: 1px solid rgba(16,185,129,0.2); }
-        .msg.err { background: rgba(220,60,10,0.10);  color: #7a2808; border: 1px solid rgba(220,60,10,0.18); }
-
-        @media (max-width: 600px) {
-          .left { display: none; }
-          .right { padding: 40px 28px; }
+        .submit:disabled{opacity:.45;cursor:not-allowed;}
+        .msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.5;}
+        .msg.ok{background:rgba(34,197,94,.14);color:#166534;border:1px solid rgba(34,197,94,.22);}
+        .msg.err{background:rgba(220,38,38,.12);color:#991b1b;border:1px solid rgba(220,38,38,.20);}
+        @media (max-width: 980px){
+          .layout{width:min(560px, 94vw);}
+          .account{grid-template-columns:1fr;min-height:auto;}
+          .account-left{min-height:220px;}
+          .account-right{padding:16px 0 0;}
         }
       `}</style>
 
       <div className="scene">
-        {/* background blobs */}
-        <div className="blob1" />
-        <div className="blob2" />
-        <div className="blob3" />
-        {/* grain */}
+        <div className="dome" />
+        <div className="orb" />
+        <div className="stone s1" />
+        <div className="stone s2" />
+        <div className="stone s3" />
+        <div className="cactus" />
         <div className="grain" />
 
-        {/* glass card */}
-        <div className="card">
-
-          {/* left */}
-          <div className="left">
-            <div className="left-label">求职助手 · AI Platform</div>
-            <div className="left-headline">用 AI 精准匹配<br />你的下一份工作</div>
-          </div>
-
-          {/* right */}
-          <div className="right">
-            <div className="eyebrow">Welcome back</div>
-            <div className="heading">{mode === 'login' ? '登录账号' : '创建账号'}</div>
-            <div className="subtext">
-              {mode === 'login' ? 'AI 驱动的个性化求职规划平台' : '开始你的 AI 求职之旅'}
+        <div className="layout">
+          <section className="glass account">
+            <div className="account-left">
+              <div className="brand">求职助手</div>
+              <div className="account-copy"></div>
             </div>
+            <div className="account-right">
+              <div className="asterisk">*</div>
+              <h1 className="heading">{mode === 'login' ? 'Log in' : 'Create an account'}</h1>
+              <p className="sub"></p>
 
-            <div className="tabs">
-              <button className={`tab${mode === 'login' ? ' active' : ''}`} onClick={() => setMode('login')}>登录</button>
-              <button className={`tab${mode === 'signup' ? ' active' : ''}`} onClick={() => setMode('signup')}>注册</button>
+              <div className="mode-line">
+                <button className={`mode-link${mode === 'login' ? ' active' : ''}`} type="button" onClick={() => setMode('login')}>Log in</button>
+                <button className={`mode-link${mode === 'signup' ? ' active' : ''}`} type="button" onClick={() => setMode('signup')}>Sign up</button>
+              </div>
+
+              <form onSubmit={handleSubmit}>
+                <label className="label">Your email</label>
+                <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                <label className="label">{mode === 'login' ? 'Password' : 'Create password'}</label>
+                <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••••" required />
+
+                <button className="submit" type="submit" disabled={loading}>
+                  {loading ? 'Processing...' : mode === 'signup' ? 'Create account' : 'Log in'}
+                </button>
+
+                {message && (
+                  <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
+                )}
+              </form>
             </div>
+          </section>
 
-            <form onSubmit={handleSubmit}>
-              <label className="label">邮箱</label>
-              <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="your@email.com" required />
-
-              <label className="label">密码</label>
-              <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="至少 6 位" required />
-
-              {message && (
-                <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
-              )}
-
-              <button className="btn" type="submit" disabled={loading}>
-                {loading ? '处理中...' : mode === 'login' ? '登录' : '注册'}
-              </button>
-            </form>
           </div>
-
-        </div>
       </div>
     </>
   )
