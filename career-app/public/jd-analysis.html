@@ -751,6 +751,7 @@
   </div>
 </div>
 
+<script src="/career-user-storage-scope.js"></script>
 <script>
 // ── STORAGE KEYS ──────────────────────────────────────────────────────────
 const DB_KEY    = 'career_compare_board_v1'  // shared with compare-dashboard.html
@@ -3561,68 +3562,59 @@ function restoreP2Session() {
 
 
 // ── INIT ──────────────────────────────────────────────────────────────────
-setState('empty')
-step3AccessGrantedThisVisit = false
-const initialHash = (window.location.hash || '').trim().toLowerCase()
-const urlParams = new URLSearchParams(window.location.search)
-let initialRouteHandled = false
-try {
-  if (urlParams.get('forceP2') === '1') {
-    goPage('p2')
-    initialRouteHandled = true
-    try {
-      const u = new URL(window.location.href)
-      u.searchParams.delete('forceP2')
-      history.replaceState(null, '', u.pathname + (u.hash || ''))
-    } catch (e) {}
-  }
-} catch (e) {}
-if (!initialRouteHandled && hydrateFromDashboardQuery()) {
-  initialRouteHandled = true
-}
-if (!urlParams.get('jobId')) {
-  restoreP2Session()
-}
-if (!initialRouteHandled) {
-  const p3Ok =
-    hasCompletedJDAnalysisForStep3() && hasStep3OptimizeGate()
-  let last = ''
+;(async function careerJdAnalysisBoot() {
   try {
-    last = (localStorage.getItem(LAST_PAGE_KEY) || '').trim()
+    if (typeof window.__careerEnsureStorageUserScope === 'function') {
+      await window.__careerEnsureStorageUserScope()
+    }
   } catch (e) {}
-  if (initialHash === '#p3' && p3Ok) {
-    goPage('p3')
-  } else if (initialHash === '#p2') {
-    goPage('p2')
-  } else if (last === 'p3' && p3Ok) {
-    goPage('p3')
-  } else if (last === 'p2') {
-    goPage('p2')
-  } else {
+
+  setState('empty')
+  step3AccessGrantedThisVisit = false
+  const urlParams = new URLSearchParams(window.location.search)
+  let initialRouteHandled = false
+  try {
+    if (urlParams.get('forceP2') === '1') {
+      goPage('p2')
+      initialRouteHandled = true
+      try {
+        const u = new URL(window.location.href)
+        u.searchParams.delete('forceP2')
+        history.replaceState(null, '', u.pathname + (u.hash || ''))
+      } catch (e2) {}
+    }
+  } catch (e3) {}
+  if (!initialRouteHandled && hydrateFromDashboardQuery()) {
+    initialRouteHandled = true
+  }
+  if (!urlParams.get('jobId')) {
+    restoreP2Session()
+  }
+  if (!initialRouteHandled) {
     goPage('p1')
   }
-}
-updateNavStatus()
-maybeShowPostRefreshHints()
+  updateNavStatus()
+  maybeShowPostRefreshHints()
 
-// Step3「开始分析并优化简历」：用 addEventListener 绑定，避免内联 onclick 在部分环境下不触发
-;(function bindP3GenerateButton() {
-  const btn = document.getElementById('btn-p3-generate')
-  if (!btn || typeof p3Generate !== 'function') {
-    console.warn('Step3: 未找到 #btn-p3-generate 或 p3Generate 未定义，请检查 HTML/脚本顺序')
-    return
-  }
-  btn.addEventListener('click', function (e) {
-    e.preventDefault()
-    console.log('[Step3] 按钮 click 已触发 → 调用 p3Generate()')
-    p3Generate()
-  })
-  const right = document.getElementById('p3se-right-sections')
-  if (right && typeof p3SyncEditorMirrorFromStructured === 'function') {
-    right.addEventListener('input', function () {
-      p3SyncEditorMirrorFromStructured()
+  // Step3「开始分析并优化简历」：用 addEventListener 绑定，避免内联 onclick 在部分环境下不触发
+  ;(function bindP3GenerateButton() {
+    const btn = document.getElementById('btn-p3-generate')
+    if (!btn || typeof p3Generate !== 'function') {
+      console.warn('Step3: 未找到 #btn-p3-generate 或 p3Generate 未定义，请检查 HTML/脚本顺序')
+      return
+    }
+    btn.addEventListener('click', function (e) {
+      e.preventDefault()
+      console.log('[Step3] 按钮 click 已触发 → 调用 p3Generate()')
+      p3Generate()
     })
-  }
+    const right = document.getElementById('p3se-right-sections')
+    if (right && typeof p3SyncEditorMirrorFromStructured === 'function') {
+      right.addEventListener('input', function () {
+        p3SyncEditorMirrorFromStructured()
+      })
+    }
+  })()
 })()
 
 </script>

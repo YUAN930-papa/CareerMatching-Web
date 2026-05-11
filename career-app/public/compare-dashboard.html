@@ -255,6 +255,7 @@
   </div>
 </div>
 <div class="toast-wrap" id="toast-wrap"></div>
+<script src="/career-user-storage-scope.js"></script>
 <script>
 const COMPARE_KEY = 'career_compare_board_v1'
 const TRACKING_KEY = 'career_tracking_board_v1'
@@ -528,7 +529,12 @@ document.addEventListener('click', (ev) => {
 })
 document.addEventListener('scroll', hideContextMenu, true)
 window.addEventListener('storage', ()=>{ load(); render() })
-load(); render()
+;(async function careerCompareBoardBoot(){
+  if (typeof window.__careerEnsureStorageUserScope === 'function') {
+    await window.__careerEnsureStorageUserScope()
+  }
+  load(); render()
+})()
 
 function showConfirm(message){
   return new Promise(resolve => {

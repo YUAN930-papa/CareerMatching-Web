@@ -29,6 +29,24 @@ export default function LoginPage() {
     setLoading(false)
   }
 
+  /** Supabase Auth：向邮箱发送「重置密码」链接，用户点击后进入 /auth/reset-password */
+  async function handleForgotPassword() {
+    setMessage('')
+    const trimmed = email.trim()
+    if (!trimmed) {
+      setMessage('请先填写邮箱，再点击「忘记密码」。')
+      return
+    }
+    setLoading(true)
+    const origin = typeof window !== 'undefined' ? window.location.origin : ''
+    const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
+      redirectTo: `${origin}/auth/reset-password`,
+    })
+    setLoading(false)
+    if (error) setMessage(error.message)
+    else setMessage('已发送重置邮件，请查收邮箱并点击邮件中的链接设置新密码。')
+  }
+
   return (
     <>
       <style>{`
@@ -92,6 +110,9 @@ export default function LoginPage() {
           font-size:14px;font-weight:620;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.32);
         }
         .submit:disabled{opacity:.45;cursor:not-allowed;}
+        .forgot-row{margin-top:10px;text-align:center;}
+        .forgot-link{background:none;border:none;color:#c04810;cursor:pointer;font-size:12px;text-decoration:underline;padding:0;font-family:inherit;}
+        .forgot-link:hover{color:#9a3412;}
         .msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.5;}
         .msg.ok{background:rgba(34,197,94,.14);color:#166534;border:1px solid rgba(34,197,94,.22);}
         .msg.err{background:rgba(220,38,38,.12);color:#991b1b;border:1px solid rgba(220,38,38,.20);}
@@ -137,6 +158,14 @@ export default function LoginPage() {
                 <button className="submit" type="submit" disabled={loading}>
                   {loading ? 'Processing...' : mode === 'signup' ? 'Create account' : 'Log in'}
                 </button>
+
+                {mode === 'login' && (
+                  <div className="forgot-row">
+                    <button className="forgot-link" type="button" onClick={handleForgotPassword} disabled={loading}>
+                      忘记密码
+                    </button>
+                  </div>
+                )}
 
                 {message && (
                   <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>

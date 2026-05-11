@@ -447,6 +447,7 @@
   <button onclick="deleteByContextMenu()" style="display:block;width:100%;border:none;background:transparent;text-align:left;padding:8px 10px;cursor:pointer;font-family:inherit;color:var(--red);">删除</button>
 </div>
 
+<script src="/career-user-storage-scope.js"></script>
 <script>
 const STORAGE_KEY = 'career_tracking_board_v1'
 const COMPARE_KEY = 'career_compare_board_v1'
@@ -907,7 +908,12 @@ function importData(e){
   e.target.value=''
 }
 
-load();render()
+;(async function careerTrackingBoardBoot(){
+  if (typeof window.__careerEnsureStorageUserScope === 'function') {
+    await window.__careerEnsureStorageUserScope()
+  }
+  load();render()
+})()
 window.addEventListener('storage', () => { load(); render() })
 document.addEventListener('click', hideContextMenu)
 document.addEventListener('scroll', hideContextMenu, true)

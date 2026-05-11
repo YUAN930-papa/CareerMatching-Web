@@ -64,6 +64,7 @@
     <button onclick="restoreFromMenu()">恢复到JD对比看板</button>
     <button onclick="trashDeleteFromMenu()">彻底删除</button>
   </div>
+  <script src="/career-user-storage-scope.js"></script>
   <script>
     const TRASH_KEY = 'career_compare_trash_v1'
     const COMPARE_KEY = 'career_compare_board_v1'
@@ -219,7 +220,12 @@
       trashMenuId = null
     })
 
-    load()
+    ;(async function careerTrashBoardBoot(){
+      if (typeof window.__careerEnsureStorageUserScope === 'function') {
+        await window.__careerEnsureStorageUserScope()
+      }
+      load()
+    })()
   </script>
 </body>
 </html>
