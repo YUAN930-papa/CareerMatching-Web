@@ -155,12 +155,46 @@ function enrichJdAnalysisForUi(p: Record<string, unknown>): Record<string, unkno
   return p
 }
 
-/** Postgres date 列不能接受 ''，无值必须传 null */
+function toIsoDate(value: Date): string {
+  const y = value.getFullYear()
+  const m = String(value.getMonth() + 1).padStart(2, '0')
+  const d = String(value.getDate()).padStart(2, '0')
+  return `${y}-${m}-${d}`
+}
+
+/**
+ * Postgres `date` 仅接受 YYYY-MM-DD。
+ * 模型常返回自然语言时间（如 "11.59pm Monday 8 June 2026"），这里做容错归一化。
+ */
 function deadlineForDb(value: unknown): string | null {
   if (value == null || value === 'null') return null
-  const s = String(value).trim()
-  if (!s) return null
-  return s
+  const raw = String(value).trim()
+  if (!raw) return null
+
+  // 已是 ISO 日期
+  if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw
+
+  // 去掉常见序数后缀并统一分隔，提升 Date.parse 命中率
+  const sanitized = raw
+    .replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, '$1')
+    .replace(/\./g, ':')
+    .replace(/\s+/g, ' ')
+    .trim()
+
+  const direct = new Date(sanitized)
+  if (!Number.isNaN(direct.getTime())) return toIsoDate(direct)
+
+  // 兜底：只提取 "8 June 2026" 这种日期片段
+  const m = sanitized.match(
+    /\b(\d{1,2}\s+[A-Za-z]{3,9}\s+\d{4}|[A-Za-z]{3,9}\s+\d{1,2},?\s+\d{4})\b/
+  )
+  if (m?.[1]) {
+    const onlyDate = new Date(m[1])
+    if (!Number.isNaN(onlyDate.getTime())) return toIsoDate(onlyDate)
+  }
+
+  // 无法可靠解析时宁可置空，避免整条 jobs 插入失败
+  return null
 }
 
 function buildJobInsertCandidates(
