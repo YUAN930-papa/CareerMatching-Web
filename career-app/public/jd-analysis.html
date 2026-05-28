@@ -105,8 +105,11 @@
   .nav-link.active{background:#111;border-color:#111;}
   .nav-link.active .step-check{opacity:0;}
   .nav-link.pending{background:#b9b9b9;border-color:#b9b9b9;opacity:1;}
-  .nav-link.pending + .step-text .step-title{color:#6b7280;}
-  .nav-link.pending + .step-text .step-kicker{color:#9ca3af;}
+  .nav-link.active + .step-text,
+  .nav-link.completed + .step-text{opacity:1;}
+  .nav-link.pending + .step-text{opacity:.6;}
+  .nav-link.pending + .step-text .step-title{color:#000;font-weight:700;}
+  .nav-link.pending + .step-text .step-kicker{color:#000;font-weight:700;}
   .nav-link.disabled{cursor:not-allowed;pointer-events:none;opacity:.85;}
   .topnav .nav-link,
   .topnav .nav-link:hover{
@@ -554,32 +557,32 @@
     position:fixed;
     left:0 !important;
     right:0 !important;
-    top:56px !important;
+    top:0 !important;
     bottom:0 !important;
-    width:auto !important;
-    height:auto !important;
-    inset:auto !important;
+    width:100% !important;
+    height:100% !important;
     transform:none !important;
     border-radius:0 !important;
     background:
-      radial-gradient(760px 760px at 93% 90%, rgba(133,178,244,.92) 0%, rgba(161,197,248,.70) 34%, rgba(196,219,252,.34) 58%, rgba(236,241,249,0) 80%),
+      radial-gradient(1100px 1000px at 76% 70%, rgba(133,178,244,.80) 0%, rgba(161,197,248,.55) 35%, rgba(196,219,252,.28) 60%, rgba(236,241,249,0) 82%),
       linear-gradient(180deg, #ececef 0%, #ececef 100%);
     opacity:1 !important;
     z-index:0;
     pointer-events:none;
   }
+  /* Nav — Figma: FFFFFF 10%, Glass Frost:100 */
   .topnav{
-    height:56px !important;
-    padding:0 16px !important;
-    background:#f5f6f7 !important;
-    border-bottom:1px solid #e2e5e9 !important;
+    height:63px !important;
+    padding:0 20px !important;
+    background:rgba(255,255,255,.10) !important;
+    border-bottom:2.5px solid rgba(255,255,255,1.0) !important;
     box-shadow:none !important;
-    backdrop-filter:none !important;
-    -webkit-backdrop-filter:none !important;
+    backdrop-filter:blur(24px) saturate(160%) !important;
+    -webkit-backdrop-filter:blur(24px) saturate(160%) !important;
   }
   .nav-logo{font-size:16px;font-weight:700;letter-spacing:-.2px;}
-  .step-kicker{font-size:8px;color:#8b9098;}
-  .step-title{font-size:9px;font-weight:500;color:#8b9098;}
+  .step-kicker{font-size:8px;color:#000;opacity:1;font-weight:700;}
+  .step-title{font-size:9px;font-weight:700;color:#000;opacity:1;}
   .nav-links::before{background:#1f2937 !important;opacity:.16;}
   .nav-links::after{background:#1f2937 !important;}
   .nav-right .btn-board-nav{
@@ -597,22 +600,28 @@
     max-width:1280px !important;
     width:calc(100vw - 120px) !important;
     margin:0 auto !important;
-    padding:16px 16px 92px !important;
+    padding:16px 16px 0 !important;
   }
+  /* 卡片 — Figma: FFFFFF 40%, 白色描边 80%, blur 14, Inner shadow Y:5 */
   #page-p1-scroll > div{
     border-radius:12px !important;
-    border:1px solid #e4e7ec !important;
-    background:rgba(245,246,248,.86) !important;
-    box-shadow:none !important;
+    border:1px solid rgba(255,255,255,.80) !important;
+    background:rgba(255,255,255,.40) !important;
+    backdrop-filter:blur(14px) saturate(140%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(140%) !important;
+    box-shadow:inset 0 5px 14px rgba(255,255,255,.22), 0 1px 4px rgba(0,0,0,.06) !important;
   }
   #page-p1-scroll > div:first-child{
     border:none !important;
     background:transparent !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    box-shadow:none !important;
     padding:0 !important;
     margin-bottom:14px !important;
   }
   #page-p1-scroll > div:first-child > div:first-child{
-    font-size:34px !important;
+    font-size:16px !important;
     font-weight:700 !important;
     margin-bottom:0 !important;
   }
@@ -630,9 +639,9 @@
     justify-content:center;
   }
   #resume-dropzone > div:first-of-type{
-    font-size:52px !important;
-    font-weight:600 !important;
-    color:#d1d5db !important;
+    font-size:28px !important;
+    font-weight:500 !important;
+    color:#c4c7cc !important;
     letter-spacing:.5px;
   }
   #resume-dropzone > #resume-upload-status{
@@ -646,44 +655,108 @@
     box-shadow:none !important;
   }
   .resume-row{
-    border:1px solid #cfd6df !important;
+    border:1px solid rgba(255,255,255,.80) !important;
     border-radius:8px !important;
-    background:rgba(255,255,255,.62) !important;
+    background:rgba(255,255,255,.55) !important;
+    backdrop-filter:blur(4px) !important;
+    -webkit-backdrop-filter:blur(4px) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.70) !important;
   }
   .resume-del-btn{
-    height:30px;
-    min-width:58px;
-    border:1px solid #b7bec8 !important;
-    border-radius:8px !important;
-    background:#eceff3 !important;
+    height:28px;
+    min-width:52px;
+    border:1px solid rgba(200,210,222,.70) !important;
+    border-radius:6px !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.80) 0%,rgba(228,234,242,.60) 100%) !important;
     color:#4b5563 !important;
-    box-shadow:none !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.90), 0 1px 2px rgba(0,0,0,.10) !important;
   }
+  /* 全部清空 按钮同款立体 */
+  #page-p1 .btn.btn-sm{
+    border:1px solid rgba(200,210,222,.70) !important;
+    background:linear-gradient(180deg,rgba(255,255,255,.80) 0%,rgba(228,234,242,.60) 100%) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.90), 0 1px 2px rgba(0,0,0,.10) !important;
+  }
+  /* 自定义 checkbox — 白底黑勾，去掉蓝色 */
+  .resume-row-cb{
+    appearance:none;-webkit-appearance:none;
+    width:15px;height:15px;
+    border:1.5px solid #b0b8c4;
+    border-radius:4px;
+    background:#fff;
+    cursor:pointer;
+    position:relative;
+    flex-shrink:0;
+    margin-top:2px;
+    transition:border-color .15s;
+  }
+  .resume-row-cb:checked{
+    border-color:#1a1a1a !important;
+    background:#fff !important;
+  }
+  .resume-row-cb:checked::after{
+    content:"✓";
+    position:absolute;
+    top:50%;left:50%;
+    transform:translate(-50%,-52%);
+    font-size:11px;
+    font-weight:800;
+    color:#000;
+    line-height:1;
+  }
+  /* Badge 读取成功 — 纯黑文字，去绿色背景 */
+  .pill-green{
+    background:transparent !important;
+    color:#1a1a1a !important;
+    font-weight:600 !important;
+    padding:1px 0 !important;
+    border-radius:0 !important;
+  }
+  /* 保存状态圆圈动效 */
+  .goal-status-ring{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:11px;color:#1a1a1a;font-weight:500;
+  }
+  .goal-status-icon{
+    width:18px;height:18px;border-radius:50%;
+    display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .goal-status-icon.spinning{
+    border:2px solid #d0d4da;
+    border-top-color:#1a1a1a;
+    animation:goalSpin .7s linear infinite;
+  }
+  .goal-status-icon.done{
+    border:2px solid #1a1a1a;
+    background:#fff;
+    font-size:10px;color:#000;font-weight:800;
+  }
+  @keyframes goalSpin{to{transform:rotate(360deg)}}
+  /* 底部按钮 — 保持黑底白字，neumorphic 感 */
+  #page-p1 #btn-p1-next,#btn-p1-next{
+    border-radius:16px !important;
+    background:#111 !important;
+    box-shadow:
+      0 6px 20px rgba(0,0,0,.35),
+      0 2px 8px rgba(0,0,0,.22),
+      inset 0 1px 0 rgba(255,255,255,.14),
+      inset 0 -1px 0 rgba(0,0,0,.38) !important;
+  }
+  /* Banner — Figma: FFFFFF 40%, blur 12, Glass Frost:4 */
   #p1-sticky-actions{
-    padding:10px 16px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
-    background:rgba(255,255,255,.5) !important;
-    border-top:1px solid #e5e7eb !important;
+    height:65px !important;
+    padding:0 23px calc(0px + env(safe-area-inset-bottom, 0px)) !important;
+    background:rgba(255,255,255,.40) !important;
+    border-top:1.5px solid rgba(255,255,255,.60) !important;
     box-shadow:none !important;
-    backdrop-filter:none !important;
-    -webkit-backdrop-filter:none !important;
-  }
-  #p1-sticky-actions > div{
-    max-width:1300px !important;
-    margin:0 auto !important;
+    backdrop-filter:blur(12px) !important;
+    -webkit-backdrop-filter:blur(12px) !important;
     display:flex !important;
+    align-items:center !important;
     justify-content:flex-end !important;
   }
-  #btn-p1-next{
-    width:auto !important;
-    min-width:148px;
-    height:34px;
-    border-radius:8px !important;
-    border:1px solid #000 !important;
-    background:#000 !important;
-    font-size:12px !important;
-    font-weight:600 !important;
-    padding:0 14px !important;
-    box-shadow:0 1px 2px rgba(0,0,0,.22) !important;
+  #p1-sticky-actions > div{
+    display:contents !important;
   }
   .btn,.nav-link,button{
     backdrop-filter:none !important;
@@ -697,12 +770,68 @@
     color:#4b5563 !important;
     box-shadow:none !important;
   }
+  /* 底部 CTA — Figma: 141×32, radius:6, 黑色, drop-shadow(3,4,3.7,#000 25%) */
+  #page-p1 #btn-p1-next,
+  #btn-p1-next{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:141px !important;
+    height:32px !important;
+    border-radius:6px !important;
+    border:none !important;
+    background:#000000 !important;
+    color:#fff !important;
+    font-size:16px !important;
+    font-weight:700 !important;
+    letter-spacing:-.2px !important;
+    padding:0 16px !important;
+    box-shadow:3px 4px 3.7px rgba(0,0,0,.25) !important;
+    white-space:nowrap !important;
+    flex-shrink:0 !important;
+  }
+  /* scroll 容器 flex column，让末尾卡片可以 flex:1 */
+  #page-p1-scroll{
+    display:flex !important;
+    flex-direction:column !important;
+  }
+  /* 第二步 heading — 特异性必须高于 #page-p1-scroll > div */
+  #page-p1-scroll > #step2-heading{
+    border:none !important;
+    background:transparent !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    box-shadow:none !important;
+    padding:0 !important;
+    margin-top:8px !important;
+    margin-bottom:14px !important;
+    flex-shrink:0 !important;
+  }
+  #page-p1-scroll > #step2-heading > div{
+    font-size:16px !important;
+    font-weight:700 !important;
+    letter-spacing:-.2px !important;
+  }
+  /* 未来愿景卡片填满剩余高度，底部留空让内容可见于 banner 之上 */
+  .career-goal-card{
+    flex:1 !important;
+    display:flex !important;
+    flex-direction:column !important;
+    min-height:220px !important;
+    margin-bottom:0 !important;
+    padding-bottom:80px !important;
+  }
+  .career-goal-card #career-goal{
+    flex:1 !important;
+    min-height:140px !important;
+    resize:none !important;
+  }
 </style>
 </head>
 <body>
 
 <nav class="topnav">
-  <span class="nav-logo">求职助手</span>
+  <span class="nav-logo">简历助手</span>
   <div class="nav-divider"></div>
   <div class="nav-links">
     <div class="nav-step">
@@ -712,10 +841,10 @@
       <span class="step-text"><span class="step-kicker">Step 1</span><span class="step-title">简历设置</span></span>
     </div>
     <div class="nav-step">
-      <button class="nav-link" id="nav-p2" onclick="navGoPage('p2')" aria-label="Step 2 JD分析&看板">
+      <button class="nav-link" id="nav-p2" onclick="navGoPage('p2')" aria-label="Step 2 JD匹配分析">
         <span class="step-check">✓</span>
       </button>
-      <span class="step-text"><span class="step-kicker">Step 2</span><span class="step-title">JD分析&看板</span></span>
+      <span class="step-text"><span class="step-kicker">Step 2</span><span class="step-title">JD匹配分析</span></span>
     </div>
     <div class="nav-step">
       <button class="nav-link" id="nav-p3" onclick="navGoPage('p3')" aria-label="Step 3 优化简历">
@@ -749,9 +878,7 @@
     </div>
 
     <!-- ① 上传 PDF / Word -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:14px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:3px;">上传简历</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:12px;"></div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px;">
       <div id="resume-dropzone" style="border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg);transition:border-color .15s, background .15s;">
         <input type="file" id="resume-file-input" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;">
         <div style="font-size:13px;color:var(--text);">上传简历</div>
@@ -761,25 +888,23 @@
 
     <!-- ② 已上传简历列表（勾选参与分析） -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:14px;">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap;">
-        <div>
-          <div style="font-size:13px;font-weight:600;margin-bottom:3px;">已上传的简历</div>
-          <div style="font-size:11px;color:var(--text3);"></div>
-        </div>
-        <button type="button" class="btn btn-sm" onclick="clearAllResumes()" style="color:#92400e;border-color:#fcd34d;font-size:12px;">清空全部</button>
-      </div>
+      <div style="font-size:11px;color:#8b9098;margin-bottom:10px;">已上传的简历</div>
       <div id="resume-list-host" class="resume-list-host"></div>
+      <div style="display:flex;justify-content:flex-end;margin-top:8px;">
+        <button type="button" class="btn btn-sm" onclick="clearAllResumes()" style="font-size:12px;">全部清空</button>
+      </div>
       <!-- 供旧逻辑同步合并正文，不在界面展示 -->
       <textarea id="resume-text" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0;" aria-hidden="true" tabindex="-1" autocomplete="off"></textarea>
     </div>
 
+    <!-- ③ 第二步 标题（卡片外，与第一步对齐） -->
+    <div id="step2-heading">
+      <div>第二步：未来愿景，职业发展方向补充</div>
+    </div>
+
     <!-- ③ 未来职业发展方向 -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;">
-      <div style="font-size:13px;font-weight:600;margin-bottom:3px;">第二步：未来愿景，职业发展方向补充</div>
-      <div style="font-size:11px;color:var(--text3);margin-bottom:14px;">
-        <strong>选填。</strong>填写后会自动保存，AI 分析会结合勾选的简历与此描述。
-      </div>
-      <textarea id="career-goal" style="width:100%;min-height:140px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);resize:vertical;outline:none;line-height:1.7;transition:border-color .15s;" placeholder="例如：我想在未来1-3年内慢慢朝新兴行业转型，新能源医疗健康等方向，希望薪资稳定增长，职位机会稳定增长，不要加班太多，且有可以远程的机会。"></textarea>
+    <div class="career-goal-card" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;">
+      <textarea id="career-goal" style="width:100%;min-height:140px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;line-height:1.7;transition:border-color .15s;" placeholder="例如：我想在未来1-3年内慢慢朝新兴行业转型，新能源医疗健康等方向，希望薪资稳定增长，职位机会稳定增长，不要加班太多，且有可以远程的机会。"></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px;">
         <span id="career-goal-status" style="font-size:11px;color:var(--green);min-height:1.2em;"></span>
         <span id="goal-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);">0 字</span>
@@ -791,8 +916,8 @@
   <!-- 吸底操作栏：避免长简历时按钮被滚到屏幕外 -->
   <div id="p1-sticky-actions" style="flex-shrink:0;position:sticky;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);box-shadow:0 -6px 24px rgba(26,25,22,.08);z-index:90;padding:14px 24px calc(14px + env(safe-area-inset-bottom, 0px));">
     <div style="max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:8px;">
-      <button type="button" id="btn-p1-next" class="btn btn-black-solid" onclick="goToStep2FromP1()" style="width:100%;padding:13px 16px;border-radius:8px;border:none;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">
-        下一步：去分析 JD →
+      <button type="button" id="btn-p1-next" class="btn btn-black-solid" onclick="goToStep2FromP1()" style="padding:10px 20px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">
+        JD匹配分析 →
       </button>
       <div id="p1-save-status" style="text-align:center;font-size:12px;color:var(--text3);min-height:1.2em;"></div>
     </div>
@@ -2717,9 +2842,11 @@ function updateCareerGoalIndicator() {
   try {
     stored = (localStorage.getItem(CAREER_GOAL_PERSIST_KEY) || '').trim()
   } catch (e) {}
-  if (v.length >= 5 && v === stored) ind.textContent = '✓ 已保存（将参与 JD 分析）'
-  else if (v.length > 0) ind.textContent = '正在输入…'
-  else ind.textContent = ''
+  if (v.length >= 5 && v === stored)
+    ind.innerHTML = '<span class="goal-status-ring"><span class="goal-status-icon done">✓</span>已保存（将参与 JD 分析）</span>'
+  else if (v.length > 0)
+    ind.innerHTML = '<span class="goal-status-ring"><span class="goal-status-icon spinning"></span>正在输入…</span>'
+  else ind.innerHTML = ''
 }
 
 function scheduleCareerGoalPersist() {
