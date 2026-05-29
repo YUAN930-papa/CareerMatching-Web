@@ -963,7 +963,11 @@
     overflow-y:auto !important;
     display:flex !important;
     flex-direction:column !important;
-    padding:14px 16px 0 !important;
+    padding:12px 16px 0 !important;
+  }
+  /* Align results top with left panel's first card (remove extra top padding) */
+  #page-p2 .results-wrap{
+    padding:0 !important;
   }
 
   /* Empty state — override to show placeholder cards */
@@ -1006,6 +1010,58 @@
     flex-shrink:0 !important;
     z-index:90 !important;
   }
+
+  /* === Page 2 results — 3-color scheme ===
+     RED  #7f1d1d  (深红色 — gaps/missing)
+     GRN  #14532d  (绿色   — matches/positive)
+     BLU  #1e3a6e  (深蓝色 — neutral/info, 2× deeper than bg blue)
+  */
+
+  /* ① Overall match card → GREEN */
+  #page-p2 #r-match-card,
+  #page-p2 #r-match-card * { color:#14532d !important; }
+  #page-p2 #r-match-pill{
+    background:rgba(20,83,45,.10) !important;
+    color:#14532d !important;
+    border-color:rgba(20,83,45,.25) !important;
+  }
+  #page-p2 #r-match-reasoning{ border-top-color:rgba(20,83,45,.20) !important; }
+  #page-p2 .tag-match{ background:rgba(20,83,45,.10) !important; color:#14532d !important; }
+
+  /* ② Gap/missing skills card → DARK RED */
+  #page-p2 #r-gap-card,
+  #page-p2 #r-gap-card * { color:#7f1d1d !important; }
+  #page-p2 .tag-gap{ background:rgba(127,29,29,.10) !important; color:#7f1d1d !important; }
+
+  /* ③ Transferable/weak skills card → BLUE */
+  #page-p2 #r-weak-card,
+  #page-p2 #r-weak-card * { color:#1e3a6e !important; }
+  #page-p2 .tag-weak{ background:rgba(30,58,110,.10) !important; color:#1e3a6e !important; }
+
+  /* ④ ATS score → GREEN */
+  #page-p2 #r-ats-score{ color:#14532d !important; }
+  #page-p2 #r-ats-bar{ background:#14532d !important; }
+
+  /* ⑤ Skills gap → BLUE */
+  #page-p2 #r-skills-score{ color:#1e3a6e !important; }
+  #page-p2 #r-skills-bar{ background:#1e3a6e !important; }
+
+  /* ⑥ Career growth → BLUE */
+  #page-p2 #r-career-score{ color:#1e3a6e !important; }
+  #page-p2 #r-career-bar{ background:#1e3a6e !important; }
+
+  /* ⑦ 转行可行性 → BLUE */
+  #page-p2 #r-switch-score{ color:#1e3a6e !important; }
+  #page-p2 #r-switch-bar{ background:#1e3a6e !important; }
+
+  /* ⑧ Career Path → BLUE */
+  #page-p2 #r-career-card .tags-title,
+  #page-p2 #r-career-text{ color:#1e3a6e !important; }
+
+  /* ⑨ AI rating → GREEN */
+  #page-p2 #r-score-big,
+  #page-p2 #r-score-big * { color:#14532d !important; }
+  #page-p2 #r-reasoning{ border-top-color:rgba(20,83,45,.20) !important; }
 
   /* Results cards — glass (same spec as placeholder cards, overrides inline coloured backgrounds) */
   #page-p2 #results-state .results-wrap > div{
@@ -1257,14 +1313,14 @@
         </div>
 
         <!-- ② 缺失技能 红色 -->
-        <div style="background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;">
+        <div id="r-gap-card" style="background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;">
           <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#991b1b;margin-bottom:8px;">✗ 缺失技能 / 关键词</div>
           <div style="font-size:11px;color:#7f1d1d;margin-bottom:8px;line-height:1.6;" id="r-gap-analysis"></div>
           <div class="tags-row" id="r-gap-tags"></div>
         </div>
 
         <!-- ③ 可迁移技能 黄色 -->
-        <div style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:14px 16px;">
+        <div id="r-weak-card" style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:14px 16px;">
           <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;">～ 有基础但需强化表述（可迁移技能）</div>
           <div class="tags-row" id="r-weak-tags"></div>
           <div style="font-size:11px;color:#b45309;margin-top:8px;line-height:1.5;" id="r-weak-note"></div>
