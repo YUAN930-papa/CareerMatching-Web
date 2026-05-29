@@ -831,29 +831,34 @@
 
   /* ===== PAGE 2 (JD Analysis) — Figma-consistent glass styling ===== */
 
-  /* Page container transparent */
+  /* Page container — flex column for full-width banner below grid */
   #page-p2{
     background:transparent !important;
     position:relative;
     z-index:1;
+    display:flex !important;
+    flex-direction:column !important;
+    height:calc(100vh - 63px) !important;
   }
 
-  /* Layout grid — transparent, height for 63px nav */
+  /* Layout grid — flex:1, takes all height above banner */
   #page-p2 .page-layout{
     background:transparent !important;
-    height:calc(100vh - 63px) !important;
+    flex:1 !important;
+    min-height:0 !important;
+    height:auto !important;
     gap:0 !important;
     grid-template-columns:5fr 6fr !important;
   }
 
-  /* Both panels — transparent, no border/shadow */
+  /* Both panels fill the grid row */
   #page-p2 .left-panel{
     background:transparent !important;
     border:none !important;
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     box-shadow:none !important;
-    height:calc(100vh - 63px) !important;
+    height:100% !important;
     padding:0 !important;
     overflow-y:auto !important;
     display:flex !important;
@@ -865,7 +870,7 @@
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     box-shadow:none !important;
-    height:calc(100vh - 63px) !important;
+    height:100% !important;
     display:flex !important;
     flex-direction:column !important;
     overflow:hidden !important;
@@ -995,7 +1000,7 @@
     flex-shrink:0;
   }
 
-  /* Page 2 bottom banner — right panel only */
+  /* Page 2 bottom banner — full-width, spans both panels */
   .p2-bottom-banner{
     height:65px !important;
     padding:0 23px !important;
@@ -1006,9 +1011,42 @@
     -webkit-backdrop-filter:blur(12px) !important;
     display:flex !important;
     align-items:center !important;
-    justify-content:flex-end !important;
+    justify-content:space-between !important;
     flex-shrink:0 !important;
     z-index:90 !important;
+    width:100% !important;
+  }
+  /* Left section: JD action buttons */
+  .p2-banner-left{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+  }
+
+  /* Blue box (⑤⑥⑦): progress bars 60% opacity blue, text 80% black */
+  #page-p2 #card-skills *,
+  #page-p2 #card-career-growth *,
+  #page-p2 #card-switch * { color:rgba(0,0,0,.80) !important; }
+  #page-p2 #r-skills-bar{ background:rgba(30,58,110,.60) !important; }
+  #page-p2 #r-career-bar{ background:rgba(30,58,110,.60) !important; }
+  #page-p2 #r-switch-bar{ background:rgba(30,58,110,.60) !important; }
+  #page-p2 #r-skills-score,
+  #page-p2 #r-career-score,
+  #page-p2 #r-switch-score{ color:rgba(0,0,0,.80) !important; }
+
+  /* Job confirm card: title 16px bold like step heading */
+  #page-p2 .job-confirm-title{
+    font-size:16px !important;
+    font-weight:700 !important;
+    letter-spacing:-.2px !important;
+    text-transform:none !important;
+    color:#1e3a6e !important;
+  }
+  #page-p2 .job-confirm-text{
+    font-size:14px !important;
+    font-weight:500 !important;
+    color:#1e3a6e !important;
+    margin-top:4px !important;
   }
 
   /* === Page 2 results — 3-color scheme ===
@@ -1250,11 +1288,6 @@
           <textarea class="jd-textarea" id="jd-text"
             placeholder="把完整的 JD 粘贴到这里...&#10;&#10;包括职位名称、公司、职责描述、要求、薪资等所有信息。&#10;粘贴越完整，分析越准确。"></textarea>
         </div>
-        <div class="analyze-btn-wrap">
-          <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
-          <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()" style="flex:1;justify-content:center;">分析这份 JD →</button>
-          <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
-        </div>
       </div>
 
     </div>
@@ -1296,7 +1329,7 @@
         <div id="r-match-card" style="background:#fffbeb;border:2px solid #f59e0b;border-radius:14px;padding:16px 18px;">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
             <div>
-              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:6px;">🎯 你与这份 JD 的匹配程度</div>
+              <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:6px;">你与这份 JD 的匹配程度</div>
               <div style="display:flex;align-items:baseline;gap:10px;">
                 <div id="r-match-pct" style="font-size:40px;font-weight:600;line-height:1;letter-spacing:-2px;color:#92400e;">—</div>
                 <div>
@@ -1314,14 +1347,14 @@
 
         <!-- ② 缺失技能 红色 -->
         <div id="r-gap-card" style="background:#fff5f5;border:1.5px solid #fca5a5;border-radius:12px;padding:14px 16px;">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#991b1b;margin-bottom:8px;">✗ 缺失技能 / 关键词</div>
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#991b1b;margin-bottom:8px;">缺失技能 / 关键词</div>
           <div style="font-size:11px;color:#7f1d1d;margin-bottom:8px;line-height:1.6;" id="r-gap-analysis"></div>
           <div class="tags-row" id="r-gap-tags"></div>
         </div>
 
         <!-- ③ 可迁移技能 黄色 -->
         <div id="r-weak-card" style="background:#fffbeb;border:1.5px solid #fcd34d;border-radius:12px;padding:14px 16px;">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;">～ 有基础但需强化表述（可迁移技能）</div>
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#92400e;margin-bottom:8px;">有基础但需强化表述（可迁移技能）</div>
           <div class="tags-row" id="r-weak-tags"></div>
           <div style="font-size:11px;color:#b45309;margin-top:8px;line-height:1.5;" id="r-weak-note"></div>
         </div>
@@ -1340,7 +1373,7 @@
         </div>
 
         <!-- ⑤ 技能差距 -->
-        <div class="score-row-card">
+        <div id="card-skills" class="score-row-card">
           <div class="score-row-top">
             <div><div class="score-row-label">⑤ 技能差距综合评分</div><div class="score-note">硬技能 / 软技能 / 可迁移技能三维拆解</div></div>
             <div class="score-row-num" id="r-skills-score" style="color:var(--teal);">—</div>
@@ -1350,7 +1383,7 @@
         </div>
 
         <!-- ⑥ Career成长 -->
-        <div class="score-row-card">
+        <div id="card-career-growth" class="score-row-card">
           <div class="score-row-top">
             <div><div class="score-row-label">⑥ Career 成长价值</div><div class="score-note">这份工作对进入 tech / AI 方向的跳板价值</div></div>
             <div class="score-row-num" id="r-career-score" style="color:var(--purple);">—</div>
@@ -1360,7 +1393,7 @@
         </div>
 
         <!-- ⑦ 转行可行性 -->
-        <div class="score-row-card" style="border-left:3px solid #f59e0b;">
+        <div id="card-switch" class="score-row-card" style="border-left:3px solid #f59e0b;">
           <div class="score-row-top">
             <div><div class="score-row-label">⑦ 转行可行性</div><div class="score-note">从景观设计背景跨行业投递的实际可行性</div></div>
             <div class="score-row-num" id="r-switch-score" style="color:var(--amber);">—</div>
@@ -1377,7 +1410,7 @@
 
         <!-- ⑨ AI建议投递评级 绿色末位 -->
         <div id="r-score-big" style="background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:16px 18px;">
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#065f46;margin-bottom:10px;">🏆 AI 建议投递评级</div>
+          <div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:#065f46;margin-bottom:10px;">AI 建议投递评级</div>
           <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:8px;">
             <div class="score-grade" id="r-grade">—</div>
             <div>
@@ -1405,13 +1438,19 @@
 
     </div><!-- end right-content-scroll -->
 
-    <!-- Right-panel bottom banner -->
-    <div class="p2-bottom-banner">
-      <button class="btn btn-black-solid" onclick="goToP3()">分析并修改简历 →</button>
-    </div>
-
   </div>
 </div>
+
+<!-- Full-width bottom banner — spans both panels -->
+<div class="p2-bottom-banner">
+  <div class="p2-banner-left">
+    <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
+    <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()">分析这份 JD →</button>
+    <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
+  </div>
+  <button class="btn btn-black-solid" onclick="goToP3()">分析并修改简历 →</button>
+</div>
+
 </div><!-- end page-p2 -->
 <!-- ══ PAGE 3 — 结构化简历对比编辑器（page3-resume-editor.html 迁移） ══ -->
 <div id="page-p3" class="p3-structured-mode" style="display:none;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;position:relative;">
