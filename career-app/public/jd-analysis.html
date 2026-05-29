@@ -1011,7 +1011,7 @@
     -webkit-backdrop-filter:blur(12px) !important;
     display:flex !important;
     align-items:center !important;
-    justify-content:space-between !important;
+    justify-content:flex-end !important;
     flex-shrink:0 !important;
     z-index:90 !important;
     width:100% !important;
@@ -1023,13 +1023,16 @@
     gap:8px !important;
   }
 
-  /* Blue box (⑤⑥⑦): progress bars 60% opacity blue, text 80% black */
+  /* Score cards ④⑤⑥⑦: unified — 80% black text, 60% opacity blue bars */
+  #page-p2 #card-ats *,
   #page-p2 #card-skills *,
   #page-p2 #card-career-growth *,
   #page-p2 #card-switch * { color:rgba(0,0,0,.80) !important; }
-  #page-p2 #r-skills-bar{ background:rgba(30,58,110,.60) !important; }
-  #page-p2 #r-career-bar{ background:rgba(30,58,110,.60) !important; }
+  #page-p2 #r-ats-bar,
+  #page-p2 #r-skills-bar,
+  #page-p2 #r-career-bar,
   #page-p2 #r-switch-bar{ background:rgba(30,58,110,.60) !important; }
+  #page-p2 #r-ats-score,
   #page-p2 #r-skills-score,
   #page-p2 #r-career-score,
   #page-p2 #r-switch-score{ color:rgba(0,0,0,.80) !important; }
@@ -1076,9 +1079,9 @@
   #page-p2 #r-weak-card * { color:#1e3a6e !important; }
   #page-p2 .tag-weak{ background:rgba(30,58,110,.10) !important; color:#1e3a6e !important; }
 
-  /* ④ ATS score → GREEN */
-  #page-p2 #r-ats-score{ color:#14532d !important; }
-  #page-p2 #r-ats-bar{ background:#14532d !important; }
+  /* ④ ATS — unified with ⑤⑥⑦ (overridden by card-ats rule above) */
+  #page-p2 #r-ats-score{ color:rgba(0,0,0,.80) !important; }
+  #page-p2 #r-ats-bar{ background:rgba(30,58,110,.60) !important; }
 
   /* ⑤ Skills gap → BLUE */
   #page-p2 #r-skills-score{ color:#1e3a6e !important; }
@@ -1288,6 +1291,11 @@
           <textarea class="jd-textarea" id="jd-text"
             placeholder="把完整的 JD 粘贴到这里...&#10;&#10;包括职位名称、公司、职责描述、要求、薪资等所有信息。&#10;粘贴越完整，分析越准确。"></textarea>
         </div>
+        <div class="analyze-btn-wrap">
+          <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
+          <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()" style="flex:1;justify-content:center;">分析这份 JD →</button>
+          <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
+        </div>
       </div>
 
     </div>
@@ -1360,7 +1368,7 @@
         </div>
 
         <!-- ④ ATS -->
-        <div class="score-row-card">
+        <div id="card-ats" class="score-row-card">
           <div class="score-row-top">
             <div>
               <div class="score-row-label">④ ATS 关键词匹配率</div>
@@ -1441,13 +1449,8 @@
   </div>
 </div>
 
-<!-- Full-width bottom banner — spans both panels -->
+<!-- Full-width bottom banner — right-aligned CTA only -->
 <div class="p2-bottom-banner">
-  <div class="p2-banner-left">
-    <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
-    <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()">分析这份 JD →</button>
-    <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
-  </div>
   <button class="btn btn-black-solid" onclick="goToP3()">分析并修改简历 →</button>
 </div>
 
