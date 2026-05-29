@@ -831,34 +831,29 @@
 
   /* ===== PAGE 2 (JD Analysis) — Figma-consistent glass styling ===== */
 
-  /* Page container — flex column so full-width banner can sit below grid */
+  /* Page container transparent */
   #page-p2{
     background:transparent !important;
     position:relative;
     z-index:1;
-    display:flex !important;
-    flex-direction:column !important;
-    height:calc(100vh - 63px) !important;
   }
 
-  /* Layout grid — takes remaining height above the full-width banner */
+  /* Layout grid — transparent, height for 63px nav */
   #page-p2 .page-layout{
     background:transparent !important;
-    flex:1 !important;
-    min-height:0 !important;
-    height:auto !important;
+    height:calc(100vh - 63px) !important;
     gap:0 !important;
     grid-template-columns:5fr 6fr !important;
   }
 
-  /* Both panels — fill the grid row height */
+  /* Both panels — transparent, no border/shadow */
   #page-p2 .left-panel{
     background:transparent !important;
     border:none !important;
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     box-shadow:none !important;
-    height:100% !important;
+    height:calc(100vh - 63px) !important;
     padding:0 !important;
     overflow-y:auto !important;
     display:flex !important;
@@ -870,7 +865,7 @@
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
     box-shadow:none !important;
-    height:100% !important;
+    height:calc(100vh - 63px) !important;
     display:flex !important;
     flex-direction:column !important;
     overflow:hidden !important;
@@ -996,7 +991,7 @@
     flex-shrink:0;
   }
 
-  /* Page 2 bottom banner — full-width, spans both panels */
+  /* Page 2 bottom banner — right panel only */
   .p2-bottom-banner{
     height:65px !important;
     padding:0 23px !important;
@@ -1007,16 +1002,9 @@
     -webkit-backdrop-filter:blur(12px) !important;
     display:flex !important;
     align-items:center !important;
-    justify-content:space-between !important;
+    justify-content:flex-end !important;
     flex-shrink:0 !important;
     z-index:90 !important;
-    width:100% !important;
-  }
-  /* Left section in full-width banner */
-  .p2-banner-left{
-    display:flex !important;
-    align-items:center !important;
-    gap:8px !important;
   }
 
   /* Results cards — glass (same spec as placeholder cards, overrides inline coloured backgrounds) */
@@ -1206,6 +1194,11 @@
           <textarea class="jd-textarea" id="jd-text"
             placeholder="把完整的 JD 粘贴到这里...&#10;&#10;包括职位名称、公司、职责描述、要求、薪资等所有信息。&#10;粘贴越完整，分析越准确。"></textarea>
         </div>
+        <div class="analyze-btn-wrap">
+          <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
+          <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()" style="flex:1;justify-content:center;">分析这份 JD →</button>
+          <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
+        </div>
       </div>
 
     </div>
@@ -1356,19 +1349,13 @@
 
     </div><!-- end right-content-scroll -->
 
+    <!-- Right-panel bottom banner -->
+    <div class="p2-bottom-banner">
+      <button class="btn btn-black-solid" onclick="goToP3()">分析并修改简历 →</button>
+    </div>
+
   </div>
 </div>
-
-<!-- Full-width bottom banner — spans both left and right panels -->
-<div class="p2-bottom-banner">
-  <div class="p2-banner-left">
-    <button class="btn" onclick="clearCurrentInputs()" title="清空当前输入">重新粘贴</button>
-    <button class="btn btn-black-solid" id="analyze-btn" onclick="analyze()">分析这份 JD →</button>
-    <span class="char-count" id="char-count" style="font-size:11px;color:#6b7280;font-family:var(--font-mono);">0 字</span>
-  </div>
-  <button class="btn btn-black-solid" onclick="goToP3()">分析并修改简历 →</button>
-</div>
-
 </div><!-- end page-p2 -->
 <!-- ══ PAGE 3 — 结构化简历对比编辑器（page3-resume-editor.html 迁移） ══ -->
 <div id="page-p3" class="p3-structured-mode" style="display:none;flex-direction:column;height:calc(100vh - 52px);overflow:hidden;position:relative;">
