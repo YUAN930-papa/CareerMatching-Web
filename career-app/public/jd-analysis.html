@@ -1005,6 +1005,15 @@
     z-index:90 !important;
   }
 
+  /* Results cards — glass (same spec as placeholder cards, overrides inline coloured backgrounds) */
+  #page-p2 #results-state .results-wrap > div{
+    border-radius:12px !important;
+    border:1px solid rgba(255,255,255,.80) !important;
+    background:rgba(255,255,255,.40) !important;
+    backdrop-filter:blur(14px) saturate(140%) !important;
+    -webkit-backdrop-filter:blur(14px) saturate(140%) !important;
+    box-shadow:inset 0 5px 14px rgba(255,255,255,.22), 0 1px 4px rgba(0,0,0,.06) !important;
+  }
   /* Banner button — black neomorphic */
   .p2-bottom-banner .btn-black-solid{
     display:inline-flex !important;
@@ -1207,12 +1216,8 @@
     <!-- Scrollable content wrapper -->
     <div id="right-content-scroll">
 
-    <!-- EMPTY STATE: 3 glass placeholder cards -->
-    <div class="right-empty" id="empty-state">
-      <div class="p2-placeholder-card" style="height:210px;"></div>
-      <div class="p2-placeholder-card" style="height:165px;"></div>
-      <div class="p2-placeholder-card" style="height:185px;"></div>
-    </div>
+    <!-- EMPTY STATE -->
+    <div class="right-empty" id="empty-state"></div>
 
     <!-- LOADING STATE -->
     <div id="loading-state" style="display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:48px;">
