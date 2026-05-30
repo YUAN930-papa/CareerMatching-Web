@@ -223,16 +223,21 @@
     background: rgba(200,206,218,0.75) !important;
     color: #1a1a18 !important;
   }
+
+  /* ── Main panel (toolbar + table): more opaque white ────────────── */
+  .toolbar,
+  table {
+    background: rgba(255,255,255,0.82) !important;
+    backdrop-filter: blur(18px) !important;
+    -webkit-backdrop-filter: blur(18px) !important;
+  }
 </style>
 </head>
 <body>
 <nav class="topnav">
   <span class="nav-logo">求职助手</span>
   <div class="nav-left">
-    <button class="btn btn-board-nav" onclick="goBackToJdAnalysis()">⬅️返回 Step2 JD分析</button>
-  </div>
-  <div class="nav-right">
-    <button class="btn btn-board-nav" onclick="openTracking()">➡️追踪进度看板</button>
+    <button class="btn btn-board-nav" onclick="goBackToJdAnalysis()">返回 Step2 JD分析</button>
   </div>
 </nav>
 <div class="stats-bar">
@@ -250,6 +255,7 @@
   </div>
 </div>
 <div style="padding:0 24px 10px;display:flex;justify-content:flex-end;gap:8px;align-items:center">
+  <button class="btn btn-board-nav" onclick="openTracking()">追踪进度看板</button>
   <button class="btn" onclick="openTrash()">🗑 垃圾桶</button>
 </div>
 <div class="toolbar">
