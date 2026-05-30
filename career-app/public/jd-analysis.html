@@ -1180,8 +1180,10 @@
   }
   #page-p3 .p3-bottom-banner > *{ pointer-events:auto !important; }
 
-  /* Banner button — black neomorphic */
-  .p2-bottom-banner .btn-black-solid{
+  /* Banner button — black neomorphic (all pages) */
+  .p2-bottom-banner .btn-black-solid,
+  .p3-bottom-banner .btn-black-solid,
+  #p1-sticky-actions .btn-black-solid{
     display:inline-flex !important;
     align-items:center !important;
     justify-content:center !important;
@@ -1549,7 +1551,7 @@
       </div>
     </div>
     <div class="p3-bottom-banner" aria-label="Step 3 底部操作">
-      <button type="button" id="btn-go-p4" class="btn btn-black-solid" onclick="goToP4()" style="padding:10px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">撰写并下载</button>
+      <button type="button" id="btn-go-p4" class="btn btn-black-solid" onclick="goToP4()">撰写并下载</button>
     </div>
   </div>
 
