@@ -64,7 +64,7 @@ export default function LoginPage() {
         /* ── Blue noise sphere ───────────────────────────────────── */
         .sphere {
           position: absolute;
-          width: 204vmin; height: 204vmin;
+          width: 153vmin; height: 153vmin;
           border-radius: 50%;
           top: 50%; left: 50%;
           transform: translate(-50%, -50%);
@@ -86,9 +86,9 @@ export default function LoginPage() {
           max-width: 440px;
           padding: 2.5rem;
           border-radius: 24px;
-          background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
-          -webkit-backdrop-filter: blur(20px);
-          backdrop-filter: blur(20px);
+          background: linear-gradient(135deg, rgba(255,255,255,0.38) 0%, rgba(255,255,255,0.33) 100%);
+          -webkit-backdrop-filter: blur(26px);
+          backdrop-filter: blur(26px);
           border: 1px solid rgba(255,255,255,0.2);
           box-shadow:
             0 4px 30px rgba(0,0,0,0.02),
