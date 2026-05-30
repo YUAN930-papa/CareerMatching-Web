@@ -773,11 +773,17 @@
   #page-p2{
     background:transparent !important;
   }
+  #page-p1{
+    height:calc(100vh - 52px) !important;
+    min-height:unset !important;
+    overflow:hidden !important;
+  }
   #page-p1-scroll{
     max-width:1280px !important;
     width:calc(100vw - 120px) !important;
     margin:0 auto !important;
     padding:16px 16px 0 !important;
+    overflow-y:auto !important;
   }
   /* 卡片 — Figma: FFFFFF 40%, 白色描边 80%, blur 14, Inner shadow Y:5 */
   #page-p1-scroll > div{
@@ -989,19 +995,24 @@
     font-weight:700 !important;
     letter-spacing:-.2px !important;
   }
-  /* 未来愿景卡片填满剩余高度，底部留空让内容可见于 banner 之上 */
+  /* 未来愿景卡片：padding 与上传简历卡片一致（14px），内部 textarea 对齐灰色 dropzone */
   .career-goal-card{
     flex:1 !important;
     display:flex !important;
     flex-direction:column !important;
-    min-height:220px !important;
+    min-height:0 !important;
     margin-bottom:0 !important;
-    padding-bottom:80px !important;
+    padding:14px !important;
   }
   .career-goal-card #career-goal{
     flex:1 !important;
-    min-height:140px !important;
+    min-height:0 !important;
     resize:none !important;
+    width:100% !important;
+    box-sizing:border-box !important;
+  }
+  .career-goal-card > div:last-child{
+    flex-shrink:0 !important;
   }
 
   /* ===== PAGE 2 (JD Analysis) — Figma-consistent glass styling ===== */
