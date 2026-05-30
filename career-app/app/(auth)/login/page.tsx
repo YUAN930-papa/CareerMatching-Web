@@ -46,235 +46,259 @@ export default function LoginPage() {
   return (
     <>
       <style>{`
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        /* override globals.css body flex */
-        html, body { display: block !important; margin: 0; padding: 0; background: #eaebee !important; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", sans-serif; }
+        html, body { display: block !important; margin: 0; padding: 0; }
 
         .scene {
           min-height: 100vh;
-          width: 100%;
           display: flex;
-          flex-direction: column;
-          align-items: center;
           justify-content: center;
-          padding: 24px;
-          /* half area of cover version: r = 53vmin/√2 ≈ 38vmin */
-          background:
-            radial-gradient(circle 86vmin at 50% 50%,
-              rgba(172,201,238,0.90)  0%,
-              rgba(188,213,243,0.58) 38%,
-              rgba(210,224,246,0.20) 62%,
-              transparent            80%
-            ),
-            #eaebee;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
-        }
-
-        /* ── Card: width ×0.8 → 269px, padding ×0.7 (height -30%) ──── */
-        .card {
-          width: min(269px, 100%);
-          background: rgba(210,225,248,0.38);
-          backdrop-filter: blur(20px) saturate(130%);
-          -webkit-backdrop-filter: blur(20px) saturate(130%);
-          border: 1.5px solid rgba(255,255,255,0.76);
-          border-radius: 20px;
-          padding: 19px 22px 18px;
-          box-shadow:
-            inset 0 4px 28px 0 rgba(255,255,255,0.50),
-            0 4px 8px 1px rgba(0,0,0,0.10);
-        }
-
-        /* ── Logo ────────────────────────────────────────────────── */
-        .logo {
-          display: flex;
           align-items: center;
-          gap: 6px;
-          margin-bottom: 20px;
+          background: linear-gradient(135deg, #e0e9f5 0%, #cbd5e1 50%, #aebeec 100%);
+          overflow: hidden;
+          position: relative;
         }
-        .logo-mark {
-          width: 22px; height: 22px;
-          border-radius: 6px;
-          background: #1a1a18;
-          display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
+
+        .scene::before {
+          content: '';
+          position: absolute;
+          width: 300px; height: 300px;
+          background: linear-gradient(135deg, #a5b4fc, #818cf8);
+          border-radius: 50%;
+          top: 15%; left: 25%;
+          z-index: 1;
+          filter: blur(20px);
+          opacity: 0.6;
         }
-        .logo-mark svg { display: block; }
-        .logo-name {
-          font-size: 13px;
+
+        .scene::after {
+          content: '';
+          position: absolute;
+          width: 400px; height: 400px;
+          background: linear-gradient(135deg, #fbcfe8, #f472b6);
+          border-radius: 50%;
+          bottom: 10%; right: 20%;
+          z-index: 1;
+          filter: blur(40px);
+          opacity: 0.4;
+        }
+
+        /* ── Glass card ──────────────────────────────────────────── */
+        .glass-card {
+          position: relative;
+          z-index: 10;
+          width: 100%;
+          max-width: 440px;
+          padding: 2.5rem;
+          border-radius: 24px;
+          background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.03) 100%);
+          -webkit-backdrop-filter: blur(20px);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(255,255,255,0.2);
+          box-shadow:
+            0 4px 30px rgba(0,0,0,0.02),
+            0 15px 40px rgba(0,0,0,0.05),
+            inset 0 1px 0 rgba(255,255,255,0.25),
+            inset 0 -1px 2px rgba(0,0,0,0.03);
+          transform: translate3d(0,0,0);
+          backface-visibility: hidden;
+          transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+        }
+
+        .glass-card:hover {
+          transform: translate3d(0,-4px,0);
+          border-color: rgba(255,255,255,0.3);
+          background: linear-gradient(135deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.05) 100%);
+          box-shadow:
+            0 8px 40px rgba(0,0,0,0.04),
+            0 25px 60px rgba(0,0,0,0.09),
+            inset 0 1px 0 rgba(255,255,255,0.35);
+        }
+
+        /* ── Header ──────────────────────────────────────────────── */
+        .card-header { margin-bottom: 2rem; }
+
+        .brand-title {
+          font-size: 0.9rem;
           font-weight: 600;
-          color: #1a1a18;
-          letter-spacing: -0.2px;
+          color: #475569;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.5rem;
         }
 
-        /* ── Heading — fs-h3(17px) from design system ────────────── */
-        .heading {
-          font-size: 17px;
+        .main-title {
+          font-size: 1.75rem;
           font-weight: 700;
-          letter-spacing: -0.3px;
-          color: #1a1a18;
-          margin-bottom: 3px;
-          line-height: 1.2;
-        }
-        .sub {
-          font-size: 12px;
-          color: #5a5a56;
-          margin-bottom: 16px;
-          line-height: 1.5;
+          color: #0f172a;
+          margin-bottom: 0.25rem;
         }
 
-        /* ── Mode toggle ─────────────────────────────────────────── */
-        .mode-line {
-          display: flex;
-          gap: 2px;
-          margin-bottom: 14px;
-          background: rgba(255,255,255,0.20);
-          border: 1px solid rgba(255,255,255,0.40);
-          border-radius: 7px;
-          padding: 2px;
+        .subtitle {
+          font-size: 0.85rem;
+          color: #64748b;
         }
-        .mode-btn {
+
+        /* ── Tab group ───────────────────────────────────────────── */
+        .tab-group {
+          display: flex;
+          background: rgba(0,0,0,0.04);
+          padding: 4px;
+          border-radius: 12px;
+          margin-bottom: 2rem;
+          border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .tab-btn {
           flex: 1;
+          padding: 0.6rem;
           border: none;
           background: transparent;
-          padding: 5px 0;
-          border-radius: 6px;
-          font-size: 12px;
+          font-size: 0.9rem;
           font-weight: 500;
-          color: rgba(26,26,24,0.65);
+          color: #64748b;
           cursor: pointer;
-          transition: all 0.15s;
+          border-radius: 9px;
+          transition: all 0.2s ease;
+          text-align: center;
           font-family: inherit;
-        }
-        .mode-btn.active {
-          background: rgba(255,255,255,0.82);
-          color: #1a1a18;
-          font-weight: 600;
-          box-shadow: 0 1px 2px rgba(100,130,180,0.10);
         }
 
-        /* ── Form fields — fs-body(14px) / fs-caption(11px) ─────── */
-        .field { margin-bottom: 10px; }
-        .label {
-          display: block;
-          font-size: 11px;
-          font-weight: 600;
-          color: rgba(26,26,24,0.80);
-          margin-bottom: 4px;
-          letter-spacing: 0.04em;
-          text-transform: uppercase;
+        .tab-btn.active {
+          background: #ffffff;
+          color: #0f172a;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .input {
+
+        /* ── Form ────────────────────────────────────────────────── */
+        .form-group { margin-bottom: 1.25rem; }
+
+        .form-label {
+          display: block;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #334155;
+          margin-bottom: 0.5rem;
+        }
+
+        .form-input {
           width: 100%;
-          height: 32px;
-          border-radius: 7px;
-          border: 1px solid rgba(255,255,255,0.70);
-          background: rgba(255,255,255,0.75);
-          padding: 0 10px;
-          font-size: 13px;
-          color: #1a1a18;
+          padding: 0.75rem 1rem;
+          border: 1px solid rgba(0,0,0,0.08);
+          border-radius: 12px;
+          background: rgba(255,255,255,0.5);
+          font-size: 0.95rem;
+          color: #0f172a;
           outline: none;
-          transition: border-color 0.15s, background 0.15s;
+          transition: all 0.3s ease;
           font-family: inherit;
         }
-        .input:focus {
-          border-color: rgba(255,255,255,0.95);
-          background: rgba(255,255,255,0.92);
+
+        .form-input::placeholder { color: #94a3b8; }
+
+        .form-input:focus {
+          background: #ffffff;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
         }
-        .input::placeholder { color: rgba(90,90,86,0.55); }
 
         /* ── Submit ──────────────────────────────────────────────── */
-        .submit {
+        .submit-btn {
           width: 100%;
-          margin-top: 6px;
-          height: 34px;
+          padding: 0.85rem;
+          background: #1e293b;
+          color: #ffffff;
           border: none;
-          border-radius: 8px;
-          background: #1a1a18;
-          color: #fff;
-          font-size: 13px;
+          border-radius: 12px;
+          font-size: 1rem;
           font-weight: 600;
           cursor: pointer;
-          transition: opacity 0.15s;
+          margin-top: 1rem;
+          margin-bottom: 1rem;
+          box-shadow: 0 4px 12px rgba(30,41,59,0.15);
+          transition: all 0.2s ease;
           font-family: inherit;
-          letter-spacing: -0.1px;
         }
-        .submit:hover:not(:disabled) { opacity: 0.84; }
-        .submit:disabled { opacity: 0.38; cursor: not-allowed; }
+
+        .submit-btn:hover:not(:disabled) {
+          background: #0f172a;
+          transform: translateY(-1px);
+          box-shadow: 0 6px 20px rgba(30,41,59,0.25);
+        }
+
+        .submit-btn:active { transform: translateY(0); }
+        .submit-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
         /* ── Forgot / Message ────────────────────────────────────── */
-        .forgot-row { margin-top: 12px; text-align: center; }
-        .forgot-link {
-          background: none; border: none;
-          color: #5a5a56; cursor: pointer;
-          font-size: 12px; padding: 0;
-          font-family: inherit;
-          text-decoration: underline;
-          text-underline-offset: 2px;
+        .forgot-link-container {
+          text-align: center;
+          margin-bottom: 2.5rem;
         }
-        .forgot-link:hover { color: #1a1a18; }
+
+        .forgot-link {
+          font-size: 0.85rem;
+          color: #475569;
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-weight: 500;
+          transition: color 0.2s ease;
+          font-family: inherit;
+          padding: 0;
+        }
+
+        .forgot-link:hover { color: #1d4ed8; text-decoration: underline; }
 
         .msg {
-          margin-top: 12px;
+          margin-top: 8px;
           padding: 10px 12px;
-          border-radius: 8px;
+          border-radius: 10px;
           font-size: 12px;
-          line-height: 1.55;
+          line-height: 1.5;
         }
         .msg.ok  { background: rgba(39,80,10,0.10);  color: #27500A; border: 1px solid rgba(39,80,10,0.18);  }
         .msg.err { background: rgba(121,31,31,0.10); color: #791F1F; border: 1px solid rgba(121,31,31,0.18); }
 
         /* ── Footer ──────────────────────────────────────────────── */
-        .footer {
-          margin-top: 20px;
-          font-size: 11px;
-          color: rgba(26,26,24,0.38);
+        .card-footer {
           text-align: center;
-          letter-spacing: 0.01em;
+          border-top: 1px solid rgba(0,0,0,0.05);
+          padding-top: 1.25rem;
+        }
+
+        .footer-text {
+          font-size: 0.75rem;
+          color: #64748b;
+          letter-spacing: 0.02em;
         }
       `}</style>
 
       <div className="scene">
-        <div className="card">
+        <div className="glass-card">
 
-          {/* Logo */}
-          <div className="logo">
-            <span className="logo-name">求职助手</span>
+          <div className="card-header">
+            <div className="brand-title">求职助手</div>
+            <h1 className="main-title">{mode === 'login' ? '欢迎回来' : '创建账号'}</h1>
+            <div className="subtitle">AI 简历优化 · JD 匹配分析 · 求职追踪</div>
           </div>
 
-          {/* Heading */}
-          <h1 className="heading">
-            {mode === 'login' ? '欢迎回来' : '创建账号'}
-          </h1>
-          <p className="sub">
-            {mode === 'login'
-              ? 'AI 简历优化 · JD 匹配分析 · 求职追踪'
-              : '开始使用 AI 求职助手，提升投递成功率'}
-          </p>
-
-          {/* Mode toggle */}
-          <div className="mode-line">
+          <div className="tab-group">
             <button
-              className={`mode-btn${mode === 'login' ? ' active' : ''}`}
+              className={`tab-btn${mode === 'login' ? ' active' : ''}`}
               type="button"
               onClick={() => { setMode('login'); setMessage('') }}
-            >
-              登录
-            </button>
+            >登录</button>
             <button
-              className={`mode-btn${mode === 'signup' ? ' active' : ''}`}
+              className={`tab-btn${mode === 'signup' ? ' active' : ''}`}
               type="button"
               onClick={() => { setMode('signup'); setMessage('') }}
-            >
-              注册
-            </button>
+            >注册</button>
           </div>
 
-          {/* Form */}
           <form onSubmit={handleSubmit}>
-            <div className="field">
-              <label className="label">邮箱</label>
+            <div className="form-group">
+              <label className="form-label">邮箱</label>
               <input
-                className="input"
+                className="form-input"
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
@@ -283,10 +307,11 @@ export default function LoginPage() {
                 autoComplete="email"
               />
             </div>
-            <div className="field">
-              <label className="label">{mode === 'login' ? '密码' : '设置密码'}</label>
+
+            <div className="form-group">
+              <label className="form-label">{mode === 'login' ? '密码' : '设置密码'}</label>
               <input
-                className="input"
+                className="form-input"
                 type="password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
@@ -296,31 +321,27 @@ export default function LoginPage() {
               />
             </div>
 
-            <button className="submit" type="submit" disabled={loading}>
+            <button className="submit-btn" type="submit" disabled={loading}>
               {loading ? '处理中…' : mode === 'signup' ? '创建账号' : '登录'}
             </button>
-
-            {mode === 'login' && (
-              <div className="forgot-row">
-                <button
-                  className="forgot-link"
-                  type="button"
-                  onClick={handleForgotPassword}
-                  disabled={loading}
-                >
-                  忘记密码？
-                </button>
-              </div>
-            )}
-
-            {message && (
-              <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>
-                {message}
-              </div>
-            )}
           </form>
 
-          <p className="footer">© 2026 求职助手 · 数据安全加密存储</p>
+          {mode === 'login' && (
+            <div className="forgot-link-container">
+              <button className="forgot-link" type="button" onClick={handleForgotPassword} disabled={loading}>
+                忘记密码？
+              </button>
+            </div>
+          )}
+
+          {message && (
+            <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
+          )}
+
+          <div className="card-footer">
+            <p className="footer-text">© 2026 求职助手 · 数据安全加密存储</p>
+          </div>
+
         </div>
       </div>
     </>
