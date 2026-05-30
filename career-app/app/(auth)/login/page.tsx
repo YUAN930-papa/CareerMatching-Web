@@ -64,16 +64,18 @@ export default function LoginPage() {
         /* ── Blue noise sphere ───────────────────────────────────── */
         .sphere {
           position: absolute;
-          width: 153vmin; height: 153vmin;
-          border-radius: 50%;
+          /* larger div so gradient fully fades before div edge — no hard clip */
+          width: 200vmin; height: 200vmin;
           top: 50%; left: 50%;
           transform: translate(-50%, -50%);
           z-index: 1;
-          background: radial-gradient(circle at center,
+          /* gradient defines the soft circle — no border-radius needed */
+          background: radial-gradient(circle 76.5vmin at center,
             rgba(115,165,242,0.92)  0%,
-            rgba(140,185,244,0.60) 38%,
-            rgba(180,210,248,0.22) 62%,
-            transparent            80%
+            rgba(140,185,244,0.60) 36%,
+            rgba(175,208,248,0.22) 58%,
+            rgba(200,220,250,0.06) 72%,
+            transparent            82%
           );
           filter: url(#sphere-noise);
         }
@@ -260,14 +262,16 @@ export default function LoginPage() {
       {/* SVG noise filter — Figma: Mono, freq 0.5×0.5, #5398FF 40% */}
       <svg style={{position:'absolute',width:0,height:0,overflow:'hidden'}} aria-hidden="true">
         <defs>
-          <filter id="sphere-noise" x="-50%" y="-50%" width="200%" height="200%">
+          <filter id="sphere-noise" x="-5%" y="-5%" width="110%" height="110%">
             <feTurbulence type="fractalNoise" baseFrequency="0.5 0.5" numOctaves="4" stitchTiles="stitch" result="noise"/>
             <feColorMatrix type="matrix"
               values="0 0 0 0 0.325  0 0 0 0 0.596  0 0 0 0 1  0 0 0 0.4 0"
               in="noise" result="coloredNoise"/>
+            {/* clip noise to source alpha so it doesn't bleed outside the gradient */}
+            <feComposite in="coloredNoise" in2="SourceAlpha" operator="in" result="maskedNoise"/>
             <feMerge>
               <feMergeNode in="SourceGraphic"/>
-              <feMergeNode in="coloredNoise"/>
+              <feMergeNode in="maskedNoise"/>
             </feMerge>
           </filter>
         </defs>
