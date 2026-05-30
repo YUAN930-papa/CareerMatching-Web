@@ -47,25 +47,19 @@ export default function LoginPage() {
     <>
       <style>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        /* override globals.css body flex that inflates outer layout */
-        html, body { display: block !important; margin: 0; padding: 0; background: #ecedf0 !important; }
+        /* override globals.css body flex */
+        html, body { display: block !important; margin: 0; padding: 0; background: #eaebee !important; }
 
         .scene {
           min-height: 100vh;
+          width: 100%;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           padding: 24px;
-          /* Circle +60% larger (52vmin), color matched to 1-2-Test1.png */
-          background:
-            radial-gradient(circle 82vmin at 50% 50%,
-              rgba(172,201,238,0.90)  0%,
-              rgba(188,213,243,0.58) 38%,
-              rgba(210,224,246,0.20) 62%,
-              transparent            80%
-            ),
-            #eaebee;
+          background: url('/1-2-Test1.png') center center / cover no-repeat;
+          background-color: #eaebee;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
