@@ -56,30 +56,31 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 24px;
-          /* Light grey base + centered soft blue radial glow */
+          /* Ref: saturated cornflower-blue glow, large ellipse, light-grey base */
           background:
-            radial-gradient(ellipse 62% 70% at 50% 50%,
-              rgba(158,188,238,0.82) 0%,
-              rgba(168,198,242,0.52) 36%,
-              rgba(185,212,248,0.18) 62%,
-              transparent 78%
+            radial-gradient(ellipse 58% 76% at 50% 47%,
+              rgba(138,174,238,1.00)  0%,
+              rgba(152,186,242,0.88) 18%,
+              rgba(170,200,245,0.62) 38%,
+              rgba(195,215,248,0.28) 58%,
+              rgba(218,228,246,0.08) 72%,
+              transparent            82%
             ),
-            #ededf0;
+            #e9eaed;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: glass frame inside the glow ───────────────────── */
+        /* ── Card: near-transparent outline sitting inside the glow ── */
         .card {
           width: min(400px, 100%);
-          background: rgba(255,255,255,0.14);
-          backdrop-filter: blur(22px) saturate(115%);
-          -webkit-backdrop-filter: blur(22px) saturate(115%);
-          border: 1.5px solid rgba(255,255,255,0.82);
+          /* Only slightly lighter than glow — white border defines the shape */
+          background: rgba(255,255,255,0.22);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          border: 1.5px solid rgba(255,255,255,0.78);
           border-radius: 22px;
           padding: 40px 36px 36px;
-          box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.70),
-            0 2px 40px rgba(120,155,210,0.10);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.60);
         }
 
         /* ── Logo ────────────────────────────────────────────────── */
