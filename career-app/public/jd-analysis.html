@@ -1220,7 +1220,7 @@
 </nav>
 
 <!-- ══ PAGE 1 — 简历设置 ══ -->
-<div id="page-p1" style="display:none;min-height:calc(100vh - 52px);background:var(--bg);flex-direction:column;">
+<div id="page-p1" style="display:flex;min-height:calc(100vh - 52px);background:var(--bg);flex-direction:column;">
   <div id="page-p1-scroll" style="flex:1;max-width:680px;width:100%;margin:0 auto;padding:40px 24px;padding-bottom:32px;box-sizing:border-box;">
 
     <div style="margin-bottom:28px;">
@@ -2695,58 +2695,62 @@ function resolveRestorablePage(requested) {
 }
 
 function goPage(p, opts) {
-  ['p1','p2','p3','p4'].forEach(id => {
-    const el = document.getElementById('page-'+id)
-    if (el) el.style.display = 'none'
+  // p1 + p2 are always visible (scroll layout); p3/p4 are tab-switched
+  const isScrollPage = p === 'p1' || p === 'p2'
+
+  // Reset nav dot classes
+  ;['p1','p2','p3','p4'].forEach(id => {
     const nav = document.getElementById('nav-'+id)
     if (nav) nav.classList.remove('active','soft-active','completed','pending')
   })
 
-  if (p === 'p1') {
-    const p1 = document.getElementById('page-p1')
-    if (p1) {
-      p1.style.display = 'flex'
-      p1.style.flexDirection = 'column'
+  if (isScrollPage) {
+    // Hide tab pages (p3/p4), keep scroll pages (p1/p2) visible
+    ;['p3','p4'].forEach(id => {
+      const el = document.getElementById('page-'+id)
+      if (el) el.style.display = 'none'
+    })
+    const p1el = document.getElementById('page-p1')
+    if (p1el) { p1el.style.display = 'flex'; p1el.style.flexDirection = 'column' }
+    const p2el = document.getElementById('page-p2')
+    if (p2el) p2el.style.display = 'block'
+
+    if (p === 'p1') {
+      loadP1()
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    } else {
+      syncP2ResultsIfResumeStale()
+      const p2el = document.getElementById('page-p2')
+      if (p2el) p2el.scrollIntoView({ behavior: 'smooth' })
     }
-    loadP1()
-    currentPageId = 'p1'
-  } else if (p === 'p2') {
-    document.getElementById('page-p2').style.display = 'block'
-    currentPageId = 'p2'
-    syncP2ResultsIfResumeStale()
-  } else if (p === 'p3') {
-    const p3 = document.getElementById('page-p3')
-    if (p3) {
-      p3.style.display = 'flex'
-      p3.style.flexDirection = 'column'
+  } else {
+    // Tab-based for p3/p4: hide everything then show target
+    ;['p1','p2','p3','p4'].forEach(id => {
+      const el = document.getElementById('page-'+id)
+      if (el) el.style.display = 'none'
+    })
+    if (p === 'p3') {
+      const p3 = document.getElementById('page-p3')
+      if (p3) { p3.style.display = 'flex'; p3.style.flexDirection = 'column' }
+      try { loadP3() } catch (e) { console.error('loadP3', e); toast('Step 3 加载出错，请刷新页面重试', '✗') }
+      if (!opts || !opts.skipP3AutoGenerate) maybeAutoGenerateP3OnEnter()
+    } else if (p === 'p4') {
+      const p4 = document.getElementById('page-p4')
+      if (p4) { p4.style.display = 'flex'; p4.style.flexDirection = 'column' }
     }
-    try {
-      loadP3()
-    } catch (e) {
-      console.error('loadP3', e)
-      toast('Step 3 加载出错，请刷新页面重试', '✗')
-    }
-    currentPageId = 'p3'
-    if (!opts || !opts.skipP3AutoGenerate) maybeAutoGenerateP3OnEnter()
-  } else if (p === 'p4') {
-    const p4 = document.getElementById('page-p4')
-    if (p4) {
-      p4.style.display = 'flex'
-      p4.style.flexDirection = 'column'
-    }
-    currentPageId = 'p4'
   }
+
+  currentPageId = p
   updateProgressNav(p)
   togglePage2BoardButtons(p === 'p2')
-  try {
-    localStorage.setItem(LAST_PAGE_KEY, p)
-  } catch (e) {}
+  try { localStorage.setItem(LAST_PAGE_KEY, p) } catch (e) {}
+
   const compareNav = document.getElementById('btn-open-compare')
   const compareDiv = document.getElementById('nav-board-divider')
-  if (compareNav) {
-    compareNav.style.display = p === 'p1' ? 'none' : 'inline-flex'
-  }
-  if (compareDiv) compareDiv.style.display = p === 'p1' ? 'none' : 'block'
+  // Compare button visible whenever page-p2 content is in view (both scroll pages)
+  if (compareNav) compareNav.style.display = (isScrollPage) ? 'inline-flex' : (p === 'p1' ? 'none' : 'inline-flex')
+  if (compareDiv) compareDiv.style.display = (isScrollPage) ? 'block' : (p === 'p1' ? 'none' : 'block')
+
   try {
     const base = window.location.pathname + window.location.search
     history.replaceState(null, '', base + '#' + p)
