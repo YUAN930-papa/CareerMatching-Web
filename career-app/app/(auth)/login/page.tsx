@@ -56,22 +56,30 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 24px;
-          background: url('/1-2-Test1.png') center center / cover fixed no-repeat;
+          /* Light grey base + centered soft blue radial glow */
+          background:
+            radial-gradient(ellipse 62% 70% at 50% 50%,
+              rgba(158,188,238,0.82) 0%,
+              rgba(168,198,242,0.52) 36%,
+              rgba(185,212,248,0.18) 62%,
+              transparent 78%
+            ),
+            #ededf0;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card ────────────────────────────────────────────────── */
+        /* ── Card: glass frame inside the glow ───────────────────── */
         .card {
           width: min(400px, 100%);
-          background: rgba(255,255,255,0.72);
-          backdrop-filter: blur(28px) saturate(140%);
-          -webkit-backdrop-filter: blur(28px) saturate(140%);
-          border: 1.2px solid rgba(255,255,255,0.82);
-          border-radius: 20px;
+          background: rgba(255,255,255,0.14);
+          backdrop-filter: blur(22px) saturate(115%);
+          -webkit-backdrop-filter: blur(22px) saturate(115%);
+          border: 1.5px solid rgba(255,255,255,0.82);
+          border-radius: 22px;
           padding: 40px 36px 36px;
           box-shadow:
-            inset 0 1px 0 rgba(255,255,255,0.90),
-            0 8px 32px rgba(100,130,180,0.14);
+            inset 0 1px 0 rgba(255,255,255,0.70),
+            0 2px 40px rgba(120,155,210,0.10);
         }
 
         /* ── Logo ────────────────────────────────────────────────── */
@@ -117,7 +125,8 @@ export default function LoginPage() {
           display: flex;
           gap: 3px;
           margin-bottom: 22px;
-          background: rgba(0,0,0,0.06);
+          background: rgba(255,255,255,0.20);
+          border: 1px solid rgba(255,255,255,0.40);
           border-radius: 9px;
           padding: 3px;
         }
@@ -129,16 +138,16 @@ export default function LoginPage() {
           border-radius: 7px;
           font-size: 13px;
           font-weight: 500;
-          color: #5a5a56;
+          color: rgba(26,26,24,0.65);
           cursor: pointer;
           transition: all 0.15s;
           font-family: inherit;
         }
         .mode-btn.active {
-          background: #fff;
+          background: rgba(255,255,255,0.82);
           color: #1a1a18;
           font-weight: 600;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+          box-shadow: 0 1px 3px rgba(100,130,180,0.12);
         }
 
         /* ── Form fields ─────────────────────────────────────────── */
@@ -156,8 +165,8 @@ export default function LoginPage() {
           width: 100%;
           height: 42px;
           border-radius: 10px;
-          border: 1px solid rgba(0,0,0,0.12);
-          background: rgba(255,255,255,0.80);
+          border: 1px solid rgba(255,255,255,0.70);
+          background: rgba(255,255,255,0.75);
           padding: 0 14px;
           font-size: 14px;
           color: #1a1a18;
@@ -166,10 +175,10 @@ export default function LoginPage() {
           font-family: inherit;
         }
         .input:focus {
-          border-color: rgba(100,140,200,0.55);
-          background: #fff;
+          border-color: rgba(255,255,255,0.95);
+          background: rgba(255,255,255,0.92);
         }
-        .input::placeholder { color: #9a9a94; }
+        .input::placeholder { color: rgba(90,90,86,0.55); }
 
         /* ── Submit ──────────────────────────────────────────────── */
         .submit {
@@ -216,7 +225,7 @@ export default function LoginPage() {
         .footer {
           margin-top: 20px;
           font-size: 11px;
-          color: rgba(26,26,24,0.45);
+          color: rgba(26,26,24,0.38);
           text-align: center;
           letter-spacing: 0.01em;
         }
