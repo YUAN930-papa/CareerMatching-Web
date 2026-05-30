@@ -1155,6 +1155,36 @@
   /* strong tags in score notes */
   #page-p2 .score-note strong{ color:#000 !important; }
 
+  /* ── Unified banner: all pages — 60% white opacity, 65px, blur 12 ── */
+  /* 50% more opaque than original 40%: 0.40 × 1.5 = 0.60              */
+  #p1-sticky-actions,
+  .p2-bottom-banner,
+  #page-p3 .p3-bottom-banner{
+    background:rgba(255,255,255,.60) !important;
+    border-top:1.5px solid rgba(255,255,255,.80) !important;
+    height:65px !important;
+    padding:0 23px !important;
+    backdrop-filter:blur(12px) !important;
+    -webkit-backdrop-filter:blur(12px) !important;
+    box-shadow:none !important;
+    display:flex !important;
+    align-items:center !important;
+  }
+  /* Page 3 banner keeps absolute positioning (overlays scrollable content) */
+  #page-p3 .p3-bottom-banner{
+    position:absolute !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    z-index:30 !important;
+    justify-content:flex-end !important;
+    pointer-events:none !important;
+    border-left:none !important;
+    border-right:none !important;
+    border-bottom:none !important;
+  }
+  #page-p3 .p3-bottom-banner > *{ pointer-events:auto !important; }
+
   /* Banner button — black neomorphic */
   .p2-bottom-banner .btn-black-solid{
     display:inline-flex !important;
@@ -1523,7 +1553,7 @@
         <div id="p3se-right-sections"></div>
       </div>
     </div>
-    <div class="p3-bottom-banner" aria-label="Step 3 底部操作" style="background:rgba(255,255,255,0.5);">
+    <div class="p3-bottom-banner" aria-label="Step 3 底部操作">
       <button type="button" id="btn-go-p4" class="btn btn-black-solid" onclick="goToP4()" style="padding:10px 18px;border-radius:8px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;">撰写并下载</button>
     </div>
   </div>
