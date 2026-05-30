@@ -836,8 +836,6 @@
     background:transparent !important;
     position:relative;
     z-index:1;
-    display:flex !important;
-    flex-direction:column !important;
     height:calc(100vh - 63px) !important;
   }
 
@@ -1276,7 +1274,7 @@
 </div>
 
 <!-- ══ PAGE 2 — JD ANALYSIS ══ -->
-<div id="page-p2" style="display:block;">
+<div id="page-p2" style="display:none;">
 <div class="page-layout">
 
   <!-- LEFT: INPUT -->
@@ -2711,7 +2709,8 @@ function goPage(p, opts) {
     loadP1()
     currentPageId = 'p1'
   } else if (p === 'p2') {
-    document.getElementById('page-p2').style.display = 'block'
+    const p2el = document.getElementById('page-p2')
+    if (p2el) { p2el.style.display = 'flex'; p2el.style.flexDirection = 'column' }
     currentPageId = 'p2'
     syncP2ResultsIfResumeStale()
   } else if (p === 'p3') {
