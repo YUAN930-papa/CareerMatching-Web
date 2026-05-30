@@ -47,7 +47,8 @@ export default function LoginPage() {
     <>
       <style>{`
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { margin: 0; }
+        /* override globals.css body flex that inflates outer layout */
+        html, body { display: block !important; margin: 0; padding: 0; background: #ecedf0 !important; }
 
         .scene {
           min-height: 100vh;
@@ -57,19 +58,19 @@ export default function LoginPage() {
           justify-content: center;
           padding: 24px;
           background: url('/1-3-Test1.png') center center / cover no-repeat;
-          background-color: #ecedf0;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: CSS replica of 1-4-Test1.png Figma parameters ────── */
-        /* Inner shadow  : X0 Y4 blur28 spread0  #FFFFFF 50%       */
-        /* Drop shadow   : X0 Y4 blur7.7 spread1 #000000 10%       */
-        /* Glass / Frost : 4px blur, light -45° 80%                */
+        /* ── Card: blue glass + white stroke (green-frame params) ───── */
+        /* Inner shadow: X0 Y4 blur28 #FFFFFF 50%                   */
+        /* Drop shadow : X0 Y4 blur7.7 spread1 #000000 10%          */
+        /* Glass Frost : 20px blur, blue-tinted semi-transparent     */
         .card {
           width: min(400px, 100%);
-          background: rgba(252,252,255,0.88);
-          backdrop-filter: blur(4px);
-          -webkit-backdrop-filter: blur(4px);
+          background: rgba(210,225,248,0.38);
+          backdrop-filter: blur(20px) saturate(130%);
+          -webkit-backdrop-filter: blur(20px) saturate(130%);
+          border: 1.5px solid rgba(255,255,255,0.76);
           border-radius: 28px;
           padding: 40px 36px 36px;
           box-shadow:
