@@ -191,17 +191,20 @@
   /* ── Topnav: stronger bottom border ───────────────────────────── */
   .topnav { border-bottom: 2px solid rgba(0,0,0,0.22) !important; }
 
-  /* ── Stats bar: grey bg + strong borders + pure black text ─────── */
+  /* ── Stats bar: transparent bg + strong borders + pure black text ── */
   .stats-bar {
-    background: rgba(200,206,218,0.70) !important;
+    background: transparent !important;
     border-top: 2px solid rgba(0,0,0,0.22) !important;
     border-bottom: 2px solid rgba(0,0,0,0.22) !important;
   }
   .stats-bar .stat-num,
   .stats-bar .stat-label { color: #1a1a18 !important; }
 
-  /* ── Table header: pure black text ─────────────────────────────── */
-  thead th { color: #1a1a18 !important; }
+  /* ── Table header: grey bg + pure black text ────────────────────── */
+  thead th {
+    background: rgba(200,206,218,0.75) !important;
+    color: #1a1a18 !important;
+  }
 </style>
 </head>
 <body>
