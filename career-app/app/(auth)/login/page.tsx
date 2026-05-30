@@ -60,7 +60,7 @@ export default function LoginPage() {
           padding: 24px;
           /* half area of cover version: r = 53vmin/√2 ≈ 38vmin */
           background:
-            radial-gradient(circle 57vmin at 50% 50%,
+            radial-gradient(circle 86vmin at 50% 50%,
               rgba(172,201,238,0.90)  0%,
               rgba(188,213,243,0.58) 38%,
               rgba(210,224,246,0.20) 62%,
