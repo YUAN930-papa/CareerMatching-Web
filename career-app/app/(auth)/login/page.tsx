@@ -13,7 +13,7 @@ export default function LoginPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     setLoading(true)
     setMessage('')
@@ -29,14 +29,10 @@ export default function LoginPage() {
     setLoading(false)
   }
 
-  /** Supabase Auth：向邮箱发送「重置密码」链接，用户点击后进入 /auth/reset-password */
   async function handleForgotPassword() {
     setMessage('')
     const trimmed = email.trim()
-    if (!trimmed) {
-      setMessage('请先填写邮箱，再点击「忘记密码」。')
-      return
-    }
+    if (!trimmed) { setMessage('请先填写邮箱，再点击「忘记密码」。'); return }
     setLoading(true)
     const origin = typeof window !== 'undefined' ? window.location.origin : ''
     const { error } = await supabase.auth.resetPasswordForEmail(trimmed, {
@@ -44,137 +40,285 @@ export default function LoginPage() {
     })
     setLoading(false)
     if (error) setMessage(error.message)
-    else setMessage('已发送重置邮件，请查收邮箱并点击邮件中的链接设置新密码。')
+    else setMessage('已发送重置邮件，请查收邮箱并点击链接设置新密码。')
   }
 
   return (
     <>
       <style>{`
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        .scene{
-          min-height:100vh;
-          font-family: Inter, -apple-system, "SF Pro Display", "Segoe UI", sans-serif;
-          position:relative;
-          overflow:hidden;
-          padding:26px;
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          background: linear-gradient(180deg, #f8eee4 0%, #f6d8b2 58%, #e7a15f 100%);
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { margin: 0; }
+
+        .scene {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          background: url('/1-2-Test1.png') center center / cover fixed no-repeat;
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
-        .grain{
-          position:absolute;
-          inset:0;
-          pointer-events:none;
-          z-index:1;
-          opacity:1;
-          background:radial-gradient(circle at 36% 34%, rgba(255,245,230,.96) 0%, rgba(255,224,182,.60) 40%, rgba(239,155,78,.52) 72%, rgba(226,129,36,.22) 100%);
-          filter:blur(22px);
+
+        /* ── Card ────────────────────────────────────────────────── */
+        .card {
+          width: min(400px, 100%);
+          background: rgba(255,255,255,0.72);
+          backdrop-filter: blur(28px) saturate(140%);
+          -webkit-backdrop-filter: blur(28px) saturate(140%);
+          border: 1.2px solid rgba(255,255,255,0.82);
+          border-radius: 20px;
+          padding: 40px 36px 36px;
+          box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.90),
+            0 8px 32px rgba(100,130,180,0.14);
         }
-        .dome,.orb,.stone,.cactus{display:none;}
-        .layout{position:relative;z-index:2;width:min(760px, 94vw);}
-        .glass{
-          background:
-            linear-gradient(rgba(255,255,255,.50), rgba(255,250,244,.46)) padding-box,
-            linear-gradient(135deg, rgba(255,255,255,.30) 0%, rgba(255,255,255,.10) 48%, rgba(255,255,255,.50) 100%) border-box;
-          border:1.2px solid transparent;border-radius:28px;
-          backdrop-filter:blur(34px) saturate(140%);-webkit-backdrop-filter:blur(34px) saturate(140%);
-          box-shadow:inset 0 1px 0 rgba(255,255,255,.4), inset 0 0 0 1px rgba(255,255,255,.15), 0 22px 44px rgba(63,36,10,.18);
+
+        /* ── Logo ────────────────────────────────────────────────── */
+        .logo {
+          display: flex;
+          align-items: center;
+          gap: 7px;
+          margin-bottom: 36px;
         }
-        .account{padding:24px;display:grid;grid-template-columns:1.02fr 1.08fr;min-height:560px;overflow:hidden;}
-        .account-left{
-          border-radius:20px;padding:24px;display:flex;flex-direction:column;justify-content:space-between;color:#16120c;
-          background:
-            radial-gradient(circle at 72% 70%, rgba(243,148,66,.55) 0%, rgba(243,148,66,.16) 36%, rgba(255,255,255,.04) 70%),
-            linear-gradient(180deg, rgba(255,255,255,.58) 0%, rgba(255,245,233,.54) 100%);
-          border:1px solid rgba(255,255,255,.46);
+        .logo-mark {
+          width: 26px; height: 26px;
+          border-radius: 7px;
+          background: #1a1a18;
+          display: flex; align-items: center; justify-content: center;
+          flex-shrink: 0;
         }
-        .brand{font-size:14px;font-weight:600;}
-        .account-copy{font-size:40px;font-weight:650;line-height:1.12;letter-spacing:-.02em;}
-        .account-copy small{display:block;font-size:20px;font-weight:500;opacity:.78;}
-        .account-right{padding:4px 2px 4px 24px;display:flex;flex-direction:column;justify-content:center;}
-        .asterisk{font-size:34px;color:#c77a48;line-height:1;margin-bottom:4px;}
-        .heading{font-size:44px;font-weight:640;letter-spacing:-.02em;color:#111;margin-bottom:4px;}
-        .sub{font-size:13px;color:#645c51;line-height:1.5;margin-bottom:20px;}
-        .mode-line{display:flex;gap:12px;margin-bottom:14px;}
-        .mode-link{border:none;background:transparent;cursor:pointer;font-size:13px;font-weight:600;color:#14110c;opacity:.55;}
-        .mode-link.active{opacity:1;text-decoration:underline;}
-        .label{display:block;font-size:12px;color:#4f473d;margin-bottom:6px;}
-        .input{
-          width:100%;height:44px;border-radius:12px;border:1px solid rgba(228,216,200,.9);
-          background:#fff;padding:0 14px;font-size:14px;color:#121212;margin-bottom:12px;outline:none;
+        .logo-mark svg { display: block; }
+        .logo-name {
+          font-size: 14px;
+          font-weight: 650;
+          color: #1a1a18;
+          letter-spacing: -0.3px;
         }
-        .input:focus{border-color:#c78c58;}
-        .submit{
-          width:100%;margin-top:8px;height:44px;border:none;border-radius:11px;background:#060606;color:#fff;
-          font-size:14px;font-weight:620;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.32);
+
+        /* ── Heading ─────────────────────────────────────────────── */
+        .heading {
+          font-size: 24px;
+          font-weight: 700;
+          letter-spacing: -0.5px;
+          color: #1a1a18;
+          margin-bottom: 5px;
+          line-height: 1.2;
         }
-        .submit:disabled{opacity:.45;cursor:not-allowed;}
-        .forgot-row{margin-top:10px;text-align:center;}
-        .forgot-link{background:none;border:none;color:#c04810;cursor:pointer;font-size:12px;text-decoration:underline;padding:0;font-family:inherit;}
-        .forgot-link:hover{color:#9a3412;}
-        .msg{margin-top:10px;padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.5;}
-        .msg.ok{background:rgba(34,197,94,.14);color:#166534;border:1px solid rgba(34,197,94,.22);}
-        .msg.err{background:rgba(220,38,38,.12);color:#991b1b;border:1px solid rgba(220,38,38,.20);}
-        @media (max-width: 980px){
-          .layout{width:min(560px, 94vw);}
-          .account{grid-template-columns:1fr;min-height:auto;}
-          .account-left{min-height:220px;}
-          .account-right{padding:16px 0 0;}
+        .sub {
+          font-size: 13px;
+          color: #5a5a56;
+          margin-bottom: 28px;
+          line-height: 1.5;
+        }
+
+        /* ── Mode toggle ─────────────────────────────────────────── */
+        .mode-line {
+          display: flex;
+          gap: 3px;
+          margin-bottom: 22px;
+          background: rgba(0,0,0,0.06);
+          border-radius: 9px;
+          padding: 3px;
+        }
+        .mode-btn {
+          flex: 1;
+          border: none;
+          background: transparent;
+          padding: 7px 0;
+          border-radius: 7px;
+          font-size: 13px;
+          font-weight: 500;
+          color: #5a5a56;
+          cursor: pointer;
+          transition: all 0.15s;
+          font-family: inherit;
+        }
+        .mode-btn.active {
+          background: #fff;
+          color: #1a1a18;
+          font-weight: 600;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.10);
+        }
+
+        /* ── Form fields ─────────────────────────────────────────── */
+        .field { margin-bottom: 14px; }
+        .label {
+          display: block;
+          font-size: 11px;
+          font-weight: 600;
+          color: rgba(26,26,24,0.80);
+          margin-bottom: 6px;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+        .input {
+          width: 100%;
+          height: 42px;
+          border-radius: 10px;
+          border: 1px solid rgba(0,0,0,0.12);
+          background: rgba(255,255,255,0.80);
+          padding: 0 14px;
+          font-size: 14px;
+          color: #1a1a18;
+          outline: none;
+          transition: border-color 0.15s, background 0.15s;
+          font-family: inherit;
+        }
+        .input:focus {
+          border-color: rgba(100,140,200,0.55);
+          background: #fff;
+        }
+        .input::placeholder { color: #9a9a94; }
+
+        /* ── Submit ──────────────────────────────────────────────── */
+        .submit {
+          width: 100%;
+          margin-top: 8px;
+          height: 42px;
+          border: none;
+          border-radius: 10px;
+          background: #1a1a18;
+          color: #fff;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: opacity 0.15s;
+          font-family: inherit;
+          letter-spacing: -0.2px;
+        }
+        .submit:hover:not(:disabled) { opacity: 0.84; }
+        .submit:disabled { opacity: 0.38; cursor: not-allowed; }
+
+        /* ── Forgot / Message ────────────────────────────────────── */
+        .forgot-row { margin-top: 12px; text-align: center; }
+        .forgot-link {
+          background: none; border: none;
+          color: #5a5a56; cursor: pointer;
+          font-size: 12px; padding: 0;
+          font-family: inherit;
+          text-decoration: underline;
+          text-underline-offset: 2px;
+        }
+        .forgot-link:hover { color: #1a1a18; }
+
+        .msg {
+          margin-top: 12px;
+          padding: 10px 12px;
+          border-radius: 8px;
+          font-size: 12px;
+          line-height: 1.55;
+        }
+        .msg.ok  { background: rgba(39,80,10,0.10);  color: #27500A; border: 1px solid rgba(39,80,10,0.18);  }
+        .msg.err { background: rgba(121,31,31,0.10); color: #791F1F; border: 1px solid rgba(121,31,31,0.18); }
+
+        /* ── Footer ──────────────────────────────────────────────── */
+        .footer {
+          margin-top: 20px;
+          font-size: 11px;
+          color: rgba(26,26,24,0.45);
+          text-align: center;
+          letter-spacing: 0.01em;
         }
       `}</style>
 
       <div className="scene">
-        <div className="dome" />
-        <div className="orb" />
-        <div className="stone s1" />
-        <div className="stone s2" />
-        <div className="stone s3" />
-        <div className="cactus" />
-        <div className="grain" />
+        <div className="card">
 
-        <div className="layout">
-          <section className="glass account">
-            <div className="account-left">
-              <div className="brand">求职助手</div>
-              <div className="account-copy"></div>
+          {/* Logo */}
+          <div className="logo">
+            <div className="logo-mark">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <rect x="2" y="2" width="4" height="4" rx="1" fill="white"/>
+                <rect x="8" y="2" width="4" height="4" rx="1" fill="white" opacity=".6"/>
+                <rect x="2" y="8" width="4" height="4" rx="1" fill="white" opacity=".6"/>
+                <rect x="8" y="8" width="4" height="4" rx="1" fill="white" opacity=".3"/>
+              </svg>
             </div>
-            <div className="account-right">
-              <div className="asterisk">*</div>
-              <h1 className="heading">{mode === 'login' ? 'Log in' : 'Create an account'}</h1>
-              <p className="sub"></p>
-
-              <div className="mode-line">
-                <button className={`mode-link${mode === 'login' ? ' active' : ''}`} type="button" onClick={() => setMode('login')}>Log in</button>
-                <button className={`mode-link${mode === 'signup' ? ' active' : ''}`} type="button" onClick={() => setMode('signup')}>Sign up</button>
-              </div>
-
-              <form onSubmit={handleSubmit}>
-                <label className="label">Your email</label>
-                <input className="input" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
-                <label className="label">{mode === 'login' ? 'Password' : 'Create password'}</label>
-                <input className="input" type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••••" required />
-
-                <button className="submit" type="submit" disabled={loading}>
-                  {loading ? 'Processing...' : mode === 'signup' ? 'Create account' : 'Log in'}
-                </button>
-
-                {mode === 'login' && (
-                  <div className="forgot-row">
-                    <button className="forgot-link" type="button" onClick={handleForgotPassword} disabled={loading}>
-                      忘记密码
-                    </button>
-                  </div>
-                )}
-
-                {message && (
-                  <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
-                )}
-              </form>
-            </div>
-          </section>
-
+            <span className="logo-name">求职助手</span>
           </div>
+
+          {/* Heading */}
+          <h1 className="heading">
+            {mode === 'login' ? '欢迎回来' : '创建账号'}
+          </h1>
+          <p className="sub">
+            {mode === 'login'
+              ? 'AI 简历优化 · JD 匹配分析 · 求职追踪'
+              : '开始使用 AI 求职助手，提升投递成功率'}
+          </p>
+
+          {/* Mode toggle */}
+          <div className="mode-line">
+            <button
+              className={`mode-btn${mode === 'login' ? ' active' : ''}`}
+              type="button"
+              onClick={() => { setMode('login'); setMessage('') }}
+            >
+              登录
+            </button>
+            <button
+              className={`mode-btn${mode === 'signup' ? ' active' : ''}`}
+              type="button"
+              onClick={() => { setMode('signup'); setMessage('') }}
+            >
+              注册
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            <div className="field">
+              <label className="label">邮箱</label>
+              <input
+                className="input"
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="your@email.com"
+                required
+                autoComplete="email"
+              />
+            </div>
+            <div className="field">
+              <label className="label">{mode === 'login' ? '密码' : '设置密码'}</label>
+              <input
+                className="input"
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              />
+            </div>
+
+            <button className="submit" type="submit" disabled={loading}>
+              {loading ? '处理中…' : mode === 'signup' ? '创建账号' : '登录'}
+            </button>
+
+            {mode === 'login' && (
+              <div className="forgot-row">
+                <button
+                  className="forgot-link"
+                  type="button"
+                  onClick={handleForgotPassword}
+                  disabled={loading}
+                >
+                  忘记密码？
+                </button>
+              </div>
+            )}
+
+            {message && (
+              <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>
+                {message}
+              </div>
+            )}
+          </form>
+        </div>
+
+        <p className="footer">© 2026 求职助手 · 数据安全加密存储</p>
       </div>
     </>
   )
