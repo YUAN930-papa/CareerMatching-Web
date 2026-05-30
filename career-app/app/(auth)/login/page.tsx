@@ -78,7 +78,7 @@ export default function LoginPage() {
           -webkit-backdrop-filter: blur(20px) saturate(130%);
           border: 1.5px solid rgba(255,255,255,0.76);
           border-radius: 20px;
-          padding: 24px 22px 22px;
+          padding: 19px 22px 18px;
           box-shadow:
             inset 0 4px 28px 0 rgba(255,255,255,0.50),
             0 4px 8px 1px rgba(0,0,0,0.10);
@@ -238,14 +238,6 @@ export default function LoginPage() {
 
           {/* Logo */}
           <div className="logo">
-            <div className="logo-mark">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <rect x="2" y="2" width="4" height="4" rx="1" fill="white"/>
-                <rect x="8" y="2" width="4" height="4" rx="1" fill="white" opacity=".6"/>
-                <rect x="2" y="8" width="4" height="4" rx="1" fill="white" opacity=".6"/>
-                <rect x="8" y="8" width="4" height="4" rx="1" fill="white" opacity=".3"/>
-              </svg>
-            </div>
             <span className="logo-name">求职助手</span>
           </div>
 
