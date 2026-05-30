@@ -255,6 +255,21 @@
     overflow-x:hidden;
   }
   body > *{position:relative;z-index:1;}
+
+  /* ── Topnav: stronger bottom border ───────────────────────────── */
+  .topnav { border-bottom: 2px solid rgba(0,0,0,0.22) !important; }
+
+  /* ── Stats bar: grey bg + strong borders + pure black text ─────── */
+  .stats-bar {
+    background: rgba(200,206,218,0.70) !important;
+    border-top: 2px solid rgba(0,0,0,0.22) !important;
+    border-bottom: 2px solid rgba(0,0,0,0.22) !important;
+  }
+  .stats-bar .stat-num,
+  .stats-bar .stat-label { color: #1a1a18 !important; }
+
+  /* ── Table header: pure black text ─────────────────────────────── */
+  thead th { color: #1a1a18 !important; }
 </style>
 </head>
 <body>
@@ -265,7 +280,7 @@
     <button class="btn btn-board-nav" onclick="goBackToJdAnalysis()">⬅️返回 Step2 JD分析</button>
   </div>
   <div class="nav-right">
-    <button class="btn btn-board-nav btn-board-compare btn-black-solid" onclick="openCompareBoard()">⬅️返回 JD对比看板</button>
+    <button class="btn btn-board-nav" onclick="openCompareBoard()">⬅️返回 JD对比看板</button>
   </div>
 </nav>
 
@@ -276,13 +291,13 @@
 <div class="stats-bar">
   <div class="stat"><div class="stat-num" id="stat-total">0</div><div class="stat-label">总职位</div></div>
   <div class="stat-divider"></div>
-  <div class="stat"><div class="stat-num" id="stat-applied" style="color:#1e40af">0</div><div class="stat-label">已投递</div></div>
+  <div class="stat"><div class="stat-num" id="stat-applied">0</div><div class="stat-label">已投递</div></div>
   <div class="stat-divider"></div>
-  <div class="stat"><div class="stat-num" id="stat-replied" style="color:#2d6a4f">0</div><div class="stat-label">有回音</div></div>
+  <div class="stat"><div class="stat-num" id="stat-replied">0</div><div class="stat-label">有回音</div></div>
   <div class="stat-divider"></div>
-  <div class="stat"><div class="stat-num" id="stat-interview" style="color:#5b21b6">0</div><div class="stat-label">面试中</div></div>
+  <div class="stat"><div class="stat-num" id="stat-interview">0</div><div class="stat-label">面试中</div></div>
   <div class="stat-divider"></div>
-  <div class="stat"><div class="stat-num" id="stat-rate" style="color:#92400e">0%</div><div class="stat-label">回复率</div></div>
+  <div class="stat"><div class="stat-num" id="stat-rate">0%</div><div class="stat-label">回复率</div></div>
 </div>
 
 <div class="toolbar">
