@@ -6,14 +6,33 @@
 <title>求上岸-投递进度追踪</title>
 <style>
   :root {
-    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
     --font-mono: ui-monospace, "Cascadia Mono", Consolas, "SF Mono", "Liberation Mono", monospace;
-    --bg:#f5f4f0;--surface:#fff;--surface2:#f0ede8;--border:#e2dfd8;--border2:#d0cdc6;
-    --text:#1a1916;--text2:#6b6860;--text3:#9e9b96;--accent:#1a1916;
-    --green:#2d6a4f;--green-bg:#d8f3dc;--amber:#92400e;--amber-bg:#fef3c7;
-    --blue:#1e40af;--blue-bg:#dbeafe;--red:#991b1b;--red-bg:#fee2e2;
-    --purple:#5b21b6;--purple-bg:#ede9fe;--gray:#374151;--gray-bg:#f3f4f6;
-    --radius:8px;--radius-lg:12px;
+    /* Core tokens */
+    --color-bg-primary:#ffffff; --color-bg-secondary:#f5f5f3; --color-bg-tertiary:#efefed;
+    --color-text-primary:#1a1a18; --color-text-secondary:#5a5a56; --color-text-tertiary:#9a9a94;
+    --color-border-default:rgba(0,0,0,0.10); --color-border-strong:rgba(0,0,0,0.20);
+    --color-accent:#1a1a18; --color-accent-hover:#3a3a38;
+    --color-success-bg:#EAF3DE; --color-success-text:#27500A;
+    --color-info-bg:#E6F1FB; --color-info-text:#0C447C;
+    --color-warning-bg:#FAEEDA; --color-warning-text:#633806;
+    --color-danger-bg:#FCEBEB; --color-danger-text:#791F1F;
+    /* Type scale */
+    --fs-h1:24px; --fs-h2:20px; --fs-h3:17px; --fs-h4:15px;
+    --fs-body-lg:16px; --fs-body:14px; --fs-small:12px; --fs-caption:11px;
+    --lh-base:1.6; --lh-relaxed:1.7;
+    --fw-normal:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+    /* Radius */
+    --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-pill:999px;
+    /* Legacy aliases */
+    --bg:var(--color-bg-tertiary); --surface:var(--color-bg-primary); --surface2:var(--color-bg-secondary);
+    --border:var(--color-border-default); --border2:var(--color-border-strong);
+    --text:var(--color-text-primary); --text2:var(--color-text-secondary); --text3:var(--color-text-tertiary);
+    --accent:var(--color-accent);
+    --green:#2d6a4f; --green-bg:#d8f3dc; --amber:#92400e; --amber-bg:#fef3c7;
+    --blue:#1e40af; --blue-bg:#dbeafe; --red:#991b1b; --red-bg:#fee2e2;
+    --purple:#5b21b6; --purple-bg:#ede9fe; --gray:#374151; --gray-bg:#f3f4f6;
+    --radius:8px; --radius-lg:12px;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{font-family:var(--font-sans);background:#808080;color:var(--text);min-height:100vh;font-size:14px;}
@@ -229,26 +248,11 @@
   button:hover:not(:disabled),.btn:hover:not(:disabled){
     box-shadow:0 4px 6px rgba(0,0,0,.46) !important;
   }
-  /* Minimal warm backdrop: one gradient orb */
+  /* Background image */
   body{
-    background:linear-gradient(180deg,#f8efe3 0%, #f4d8b8 56%, #e5a35f 100%) !important;
+    background:url('1-2-Test1.png') center center / cover fixed no-repeat !important;
     position:relative;
     overflow-x:hidden;
-  }
-  body::before{
-    content:'';
-    position:fixed;
-    width:min(64vw,780px);
-    aspect-ratio:1;
-    border-radius:50%;
-    left:50%;
-    top:16%;
-    transform:translate(-50%,-50%);
-    background:radial-gradient(circle at 36% 34%, rgba(255,245,230,.96) 0%, rgba(255,224,182,.60) 40%, rgba(239,155,78,.52) 72%, rgba(226,129,36,.22) 100%);
-    filter:blur(22px);
-    opacity:.78;
-    pointer-events:none;
-    z-index:0;
   }
   body > *{position:relative;z-index:1;}
 </style>
