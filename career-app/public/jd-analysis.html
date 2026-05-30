@@ -18,9 +18,50 @@
     --red:#991b1b;--red-bg:#fee2e2;
     --purple:#5b21b6;--purple-bg:#ede9fe;
     --teal:#0f766e;--teal-bg:#ccfbf1;
+
+    /* ── Type scale ── */
+    --fs-xs:10px; --fs-sm:12px; --fs-ui:13px; --fs-body-sm:14px; --fs-body:16px;
+    --fs-h4:15px; --fs-h3:18px; --fs-h2:22px; --fs-h1:28px;
+    --lh-tight:1.25; --lh-snug:1.4; --lh-base:1.55; --lh-relaxed:1.65;
+    --fw-normal:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
+    /* Semantic text colours (richer than legacy --text* palette) */
+    --text-primary:#1a1a1a;   /* deep charcoal — reading body */
+    --text-secondary:#44444f; /* mid-dark — supporting copy */
+    --text-muted:#8a8896;     /* tertiary — labels, captions */
+    --content-max-w:660px;    /* comfortable reading line length */
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:var(--font-sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:14px;}
+  body{font-family:var(--font-sans);background:var(--bg);color:var(--text-primary);min-height:100vh;font-size:var(--fs-body);line-height:var(--lh-base);}
+
+  /* ══════════════════════════════════════════════════════════
+     TYPOGRAPHY SYSTEM
+     Heading scale: H1 28 / H2 22 / H3 18 / H4 15
+     Body reading:  16px / lh 1.65 / #1a1a1a
+     Dense UI:      13px / lh 1.55 (nav, tags, score labels)
+     Info-dense:    14px / lh 1.6  (analysis cards, metadata)
+  ══════════════════════════════════════════════════════════ */
+
+  /* Heading hierarchy — breathing room + strong contrast */
+  h1,h2,h3,h4{margin:0;font-family:var(--font-sans);color:var(--text-primary);letter-spacing:-.2px;}
+  h1{font-size:var(--fs-h1);font-weight:var(--fw-bold);line-height:var(--lh-tight);letter-spacing:-.5px;}
+  h2{font-size:var(--fs-h2);font-weight:var(--fw-bold);line-height:var(--lh-tight);letter-spacing:-.35px;}
+  h3{font-size:var(--fs-h3);font-weight:var(--fw-semibold);line-height:var(--lh-snug);}
+  h4{font-size:var(--fs-h4);font-weight:var(--fw-semibold);line-height:var(--lh-snug);}
+
+  /* Prose paragraph — max-width guards reading comfort on wide screens */
+  p{font-size:var(--fs-body);line-height:var(--lh-relaxed);color:var(--text-primary);max-width:var(--content-max-w);margin:0;}
+
+  /* Dense-context helper — apply to data panels, score cards, tag rows */
+  .type-dense{font-size:var(--fs-ui)!important;line-height:var(--lh-base)!important;}
+
+  /* Step-page heading labels (e.g. "第三步：键入 JD 信息") */
+  .page-step-label{
+    font-size:var(--fs-body-sm);
+    font-weight:var(--fw-semibold);
+    color:var(--text-secondary);
+    letter-spacing:.01em;
+    line-height:var(--lh-snug);
+  }
 
   /* NAV */
   .topnav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;height:52px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:200;flex-shrink:0;}
@@ -153,6 +194,16 @@
   .btn-board-tracking{background:#0f766e;color:#fff;border-color:#0f766e;font-weight:700;}
   .btn-board-tracking:hover:not(:disabled){opacity:.9;}
   .btn-board-nav{height:32px;padding:0 14px;border-radius:8px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;}
+
+  /* ── Dense UI lock: nav chrome + data panels inherit 13px, not body 16px ── */
+  .topnav,.left-panel,.right-panel,.info-card,.score-section,
+  .score-big,.score-row-card,.tags-section,.action-bar,
+  .job-confirm,.info-grid,.p2-step-heading,
+  #page-p3 .p3se-page-head,#page-p3 .p3se-sec-head,
+  #page-p3 .p3se-generate-bar,
+  #page-p4 .p4-head,.p4-compare-wrap,.p4-jd-check {
+    font-size:var(--fs-ui);
+  }
 
   /* LAYOUT */
   .page-layout{display:grid;grid-template-columns:1fr 1fr;gap:0;height:calc(100vh - 52px);}
@@ -1193,17 +1244,38 @@
     -webkit-backdrop-filter:none !important;
   }
 
-  /* ── Body text: Pages 2/3/4 — 13px pure black ── */
-  /* P2: grey secondary text → black */
-  #page-p2 .score-reasoning,
-  #page-p2 .score-note { color:#000 !important; font-size:13px !important; }
-  /* P3: section body + editable lines */
-  #page-p3 .p3se-sec-body { color:#000 !important; font-size:13px !important; }
+  /* ── Reading content: 16px var(--text-primary) across P2/P3/P4 ──
+     Highlighted child spans keep their own colour (child explicit > inherited).
+     Dense UI siblings above lock at 13px via the dense-lock block.         ── */
+  /* P2: analysis description prose */
+  #page-p2 .score-reasoning {
+    font-size:var(--fs-body-sm) !important;
+    line-height:var(--lh-relaxed) !important;
+    color:var(--text-primary) !important;
+  }
+  #page-p2 .score-note {
+    font-size:var(--fs-sm) !important;
+    color:var(--text-secondary) !important;
+  }
+  /* P3: resume section body (the actual resume reading text) */
+  #page-p3 .p3se-sec-body {
+    font-size:var(--fs-body) !important;
+    line-height:var(--lh-relaxed) !important;
+    color:var(--text-primary) !important;
+  }
   #page-p3 .p3se-line,
-  #page-p3 .p3se-editable { color:#000 !important; font-size:13px !important; }
-  /* P4: resume comparison pre text (highlighted child divs keep their own inline color) */
+  #page-p3 .p3se-editable {
+    font-size:var(--fs-body) !important;
+    line-height:var(--lh-relaxed) !important;
+    color:var(--text-primary) !important;
+  }
+  /* P4: resume comparison pre (line-highlighted divs use inline color, unaffected) */
   #p4-resume-left,
-  #p4-resume-right { color:#000 !important; font-size:13px !important; }
+  #p4-resume-right {
+    font-size:var(--fs-body) !important;
+    line-height:var(--lh-relaxed) !important;
+    color:var(--text-primary) !important;
+  }
 </style>
 </head>
 <body>
