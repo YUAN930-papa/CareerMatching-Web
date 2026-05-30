@@ -4337,29 +4337,37 @@ async function goToP4() {
   const c2 = String(gaps[1] || '关键职责关键词覆盖与业务影响').trim()
   if (leftHead) leftHead.textContent = '版本 A（侧重：' + c1 + '）'
   if (rightHead) rightHead.textContent = '版本 B（侧重：' + c2 + '）'
-  if (leftPre) leftPre.textContent = '正在生成版本 A...'
-  if (rightPre) rightPre.textContent = '正在生成版本 B...'
-  if (status) status.textContent = 'AI 正在生成双版本简历...'
+  if (leftPre) leftPre.textContent = '正在加载版本 A...'
+  if (rightPre) rightPre.textContent = '正在生成版本 B（AI 中）...'
+  if (status) status.textContent = 'AI 正在生成版本 B...'
   const elA = document.getElementById('p4-criteria-a')
   const elB = document.getElementById('p4-criteria-b')
   if (elA) elA.textContent = c1
   if (elB) elB.textContent = c2
   try {
-    const [leftResult, rightResult] = await Promise.all([p4GenerateOneVariant(c1), p4GenerateOneVariant(c2)])
-    const leftText = String(leftResult?.text || '')
-    const rightText = String(rightResult?.text || '')
-    p4VariantLeft = { criterion: c1, text: leftText, sections: Array.isArray(leftResult?.sections) ? leftResult.sections : [] }
+    // Variant A: reuse existing p3 structured result (instant, no API call)
+    const p3sections = (p3StructuredPayload && Array.isArray(p3StructuredPayload.sections) && p3StructuredPayload.sections.length)
+      ? p3StructuredPayload.sections : []
+    const leftText = p3sections.length ? p4SectionsToResumeText(p3sections) : String(p3OriginalResume || '')
+    p4VariantLeft = { criterion: c1, text: leftText, sections: p3sections }
+    if (leftPre) leftPre.textContent = '正在生成版本 B（AI 中）...'
+    // Variant B: single API call for the second criterion
+    let rightResult = null
+    try {
+      rightResult = await p4GenerateOneVariant(c2)
+    } catch (e) {
+      console.warn('[p4] variant B API failed, falling back to original resume', e)
+    }
+    const rightText = rightResult?.text || String(p3OriginalResume || '')
     p4VariantRight = { criterion: c2, text: rightText, sections: Array.isArray(rightResult?.sections) ? rightResult.sections : [] }
     p4RenderResumeCompare(leftText || '（空）', rightText || '（空）')
     p4RenderDiff(leftText, rightText, c1, c2)
-    if (status) status.textContent = '已生成两版，可对比后下载'
+    if (status) status.textContent = rightResult ? '已生成两版，可对比后下载' : '版本 A 已就绪，版本 B 使用原始简历（AI 生成失败）'
   } catch (e) {
     const msg = e instanceof Error ? e.message : '未知错误'
     if (status) status.textContent = '生成失败'
     if (leftPre) leftPre.textContent = '生成失败：' + msg
     if (rightPre) rightPre.textContent = '生成失败：' + msg
-    const diff = document.getElementById('p4-diff')
-    if (diff) diff.innerHTML = '<span style="color:var(--red);">生成失败：' + esc(msg) + '</span>'
     toast('Page4 生成失败：' + msg, '✗')
   }
 }
