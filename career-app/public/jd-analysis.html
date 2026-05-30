@@ -272,7 +272,7 @@
   #page-p3 .p3se-leg-item{display:flex;align-items:center;gap:5px;}
   #page-p3 .p3se-dot{width:11px;height:11px;border-radius:2px;flex-shrink:0;}
   #page-p3 .p3se-main{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;position:relative;}
-  #page-p3 .p3se-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 18px 96px;flex:1;min-height:0;overflow:auto;max-width:1600px;margin:0 auto;width:100%;box-sizing:border-box;}
+  #page-p3 .p3se-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:14px 18px 70px;flex:1;min-height:0;overflow:auto;max-width:1600px;margin:0 auto;width:100%;box-sizing:border-box;}
   #page-p3 .p3se-col-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--border);}
   #page-p3 .p3se-section{background:rgba(255,255,255,.92);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
   #page-p3 .p3se-sec-head{padding:8px 12px;background:rgba(255,255,255,.84);border-bottom:1px solid var(--border);font-size:11px;color:var(--text2);text-transform:uppercase;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
@@ -321,7 +321,8 @@
     right:0;
     bottom:0;
     z-index:30;
-    padding:14px 20px;
+    height:65px;
+    padding:0 23px;
     display:flex;
     align-items:center;
     justify-content:flex-end;
@@ -540,13 +541,7 @@
     z-index:0;
   }
   body > *{position:relative;z-index:1;}
-  /* Step3 底栏最终样式：纯白 50% 透明浮层，不挤压内容区 */
-  #page-p3 .p3-bottom-banner{
-    background:rgba(255,255,255,.5) !important;
-    backdrop-filter:none !important;
-    -webkit-backdrop-filter:none !important;
-    box-shadow:none !important;
-  }
+  /* Step3 底栏：统一规格，由 unified-banner 规则覆盖 */
   /* ===== Figma V1 refined (Page 1 first) ===== */
   body{
     background:#ececef !important;
