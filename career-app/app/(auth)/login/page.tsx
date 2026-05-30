@@ -57,20 +57,18 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 24px;
-          background: url('/1-3-Test1.png') center center / cover no-repeat;
+          /* blue ball at 50% smaller — 70vmin fills ~50% of viewport area */
+          background: url('/1-3-Test1.png') center center / 70vmin 70vmin no-repeat;
+          background-color: #ecedf0;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: blue glass + white stroke (green-frame params) ───── */
-        /* Inner shadow: X0 Y4 blur28 #FFFFFF 50%                   */
-        /* Drop shadow : X0 Y4 blur7.7 spread1 #000000 10%          */
-        /* Glass Frost : 20px blur, blue-tinted semi-transparent     */
+        /* ── Card: white glass (Figma 1-4-Test1 params, no outer frame) */
         .card {
           width: min(400px, 100%);
-          background: rgba(210,225,248,0.38);
-          backdrop-filter: blur(20px) saturate(130%);
-          -webkit-backdrop-filter: blur(20px) saturate(130%);
-          border: 1.5px solid rgba(255,255,255,0.76);
+          background: rgba(248,248,252,0.94);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
           border-radius: 28px;
           padding: 40px 36px 36px;
           box-shadow:
