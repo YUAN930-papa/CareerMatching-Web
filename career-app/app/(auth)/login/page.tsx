@@ -54,20 +54,29 @@ export default function LoginPage() {
           display: flex;
           justify-content: center;
           align-items: center;
-          /* single centered blue sphere matching 1-2-Test1.png color */
-          background:
-            radial-gradient(circle 102vmin at 50% 50%,
-              rgba(115,165,242,0.92)  0%,
-              rgba(140,185,244,0.60) 38%,
-              rgba(180,210,248,0.22) 62%,
-              transparent            80%
-            ),
-            #eaebee;
+          background: #eaebee;
           overflow: hidden;
           position: relative;
         }
 
         .scene::before, .scene::after { display: none; }
+
+        /* ── Blue noise sphere ───────────────────────────────────── */
+        .sphere {
+          position: absolute;
+          width: 204vmin; height: 204vmin;
+          border-radius: 50%;
+          top: 50%; left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 1;
+          background: radial-gradient(circle at center,
+            rgba(115,165,242,0.92)  0%,
+            rgba(140,185,244,0.60) 38%,
+            rgba(180,210,248,0.22) 62%,
+            transparent            80%
+          );
+          filter: url(#sphere-noise);
+        }
 
         /* ── Glass card ──────────────────────────────────────────── */
         .glass-card {
@@ -248,7 +257,24 @@ export default function LoginPage() {
         }
       `}</style>
 
+      {/* SVG noise filter — Figma: Mono, freq 0.5×0.5, #5398FF 40% */}
+      <svg style={{position:'absolute',width:0,height:0,overflow:'hidden'}} aria-hidden="true">
+        <defs>
+          <filter id="sphere-noise" x="-50%" y="-50%" width="200%" height="200%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.5 0.5" numOctaves="4" stitchTiles="stitch" result="noise"/>
+            <feColorMatrix type="matrix"
+              values="0 0 0 0 0.325  0 0 0 0 0.596  0 0 0 0 1  0 0 0 0.4 0"
+              in="noise" result="coloredNoise"/>
+            <feMerge>
+              <feMergeNode in="SourceGraphic"/>
+              <feMergeNode in="coloredNoise"/>
+            </feMerge>
+          </filter>
+        </defs>
+      </svg>
+
       <div className="scene">
+        <div className="sphere" aria-hidden="true" />
         <div className="glass-card">
 
           <div className="card-header">
@@ -302,13 +328,12 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {mode === 'login' && (
-            <div className="forgot-link-container">
-              <button className="forgot-link" type="button" onClick={handleForgotPassword} disabled={loading}>
-                忘记密码？
-              </button>
-            </div>
-          )}
+          {/* always rendered to prevent layout shift / bounce */}
+          <div className="forgot-link-container" style={{visibility: mode === 'login' ? 'visible' : 'hidden'}}>
+            <button className="forgot-link" type="button" onClick={handleForgotPassword} disabled={loading}>
+              忘记密码？
+            </button>
+          </div>
 
           {message && (
             <div className={`msg ${message.includes('成功') ? 'ok' : 'err'}`}>{message}</div>
