@@ -1475,7 +1475,7 @@
       <div id="resume-dropzone" style="border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:var(--bg);transition:border-color .15s, background .15s;">
         <input type="file" id="resume-file-input" accept=".pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document" style="display:none;">
         <div style="display:flex;align-items:center;justify-content:center;gap:8px;">
-          <img src="1-6-Test1.png" alt="" style="width:22px;height:22px;object-fit:contain;opacity:0.75;">
+          <img src="/1-6-Test1.png" alt="" style="width:22px;height:22px;object-fit:contain;opacity:0.75;">
           <span style="font-size:13px;color:var(--text);">上传简历</span>
         </div>
         <div id="resume-upload-status" style="font-size:11px;color:var(--text3);margin-top:8px;min-height:1.2em;"></div>
@@ -1499,12 +1499,11 @@
     </div>
 
     <!-- ③ 未来职业发展方向 -->
-    <div class="career-goal-card" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;display:flex;flex-direction:column;">
-      <textarea id="career-goal" style="width:100%;flex:1;min-height:200px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;line-height:1.7;transition:border-color .15s;resize:vertical;" placeholder="例如： 我希望在未来1-3年内，工作机会给我较大机会，让我提升技能，积累行业经验，薪资稳定上涨，有可以远程工作的机会。"></textarea>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;flex-wrap:wrap;gap:6px;">
-        <span id="career-goal-status" style="font-size:11px;color:var(--green);min-height:1.2em;"></span>
-        <span id="goal-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);">0 字</span>
-      </div>
+    <div class="career-goal-card" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:22px;position:relative;">
+      <textarea id="career-goal" style="width:100%;min-height:220px;height:100%;padding:12px 14px 28px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;line-height:1.7;transition:border-color .15s;resize:vertical;display:block;" placeholder="例如： 我希望在未来1-3年内，工作机会给我较大机会，让我提升技能，积累行业经验，薪资稳定上涨，有可以远程工作的机会。"></textarea>
+      <!-- char count overlaid at bottom-right of textarea -->
+      <span id="career-goal-status" style="position:absolute;bottom:22px;left:26px;font-size:11px;color:var(--green);pointer-events:none;"></span>
+      <span id="goal-char-count" style="position:absolute;bottom:22px;right:26px;font-size:10px;color:var(--text3);font-family:var(--font-mono);pointer-events:none;">0 字</span>
     </div>
 
   </div>
