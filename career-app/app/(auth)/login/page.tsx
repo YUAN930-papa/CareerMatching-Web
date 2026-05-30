@@ -56,7 +56,7 @@ export default function LoginPage() {
           align-items: center;
           /* single centered blue sphere matching 1-2-Test1.png color */
           background:
-            radial-gradient(circle 45vmin at 50% 50%,
+            radial-gradient(circle 68vmin at 50% 50%,
               rgba(172,201,238,0.90)  0%,
               rgba(188,213,243,0.58) 38%,
               rgba(210,224,246,0.20) 62%,
@@ -88,18 +88,8 @@ export default function LoginPage() {
             inset 0 -1px 2px rgba(0,0,0,0.03);
           transform: translate3d(0,0,0);
           backface-visibility: hidden;
-          transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
         }
 
-        .glass-card:hover {
-          transform: translate3d(0,-4px,0);
-          border-color: rgba(255,255,255,0.3);
-          background: linear-gradient(135deg, rgba(255,255,255,0.11) 0%, rgba(255,255,255,0.05) 100%);
-          box-shadow:
-            0 8px 40px rgba(0,0,0,0.04),
-            0 25px 60px rgba(0,0,0,0.09),
-            inset 0 1px 0 rgba(255,255,255,0.35);
-        }
 
         /* ── Header ──────────────────────────────────────────────── */
         .card-header { margin-bottom: 2rem; }
