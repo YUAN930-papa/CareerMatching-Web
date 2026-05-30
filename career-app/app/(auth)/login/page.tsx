@@ -70,15 +70,15 @@ export default function LoginPage() {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: semi-transparent blue glass (reuse deleted outer frame) */
+        /* ── Card: width ×0.8 → 269px, padding ×0.7 (height -30%) ──── */
         .card {
-          width: min(336px, 100%);
+          width: min(269px, 100%);
           background: rgba(210,225,248,0.38);
           backdrop-filter: blur(20px) saturate(130%);
           -webkit-backdrop-filter: blur(20px) saturate(130%);
           border: 1.5px solid rgba(255,255,255,0.76);
-          border-radius: 24px;
-          padding: 34px 30px 30px;
+          border-radius: 20px;
+          padding: 24px 22px 22px;
           box-shadow:
             inset 0 4px 28px 0 rgba(255,255,255,0.50),
             0 4px 8px 1px rgba(0,0,0,0.10);
@@ -88,57 +88,57 @@ export default function LoginPage() {
         .logo {
           display: flex;
           align-items: center;
-          gap: 7px;
-          margin-bottom: 36px;
+          gap: 6px;
+          margin-bottom: 20px;
         }
         .logo-mark {
-          width: 26px; height: 26px;
-          border-radius: 7px;
+          width: 22px; height: 22px;
+          border-radius: 6px;
           background: #1a1a18;
           display: flex; align-items: center; justify-content: center;
           flex-shrink: 0;
         }
         .logo-mark svg { display: block; }
         .logo-name {
-          font-size: 14px;
-          font-weight: 650;
+          font-size: 13px;
+          font-weight: 600;
           color: #1a1a18;
-          letter-spacing: -0.3px;
+          letter-spacing: -0.2px;
         }
 
-        /* ── Heading ─────────────────────────────────────────────── */
+        /* ── Heading — fs-h3(17px) from design system ────────────── */
         .heading {
-          font-size: 24px;
+          font-size: 17px;
           font-weight: 700;
-          letter-spacing: -0.5px;
+          letter-spacing: -0.3px;
           color: #1a1a18;
-          margin-bottom: 5px;
+          margin-bottom: 3px;
           line-height: 1.2;
         }
         .sub {
-          font-size: 13px;
+          font-size: 12px;
           color: #5a5a56;
-          margin-bottom: 28px;
+          margin-bottom: 16px;
           line-height: 1.5;
         }
 
         /* ── Mode toggle ─────────────────────────────────────────── */
         .mode-line {
           display: flex;
-          gap: 3px;
-          margin-bottom: 22px;
+          gap: 2px;
+          margin-bottom: 14px;
           background: rgba(255,255,255,0.20);
           border: 1px solid rgba(255,255,255,0.40);
-          border-radius: 9px;
-          padding: 3px;
+          border-radius: 7px;
+          padding: 2px;
         }
         .mode-btn {
           flex: 1;
           border: none;
           background: transparent;
-          padding: 7px 0;
-          border-radius: 7px;
-          font-size: 13px;
+          padding: 5px 0;
+          border-radius: 6px;
+          font-size: 12px;
           font-weight: 500;
           color: rgba(26,26,24,0.65);
           cursor: pointer;
@@ -149,28 +149,28 @@ export default function LoginPage() {
           background: rgba(255,255,255,0.82);
           color: #1a1a18;
           font-weight: 600;
-          box-shadow: 0 1px 3px rgba(100,130,180,0.12);
+          box-shadow: 0 1px 2px rgba(100,130,180,0.10);
         }
 
-        /* ── Form fields ─────────────────────────────────────────── */
-        .field { margin-bottom: 14px; }
+        /* ── Form fields — fs-body(14px) / fs-caption(11px) ─────── */
+        .field { margin-bottom: 10px; }
         .label {
           display: block;
           font-size: 11px;
           font-weight: 600;
           color: rgba(26,26,24,0.80);
-          margin-bottom: 6px;
+          margin-bottom: 4px;
           letter-spacing: 0.04em;
           text-transform: uppercase;
         }
         .input {
           width: 100%;
-          height: 42px;
-          border-radius: 10px;
+          height: 32px;
+          border-radius: 7px;
           border: 1px solid rgba(255,255,255,0.70);
           background: rgba(255,255,255,0.75);
-          padding: 0 14px;
-          font-size: 14px;
+          padding: 0 10px;
+          font-size: 13px;
           color: #1a1a18;
           outline: none;
           transition: border-color 0.15s, background 0.15s;
@@ -185,18 +185,18 @@ export default function LoginPage() {
         /* ── Submit ──────────────────────────────────────────────── */
         .submit {
           width: 100%;
-          margin-top: 8px;
-          height: 42px;
+          margin-top: 6px;
+          height: 34px;
           border: none;
-          border-radius: 10px;
+          border-radius: 8px;
           background: #1a1a18;
           color: #fff;
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           cursor: pointer;
           transition: opacity 0.15s;
           font-family: inherit;
-          letter-spacing: -0.2px;
+          letter-spacing: -0.1px;
         }
         .submit:hover:not(:disabled) { opacity: 0.84; }
         .submit:disabled { opacity: 0.38; cursor: not-allowed; }
