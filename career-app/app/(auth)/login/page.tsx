@@ -56,10 +56,10 @@ export default function LoginPage() {
           align-items: center;
           /* single centered blue sphere matching 1-2-Test1.png color */
           background:
-            radial-gradient(circle 68vmin at 50% 50%,
-              rgba(172,201,238,0.90)  0%,
-              rgba(188,213,243,0.58) 38%,
-              rgba(210,224,246,0.20) 62%,
+            radial-gradient(circle 102vmin at 50% 50%,
+              rgba(115,165,242,0.92)  0%,
+              rgba(140,185,244,0.60) 38%,
+              rgba(180,210,248,0.22) 62%,
               transparent            80%
             ),
             #eaebee;
