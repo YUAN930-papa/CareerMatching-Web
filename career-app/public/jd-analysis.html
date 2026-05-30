@@ -1581,6 +1581,16 @@
       <span style="display:flex;align-items:center;gap:5px;"><span style="border:1px solid #e5e7eb;padding:1px 8px;border-radius:3px;font-size:11px;">无色</span>两版共有</span>
     </div>
   </div>
+  <!-- JD 核心标准 × 简历覆盖检查 -->
+  <div id="p4-jd-check" style="padding:0 20px 10px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;">
+      <div style="padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;background:var(--bg);">
+        <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text2);">JD 核心标准 × 简历覆盖 Cross-Check</span>
+        <span style="font-size:10px;color:var(--text3);font-weight:400;">— 第二次对照 JD 要求，确认生成简历是否覆盖雇主核心诉求</span>
+      </div>
+      <div id="p4-jd-check-content" style="padding:12px 14px;font-size:12px;color:var(--text2);line-height:1.7;">分析中...</div>
+    </div>
+  </div>
   <div id="p4-compare-wrap" style="padding:8px 20px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:420px;font-family:Arial,'Helvetica Neue',sans-serif;">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
       <div id="p4-head-left" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;">版本 A</div>
@@ -4262,24 +4272,80 @@ function p4RenderDiff(leftText, rightText, leftCriterion, rightCriterion) {
   const rightLines = String(rightText || '').split('\n').map(s => s.trim()).filter(Boolean)
   const rightSet = new Set(rightLines)
   const leftSet = new Set(leftLines)
-  // Pick up to 2 short unique lines as supporting evidence (≤80 chars to stay readable)
-  const shortUniq = (lines, exclude) => lines
-    .filter(x => !exclude.has(x) && x.length <= 80)
-    .slice(0, 2)
-  const onlyLeft = shortUniq(leftLines, rightSet)
-  const onlyRight = shortUniq(rightLines, leftSet)
+  // Unique lines: prefer medium-length lines (20-120 chars) as they're most informative
+  const uniq = (lines, exclude) => lines
+    .filter(x => !exclude.has(x) && x.length >= 20 && x.length <= 120)
+    .slice(0, 3)
+  const onlyLeft = uniq(leftLines, rightSet)
+  const onlyRight = uniq(rightLines, leftSet)
+
+  // Build description: what makes each version distinctive
+  const sections = (p3StructuredPayload && Array.isArray(p3StructuredPayload.sections)) ? p3StructuredPayload.sections : []
+  const matchAfter = p3StructuredPayload?.matchAfter
+  const aDesc = `Step 3 全面优化版${matchAfter ? '（预估匹配度 ' + matchAfter + '%）' : ''}，在整体 JD 覆盖基础上侧重 ${leftCriterion} 方向的相关经验与关键词。`
+  const bDesc = `AI 二次改写版，在版本 A 基础上针对性强化 ${rightCriterion}，调整措辞权重使其更突出该方向的竞争力。`
+
   const elA = document.getElementById('p4-criteria-a')
   const elB = document.getElementById('p4-criteria-b')
   if (elA) {
-    elA.innerHTML = `<span style="font-size:14px;">${esc(leftCriterion)}</span>`
-      + (onlyLeft.length ? '<div style="margin-top:6px;font-size:11px;font-weight:400;opacity:.85;">'
-        + onlyLeft.map(x => '· ' + esc(x)).join('<br>') + '</div>' : '')
+    elA.innerHTML = `<div style="font-size:14px;font-weight:700;margin-bottom:4px;">${esc(leftCriterion)}</div>`
+      + `<div style="font-size:11px;font-weight:400;line-height:1.6;margin-bottom:6px;">${esc(aDesc)}</div>`
+      + (onlyLeft.length ? '<div style="font-size:11px;color:#065f46;opacity:.9;">'
+        + onlyLeft.map(x => '→ ' + esc(x)).join('<br>') + '</div>' : '')
   }
   if (elB) {
-    elB.innerHTML = `<span style="font-size:14px;">${esc(rightCriterion)}</span>`
-      + (onlyRight.length ? '<div style="margin-top:6px;font-size:11px;font-weight:400;opacity:.85;">'
-        + onlyRight.map(x => '· ' + esc(x)).join('<br>') + '</div>' : '')
+    elB.innerHTML = `<div style="font-size:14px;font-weight:700;margin-bottom:4px;">${esc(rightCriterion)}</div>`
+      + `<div style="font-size:11px;font-weight:400;line-height:1.6;margin-bottom:6px;">${esc(bDesc)}</div>`
+      + (onlyRight.length ? '<div style="font-size:11px;color:#1e3a8a;opacity:.9;">'
+        + onlyRight.map(x => '→ ' + esc(x)).join('<br>') + '</div>' : '')
   }
+}
+
+function p4RenderJDCheck() {
+  const el = document.getElementById('p4-jd-check-content')
+  if (!el) return
+  const sections = (p3StructuredPayload && Array.isArray(p3StructuredPayload.sections))
+    ? p3StructuredPayload.sections : []
+
+  // Aggregate across all sections
+  const hardGaps = [], needsWork = [], matched = []
+  sections.forEach(sec => {
+    ;(sec.action_items || []).forEach(item => {
+      const t = String(item).trim()
+      if (t.startsWith('【缺口】')) hardGaps.push(t.replace('【缺口】', '').trim())
+      else if (t.startsWith('【强调】')) needsWork.push({ label:'强调', text: t.replace('【强调】','').trim() })
+      else if (t.startsWith('【扩展】')) needsWork.push({ label:'扩展', text: t.replace('【扩展】','').trim() })
+    })
+    ;(sec.matched_jd_items || []).forEach(item => {
+      const t = String(item).trim()
+      if (t) matched.push(t)
+    })
+  })
+
+  // Gap keywords not covered (from Step 2)
+  const gapKws = (currentResult && Array.isArray(currentResult.gapKeywords)) ? currentResult.gapKeywords : []
+
+  const col = (title, color, bg, border, items, emptyMsg) =>
+    `<div style="background:${bg};border:1px solid ${border};border-radius:7px;padding:10px 12px;">
+      <div style="font-size:11px;font-weight:700;color:${color};margin-bottom:8px;">${title}</div>
+      ${items.length
+        ? items.map(x => `<div style="color:${color};margin-bottom:4px;font-size:12px;line-height:1.5;">${esc(x)}</div>`).join('')
+        : `<div style="color:var(--text3);font-size:12px;">${emptyMsg}</div>`}
+    </div>`
+
+  const gapItems = [
+    ...hardGaps.map(x => '✗ ' + x),
+    ...gapKws.slice(0, 4).map(x => '✗ ' + x + '（JD要求，简历缺失）'),
+  ].slice(0, 8)
+
+  const workItems = needsWork.slice(0, 6).map(x => `[${x.label}] ${x.text}`)
+  const matchItems = matched.slice(0, 6).map(x => '✓ ' + x)
+
+  el.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+    ${col('无法弥补 / JD 硬缺口', '#7f1d1d', '#fff5f5', '#fca5a5', gapItems, '暂无明显硬缺口')}
+    ${col('需强化 / 现有但不够突出', '#78350f', '#fffbeb', '#fcd34d', workItems, '—')}
+    ${col('已覆盖 / 与 JD 匹配', '#065f46', '#f0fdf4', '#6ee7b7', matchItems, '—')}
+  </div>`
 }
 
 function p4RenderResumeCompare(leftText, rightText) {
@@ -4362,6 +4428,7 @@ async function goToP4() {
     p4VariantRight = { criterion: c2, text: rightText, sections: Array.isArray(rightResult?.sections) ? rightResult.sections : [] }
     p4RenderResumeCompare(leftText || '（空）', rightText || '（空）')
     p4RenderDiff(leftText, rightText, c1, c2)
+    p4RenderJDCheck()
     if (status) status.textContent = rightResult ? '已生成两版，可对比后下载' : '版本 A 已就绪，版本 B 使用原始简历（AI 生成失败）'
   } catch (e) {
     const msg = e instanceof Error ? e.message : '未知错误'
