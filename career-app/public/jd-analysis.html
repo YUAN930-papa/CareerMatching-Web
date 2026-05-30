@@ -1562,7 +1562,26 @@
     <span id="p4-status" style="font-size:12px;color:var(--text3);">正在准备...</span>
     <button class="btn" style="margin-left:auto;" onclick="goPage('p3')">返回 Step 3</button>
   </div>
-  <div id="p4-compare-wrap" style="padding:12px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:420px;font-family:Arial,'Helvetica Neue',sans-serif;">
+  <!-- AB 对比概要 — 置顶，方便一眼对比 -->
+  <div id="p4-criteria-top" style="padding:10px 20px 0;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px;">
+      <div style="background:#ecfdf5;border:1px solid #6ee7b7;border-radius:8px;padding:10px 14px;">
+        <div style="font-size:10px;font-weight:700;color:#065f46;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">版本 A 侧重</div>
+        <div id="p4-criteria-a" style="font-size:13px;font-weight:600;color:#065f46;line-height:1.5;">—</div>
+      </div>
+      <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:10px 14px;">
+        <div style="font-size:10px;font-weight:700;color:#1e3a8a;text-transform:uppercase;letter-spacing:.05em;margin-bottom:4px;">版本 B 侧重</div>
+        <div id="p4-criteria-b" style="font-size:13px;font-weight:600;color:#1e3a8a;line-height:1.5;">—</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text3);display:flex;gap:14px;align-items:center;padding-bottom:6px;">
+      <span>颜色图例：</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="background:#ecfdf5;border:1px solid #6ee7b7;padding:1px 8px;border-radius:3px;color:#065f46;font-size:11px;">绿色行</span>仅 A 版独有</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="background:#eff6ff;border:1px solid #93c5fd;padding:1px 8px;border-radius:3px;color:#1e3a8a;font-size:11px;">蓝色行</span>仅 B 版独有</span>
+      <span style="display:flex;align-items:center;gap:5px;"><span style="border:1px solid #e5e7eb;padding:1px 8px;border-radius:3px;font-size:11px;">无色</span>两版共有</span>
+    </div>
+  </div>
+  <div id="p4-compare-wrap" style="padding:8px 20px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:420px;font-family:Arial,'Helvetica Neue',sans-serif;">
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
       <div id="p4-head-left" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;">版本 A</div>
       <pre id="p4-resume-left" style="margin:0;padding:12px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:12px;flex:1;min-height:0;font-family:Arial,'Helvetica Neue',sans-serif;">等待生成...</pre>
@@ -1576,12 +1595,6 @@
       <div style="padding:10px 12px;border-top:1px solid var(--border);">
         <button class="btn btn-black-solid" onclick="p4Download('right')">下载此版本</button>
       </div>
-    </div>
-  </div>
-  <div style="padding:0 20px 16px 20px;">
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;">
-      <div style="font-size:12px;font-weight:600;margin-bottom:8px;">两版侧重点差异（Key Criteria）</div>
-      <div id="p4-diff" style="font-size:12px;color:var(--text2);line-height:1.7;">等待生成...</div>
     </div>
   </div>
 </div>
@@ -4249,18 +4262,24 @@ function p4RenderDiff(leftText, rightText, leftCriterion, rightCriterion) {
   const rightLines = String(rightText || '').split('\n').map(s => s.trim()).filter(Boolean)
   const rightSet = new Set(rightLines)
   const leftSet = new Set(leftLines)
-  const onlyLeft = leftLines.filter((x) => !rightSet.has(x)).slice(0, 6)
-  const onlyRight = rightLines.filter((x) => !leftSet.has(x)).slice(0, 6)
-  const html = [
-    `<div><strong>A 侧重点：</strong>${esc(leftCriterion)}</div>`,
-    `<div><strong>B 侧重点：</strong>${esc(rightCriterion)}</div>`,
-    '<div style="margin-top:8px;"><strong>仅 A 强调：</strong></div>',
-    `<div>${onlyLeft.length ? onlyLeft.map(x => '• ' + esc(x)).join('<br>') : '<span style="color:var(--text3)">暂无明显差异</span>'}</div>`,
-    '<div style="margin-top:8px;"><strong>仅 B 强调：</strong></div>',
-    `<div>${onlyRight.length ? onlyRight.map(x => '• ' + esc(x)).join('<br>') : '<span style="color:var(--text3)">暂无明显差异</span>'}</div>`,
-  ].join('')
-  const diff = document.getElementById('p4-diff')
-  if (diff) diff.innerHTML = html
+  // Pick up to 2 short unique lines as supporting evidence (≤80 chars to stay readable)
+  const shortUniq = (lines, exclude) => lines
+    .filter(x => !exclude.has(x) && x.length <= 80)
+    .slice(0, 2)
+  const onlyLeft = shortUniq(leftLines, rightSet)
+  const onlyRight = shortUniq(rightLines, leftSet)
+  const elA = document.getElementById('p4-criteria-a')
+  const elB = document.getElementById('p4-criteria-b')
+  if (elA) {
+    elA.innerHTML = `<span style="font-size:14px;">${esc(leftCriterion)}</span>`
+      + (onlyLeft.length ? '<div style="margin-top:6px;font-size:11px;font-weight:400;opacity:.85;">'
+        + onlyLeft.map(x => '· ' + esc(x)).join('<br>') + '</div>' : '')
+  }
+  if (elB) {
+    elB.innerHTML = `<span style="font-size:14px;">${esc(rightCriterion)}</span>`
+      + (onlyRight.length ? '<div style="margin-top:6px;font-size:11px;font-weight:400;opacity:.85;">'
+        + onlyRight.map(x => '· ' + esc(x)).join('<br>') + '</div>' : '')
+  }
 }
 
 function p4RenderResumeCompare(leftText, rightText) {
@@ -4321,6 +4340,10 @@ async function goToP4() {
   if (leftPre) leftPre.textContent = '正在生成版本 A...'
   if (rightPre) rightPre.textContent = '正在生成版本 B...'
   if (status) status.textContent = 'AI 正在生成双版本简历...'
+  const elA = document.getElementById('p4-criteria-a')
+  const elB = document.getElementById('p4-criteria-b')
+  if (elA) elA.textContent = c1
+  if (elB) elB.textContent = c2
   try {
     const [leftResult, rightResult] = await Promise.all([p4GenerateOneVariant(c1), p4GenerateOneVariant(c2)])
     const leftText = String(leftResult?.text || '')
