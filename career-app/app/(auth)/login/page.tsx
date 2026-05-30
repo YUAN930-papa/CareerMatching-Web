@@ -61,25 +61,20 @@ export default function LoginPage() {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: 1-4-Test1.png + Figma glass params ───────────────── */
+        /* ── Card: CSS replica of 1-4-Test1.png Figma parameters ────── */
+        /* Inner shadow  : X0 Y4 blur28 spread0  #FFFFFF 50%       */
+        /* Drop shadow   : X0 Y4 blur7.7 spread1 #000000 10%       */
+        /* Glass / Frost : 4px blur, light -45° 80%                */
         .card {
           width: min(400px, 100%);
-          /* PNG frame as card background */
-          background-image: url('/1-4-Test1.png');
-          background-size: cover;
-          background-position: center;
-          background-color: rgba(248,248,250,0.92);
-          /* Figma Glass — Frost:4 */
-          backdrop-filter: blur(4px) saturate(110%);
-          -webkit-backdrop-filter: blur(4px) saturate(110%);
+          background: rgba(252,252,255,0.88);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
           border-radius: 28px;
           padding: 40px 36px 36px;
-          /* Figma Inner shadow: Y4 blur28 #FFFFFF 50% */
-          /* Figma Drop shadow: Y4 blur7.7 spread1 #000000 10% */
           box-shadow:
             inset 0 4px 28px 0 rgba(255,255,255,0.50),
             0 4px 8px 1px rgba(0,0,0,0.10);
-          overflow: hidden;
         }
 
         /* ── Logo ────────────────────────────────────────────────── */
