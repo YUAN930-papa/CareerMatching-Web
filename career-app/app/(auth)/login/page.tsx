@@ -56,31 +56,21 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 24px;
-          /* Ref: saturated cornflower-blue glow, large ellipse, light-grey base */
-          background:
-            radial-gradient(ellipse 58% 76% at 50% 47%,
-              rgba(138,174,238,1.00)  0%,
-              rgba(152,186,242,0.88) 18%,
-              rgba(170,200,245,0.62) 38%,
-              rgba(195,215,248,0.28) 58%,
-              rgba(218,228,246,0.08) 72%,
-              transparent            82%
-            ),
-            #e9eaed;
+          background: url('/1-3-Test1.png') center center / cover no-repeat;
+          background-color: #ecedf0;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
-        /* ── Card: near-transparent outline sitting inside the glow ── */
+        /* ── Card: transparent glass frame inside the glow ───────────── */
         .card {
           width: min(400px, 100%);
-          /* Only slightly lighter than glow — white border defines the shape */
-          background: rgba(255,255,255,0.22);
-          backdrop-filter: blur(6px);
-          -webkit-backdrop-filter: blur(6px);
-          border: 1.5px solid rgba(255,255,255,0.78);
+          background: rgba(255,255,255,0.18);
+          backdrop-filter: blur(4px);
+          -webkit-backdrop-filter: blur(4px);
+          border: 1.5px solid rgba(255,255,255,0.80);
           border-radius: 22px;
           padding: 40px 36px 36px;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.60);
+          box-shadow: inset 0 1px 0 rgba(255,255,255,0.55);
         }
 
         /* ── Logo ────────────────────────────────────────────────── */
