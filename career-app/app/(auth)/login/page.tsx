@@ -72,13 +72,13 @@ export default function LoginPage() {
 
         /* ── Card: semi-transparent blue glass (reuse deleted outer frame) */
         .card {
-          width: min(400px, 100%);
+          width: min(336px, 100%);
           background: rgba(210,225,248,0.38);
           backdrop-filter: blur(20px) saturate(130%);
           -webkit-backdrop-filter: blur(20px) saturate(130%);
           border: 1.5px solid rgba(255,255,255,0.76);
-          border-radius: 28px;
-          padding: 40px 36px 36px;
+          border-radius: 24px;
+          padding: 34px 30px 30px;
           box-shadow:
             inset 0 4px 28px 0 rgba(255,255,255,0.50),
             0 4px 8px 1px rgba(0,0,0,0.10);
