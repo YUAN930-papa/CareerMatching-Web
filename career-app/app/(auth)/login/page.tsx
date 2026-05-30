@@ -57,15 +57,15 @@ export default function LoginPage() {
           align-items: center;
           justify-content: center;
           padding: 24px;
-          /* Perfect CSS circle — no PNG distortion */
+          /* Circle +60% larger (52vmin), color matched to 1-2-Test1.png */
           background:
-            radial-gradient(circle 32vmin at 50% 50%,
-              rgba(148,184,240,0.92)  0%,
-              rgba(162,196,244,0.62) 38%,
-              rgba(185,212,248,0.22) 62%,
+            radial-gradient(circle 51vmin at 50% 50%,
+              rgba(172,201,238,0.90)  0%,
+              rgba(188,213,243,0.58) 38%,
+              rgba(210,224,246,0.20) 62%,
               transparent            80%
             ),
-            #ecedf0;
+            #eaebee;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
         }
 
