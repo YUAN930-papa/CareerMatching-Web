@@ -54,34 +54,20 @@ export default function LoginPage() {
           display: flex;
           justify-content: center;
           align-items: center;
-          background: linear-gradient(135deg, #e0e9f5 0%, #cbd5e1 50%, #aebeec 100%);
+          /* single centered blue sphere matching 1-2-Test1.png color */
+          background:
+            radial-gradient(circle 45vmin at 50% 50%,
+              rgba(172,201,238,0.90)  0%,
+              rgba(188,213,243,0.58) 38%,
+              rgba(210,224,246,0.20) 62%,
+              transparent            80%
+            ),
+            #eaebee;
           overflow: hidden;
           position: relative;
         }
 
-        .scene::before {
-          content: '';
-          position: absolute;
-          width: 300px; height: 300px;
-          background: linear-gradient(135deg, #a5b4fc, #818cf8);
-          border-radius: 50%;
-          top: 15%; left: 25%;
-          z-index: 1;
-          filter: blur(20px);
-          opacity: 0.6;
-        }
-
-        .scene::after {
-          content: '';
-          position: absolute;
-          width: 400px; height: 400px;
-          background: linear-gradient(135deg, #fbcfe8, #f472b6);
-          border-radius: 50%;
-          bottom: 10%; right: 20%;
-          z-index: 1;
-          filter: blur(40px);
-          opacity: 0.4;
-        }
+        .scene::before, .scene::after { display: none; }
 
         /* ── Glass card ──────────────────────────────────────────── */
         .glass-card {
