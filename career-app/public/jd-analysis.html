@@ -1439,8 +1439,8 @@
   #page-p3 .p3se-tag-red,
   #page-p3 .p3se-tag-gray { color:rgba(26,26,24,0.80) !important; }
 
-  /* P4 切换箭头：默认隐藏（手机媒体查询里覆盖为 flex） */
-  .p4-mob-arrow { display: none !important; }
+  /* P3/P4 切换箭头：默认隐藏（手机媒体查询里覆盖为 flex） */
+  .p4-mob-arrow, .p3-mob-arrow { display: none !important; }
 
   /* ── Design System: mobile token overrides ≤ 768px ─────────────── */
   @media (max-width: 768px) {
@@ -1681,6 +1681,46 @@
     #page-p4.p4-show-b .p4-mob-arrow-left {
       display: flex !important;
     }
+
+    /* ─── PAGE 3 手机端：单屏切换 原始/AI ─── */
+    /* grid 已是 1fr；默认隐藏 AI 面板 */
+    #p3-panel-ai { display: none !important; }
+    /* 切到 AI 时 */
+    #page-p3.p3-show-ai #p3-panel-orig { display: none !important; }
+    #page-p3.p3-show-ai #p3-panel-ai   { display: block !important; }
+
+    /* P3 箭头按钮（和 P4 样式完全一致） */
+    .p3-mob-arrow {
+      display: flex !important;
+      position: fixed !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      right: 10px !important;
+      width: 36px !important;
+      height: 36px !important;
+      border-radius: 50% !important;
+      background: rgba(255,255,255,0.72) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(255,255,255,0.50) !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12) !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 22px !important;
+      color: var(--text) !important;
+      cursor: pointer !important;
+      z-index: 150 !important;
+      font-family: inherit !important;
+      line-height: 1 !important;
+      padding: 0 !important;
+    }
+    .p3-mob-arrow-left {
+      right: auto !important;
+      left: 10px !important;
+      display: none !important;
+    }
+    #page-p3.p3-show-ai .p3-mob-arrow:not(.p3-mob-arrow-left) { display: none !important; }
+    #page-p3.p3-show-ai .p3-mob-arrow-left { display: flex !important; }
 
     /* 防止水平溢出 */
     html, body { overflow-x: hidden !important; }
@@ -2028,16 +2068,21 @@
       <button type="button" class="btn btn-p3-cta btn-black-solid" id="btn-p3-generate">开始分析并优化简历</button>
     </div>
     <div class="p3se-grid">
-      <div style="min-width:0;">
+      <div id="p3-panel-orig" style="min-width:0;">
         <div class="p3se-col-label">原始简历（红=需处理 · 绿=已匹配）</div>
         <div id="p3se-left-sections"></div>
       </div>
-      <div style="min-width:0;">
+      <div id="p3-panel-ai" style="min-width:0;">
         <div class="p3se-col-label">AI 建议（可编辑 · 下为蓝/绿/红对照）</div>
         <div id="p3se-right-sections"></div>
       </div>
     </div>
   </div>
+
+  <!-- 手机端 原始/AI 切换箭头 -->
+  <button id="p3-arrow-right" class="p3-mob-arrow" onclick="p3ShowPanel('ai')" aria-label="查看 AI 建议">›</button>
+  <button id="p3-arrow-left"  class="p3-mob-arrow p3-mob-arrow-left" onclick="p3ShowPanel('orig')" aria-label="查看原始简历">‹</button>
+
   <div class="p3-bottom-banner" aria-label="Step 3 底部操作">
     <button type="button" id="btn-go-p4" class="btn btn-black-solid" onclick="goToP4()">撰写并下载</button>
   </div>
@@ -2785,7 +2830,13 @@ function p4ShowVersion(v) {
   if (!p4) return
   if (v === 'b') p4.classList.add('p4-show-b')
   else p4.classList.remove('p4-show-b')
-  // 切换后滚到顶部
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+function p3ShowPanel(panel) {
+  const p3 = document.getElementById('page-p3')
+  if (!p3) return
+  if (panel === 'ai') p3.classList.add('p3-show-ai')
+  else p3.classList.remove('p3-show-ai')
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 function setLoadingText(main, sub) {
@@ -3280,6 +3331,7 @@ function goPage(p, opts) {
     if (p3) {
       p3.style.display = 'flex'
       p3.style.flexDirection = 'column'
+      p3.classList.remove('p3-show-ai')  // 手机端始终从原始简历开始
     }
     try {
       loadP3()
