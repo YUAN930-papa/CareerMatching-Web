@@ -1430,6 +1430,98 @@
   #page-p3 .p3se-tag-blue,
   #page-p3 .p3se-tag-red,
   #page-p3 .p3se-tag-gray { color:rgba(26,26,24,0.80) !important; }
+
+  /* ── Mobile responsive ≤ 768px ──────────────────────────────────── */
+  @media (max-width: 768px) {
+    /* Nav: 缩小高度，logo 不换行 */
+    .topnav {
+      height: 52px !important;
+      padding: 0 12px !important;
+      gap: 8px !important;
+    }
+    .nav-logo {
+      font-size: 13px !important;
+      white-space: nowrap;
+    }
+    .nav-divider { display: none !important; }
+
+    /* Step 导航：4 步缩小字体 + 间距 */
+    .nav-links {
+      min-width: 0 !important;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+      column-gap: 4px !important;
+    }
+    .step-kicker { font-size: 7px !important; }
+    .step-title  { font-size: 7px !important; }
+    .nav-link    { width: 16px !important; height: 16px !important; border-width: 2px !important; }
+    .step-check  { font-size: 8px !important; }
+
+    /* 右上角看板按钮：手机上隐藏，节省空间 */
+    .nav-right .btn-board-nav { display: none !important; }
+
+    /* P1 主滚动区：全宽，去掉左右大 padding */
+    #page-p1 {
+      height: auto !important;
+      min-height: calc(100vh - 52px) !important;
+      overflow: visible !important;
+    }
+    #page-p1-scroll {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 12px 12px 0 !important;
+    }
+
+    /* 上传卡片内部 dropzone */
+    #resume-dropzone {
+      min-height: 120px !important;
+    }
+
+    /* 未来愿景 textarea */
+    .career-goal-card {
+      margin-bottom: 12px !important;
+    }
+    #career-goal {
+      min-height: 100px !important;
+    }
+
+    /* 底部 CTA Banner */
+    #p1-sticky-actions {
+      height: auto !important;
+      padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+    #page-p1 #btn-p1-next,
+    #btn-p1-next {
+      width: 100% !important;
+      height: 44px !important;
+      font-size: 15px !important;
+      border-radius: 10px !important;
+    }
+
+    /* P2 左右面板：手机上纵向堆叠 */
+    #page-p2 {
+      flex-direction: column !important;
+    }
+    .left-panel {
+      width: 100% !important;
+      height: auto !important;
+      position: static !important;
+      border-right: none !important;
+      border-bottom: 1px solid var(--border) !important;
+      max-height: 50vh;
+    }
+    .right-panel {
+      width: 100% !important;
+      height: auto !important;
+      position: static !important;
+      min-height: 50vh;
+    }
+
+    /* P3 双列 → 单列 */
+    #page-p3 .p3se-grid {
+      grid-template-columns: 1fr !important;
+      padding: 10px 10px 70px !important;
+    }
+  }
 </style>
 </head>
 <body>
