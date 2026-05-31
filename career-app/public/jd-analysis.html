@@ -1589,9 +1589,8 @@
     #p4-criteria-top > div + div { display: none !important; }
     #p4-jd-check { padding: 0 12px 10px !important; }
 
-    /* 防止页面切换时内容溢出 frame */
+    /* 防止水平溢出 */
     html, body { overflow-x: hidden !important; }
-    #page-p1, #page-p2, #page-p3, #page-p4 { overflow: hidden; }
   }
 </style>
 </head>
@@ -1769,7 +1768,7 @@
 
     <!-- Step 4 heading -->
     <div class="p2-step-heading" style="padding:16px 16px 0;">
-      <button id="p2-mobile-back-btn" onclick="p2MobileBack()" style="display:none;align-items:center;gap:4px;background:none;border:none;font-size:13px;color:var(--text2);cursor:pointer;padding:0;margin-bottom:8px;font-family:inherit;">← 修改 JD</button>
+      <button id="p2-mobile-back-btn" class="btn btn-sm" onclick="p2MobileBack()" style="display:none;margin-bottom:8px;">← 修改 JD</button>
       第四步：JD 匹配度和职业规划匹配分析
     </div>
 
@@ -1794,7 +1793,7 @@
         <div class="job-confirm" id="r-job-confirm">
           <div class="job-confirm-top">
             <div class="job-confirm-title" style="margin-bottom:0;">当前分析职位（确认信息）</div>
-            <button type="button" class="btn btn-sm btn-confirm-add" id="btn-add-compare-manual" onclick="addCurrentToCompareBoard()" disabled><span class="btn-add-compare-plus" aria-hidden="true">+</span><span>添加入JD对比看板</span></button>
+            <button type="button" class="btn btn-sm btn-confirm-add" id="btn-add-compare-manual" onclick="addCurrentToCompareBoard()" disabled style="font-size:11px;padding:4px 8px;gap:4px;"><span class="btn-add-compare-plus" aria-hidden="true" style="font-size:11px;">+</span><span>加入对比看板</span></button>
           </div>
           <div class="job-confirm-text" id="r-job-confirm-text">—</div>
         </div>
