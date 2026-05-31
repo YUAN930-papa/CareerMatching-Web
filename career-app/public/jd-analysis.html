@@ -1438,6 +1438,9 @@
   #page-p3 .p3se-tag-red,
   #page-p3 .p3se-tag-gray { color:rgba(26,26,24,0.80) !important; }
 
+  /* P4 切换箭头：默认隐藏（手机媒体查询里覆盖为 flex） */
+  .p4-mob-arrow { display: none !important; }
+
   /* ── Design System: mobile token overrides ≤ 768px ─────────────── */
   @media (max-width: 768px) {
     :root {
@@ -1604,11 +1607,6 @@
     #page-p3 #btn-p3-generate { width: 100% !important; }
 
     /* ─── PAGE 4 ─── */
-    #p4-compare-wrap {
-      grid-template-columns: 1fr !important;
-      gap: 12px !important;
-      padding: 8px 12px 16px !important;
-    }
     /* AB 对比摘要：两列保留（够小） */
     #p4-criteria-top > div {
       grid-template-columns: 1fr 1fr !important;
@@ -1616,6 +1614,72 @@
     /* 颜色图例：手机上隐藏（太长） */
     #p4-criteria-top > div + div { display: none !important; }
     #p4-jd-check { padding: 0 12px 10px !important; }
+
+    /* P4 手机端：单屏切换 A/B */
+    #p4-compare-wrap {
+      grid-template-columns: 1fr !important;
+      gap: 0 !important;
+      padding: 8px 12px 80px !important;
+    }
+    /* 默认只显示 A */
+    #p4-panel-b { display: none !important; }
+    /* 切到 B 时：隐藏 A，显示 B */
+    #page-p4.p4-show-b #p4-panel-a { display: none !important; }
+    #page-p4.p4-show-b #p4-panel-b { display: flex !important; flex-direction: column !important; }
+
+    /* 版本标签 pill（告知当前是哪一版） */
+    #p4-compare-wrap::before {
+      content: '版本 A';
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text3);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    #page-p4.p4-show-b #p4-compare-wrap::before {
+      content: '版本 B';
+    }
+
+    /* 手机端：侧边箭头 */
+    .p4-mob-arrow {
+      display: flex !important;
+      position: fixed !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      right: 10px !important;
+      width: 36px !important;
+      height: 36px !important;
+      border-radius: 50% !important;
+      background: rgba(255,255,255,0.72) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+      border: 1px solid rgba(255,255,255,0.50) !important;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12) !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-size: 22px !important;
+      color: var(--text) !important;
+      cursor: pointer !important;
+      z-index: 150 !important;
+      font-family: inherit !important;
+      line-height: 1 !important;
+      padding: 0 !important;
+    }
+    /* 左箭头：默认隐藏，切到 B 后显示 */
+    .p4-mob-arrow-left {
+      right: auto !important;
+      left: 10px !important;
+      display: none !important;
+    }
+    #page-p4.p4-show-b .p4-mob-arrow:not(.p4-mob-arrow-left) {
+      display: none !important;
+    }
+    #page-p4.p4-show-b .p4-mob-arrow-left {
+      display: flex !important;
+    }
 
     /* 防止水平溢出 */
     html, body { overflow-x: hidden !important; }
@@ -2026,21 +2090,26 @@
     </div>
   </div>
   <div id="p4-compare-wrap" style="padding:8px 20px 16px;display:grid;grid-template-columns:1fr 1fr;gap:12px;min-height:420px;font-family:Arial,'Helvetica Neue',sans-serif;">
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
+    <div id="p4-panel-a" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
       <div id="p4-head-left" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;">版本 A</div>
       <pre id="p4-resume-left" style="margin:0;padding:12px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:12px;flex:1;min-height:0;font-family:Arial,'Helvetica Neue',sans-serif;">等待生成...</pre>
       <div style="padding:10px 12px;border-top:1px solid var(--border);">
-        <button class="btn btn-black-solid" onclick="p4Download('left')">下载此版本</button>
+        <button class="btn btn-black-solid" onclick="p4Download('left')">下载版本 A</button>
       </div>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
+    <div id="p4-panel-b" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;min-height:0;">
       <div id="p4-head-right" style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;font-weight:600;">版本 B</div>
       <pre id="p4-resume-right" style="margin:0;padding:12px;overflow:auto;white-space:pre-wrap;line-height:1.6;font-size:12px;flex:1;min-height:0;font-family:Arial,'Helvetica Neue',sans-serif;">等待生成...</pre>
       <div style="padding:10px 12px;border-top:1px solid var(--border);">
-        <button class="btn btn-black-solid" onclick="p4Download('right')">下载此版本</button>
+        <button class="btn btn-black-solid" onclick="p4Download('right')">下载版本 B</button>
       </div>
     </div>
   </div>
+
+  <!-- 手机端 A/B 切换箭头（桌面端隐藏） -->
+  <button id="p4-arrow-right" class="p4-mob-arrow" onclick="p4ShowVersion('b')" aria-label="查看版本 B">›</button>
+  <button id="p4-arrow-left"  class="p4-mob-arrow p4-mob-arrow-left" onclick="p4ShowVersion('a')" aria-label="查看版本 A">‹</button>
+
 </div>
 
 <script src="/career-user-storage-scope.js"></script>
@@ -2711,6 +2780,14 @@ function p2MobileShowResults() {
 function p2MobileBack() {
   const p2 = document.getElementById('page-p2')
   if (p2) p2.classList.remove('p2-results-mode')
+}
+function p4ShowVersion(v) {
+  const p4 = document.getElementById('page-p4')
+  if (!p4) return
+  if (v === 'b') p4.classList.add('p4-show-b')
+  else p4.classList.remove('p4-show-b')
+  // 切换后滚到顶部
+  window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 function setLoadingText(main, sub) {
   document.getElementById('loading-text').textContent = main
@@ -4839,6 +4916,8 @@ async function goToP4() {
     return
   }
   goPage('p4')
+  const p4el = document.getElementById('page-p4')
+  if (p4el) p4el.classList.remove('p4-show-b')
   const status = document.getElementById('p4-status')
   const leftHead = document.getElementById('p4-head-left')
   const rightHead = document.getElementById('p4-head-right')
