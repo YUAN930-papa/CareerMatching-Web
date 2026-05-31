@@ -1439,8 +1439,8 @@
   #page-p3 .p3se-tag-red,
   #page-p3 .p3se-tag-gray { color:rgba(26,26,24,0.80) !important; }
 
-  /* P3/P4 切换箭头：默认隐藏（手机媒体查询里覆盖为 flex） */
-  .p4-mob-arrow, .p3-mob-arrow { display: none !important; }
+  /* P3/P4 切换箭头 & P3 tab 栏：默认隐藏（手机媒体查询里覆盖） */
+  .p4-mob-arrow, .p3-mob-arrow, .p3-mob-tabs { display: none !important; }
 
   /* ── Design System: mobile token overrides ≤ 768px ─────────────── */
   @media (max-width: 768px) {
@@ -1683,6 +1683,64 @@
     }
 
     /* ─── PAGE 3 手机端：单屏切换 原始/AI ─── */
+    /* Tab 栏 */
+    .p3-mob-tabs {
+      display: flex !important;
+      gap: 8px !important;
+      padding: 8px 12px !important;
+      background: var(--surface) !important;
+      border-bottom: 1px solid var(--border) !important;
+      flex-shrink: 0 !important;
+    }
+    .p3-mob-tab {
+      flex: 1 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      gap: 6px !important;
+      padding: 8px 0 !important;
+      border-radius: 8px !important;
+      border: 1.5px solid var(--border) !important;
+      background: var(--bg) !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: var(--text2) !important;
+      cursor: pointer !important;
+      font-family: inherit !important;
+      transition: background .15s, border-color .15s, color .15s !important;
+    }
+    .p3-tab-badge {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 20px !important;
+      height: 20px !important;
+      border-radius: 50% !important;
+      background: var(--border) !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: var(--text2) !important;
+    }
+    /* 默认：A 激活 */
+    #page-p3:not(.p3-show-ai) .p3-mob-tab-a {
+      background: var(--color-accent) !important;
+      border-color: var(--color-accent) !important;
+      color: var(--color-bg-primary) !important;
+    }
+    #page-p3:not(.p3-show-ai) .p3-mob-tab-a .p3-tab-badge {
+      background: rgba(255,255,255,0.25) !important;
+      color: var(--color-bg-primary) !important;
+    }
+    /* 切到 AI：B 激活 */
+    #page-p3.p3-show-ai .p3-mob-tab-b {
+      background: var(--color-accent) !important;
+      border-color: var(--color-accent) !important;
+      color: var(--color-bg-primary) !important;
+    }
+    #page-p3.p3-show-ai .p3-mob-tab-b .p3-tab-badge {
+      background: rgba(255,255,255,0.25) !important;
+      color: var(--color-bg-primary) !important;
+    }
     /* grid 已是 1fr；默认隐藏 AI 面板 */
     #p3-panel-ai { display: none !important; }
     /* 切到 AI 时 */
@@ -2067,6 +2125,16 @@
     <div id="p3-generate-bar" style="padding:10px 18px;border-bottom:1px solid var(--border);flex-shrink:0;display:none;gap:12px;align-items:center;flex-wrap:wrap;background:var(--surface2);">
       <button type="button" class="btn btn-p3-cta btn-black-solid" id="btn-p3-generate">开始分析并优化简历</button>
     </div>
+    <!-- 手机端 A/B 版本切换 Tab（桌面端通过 CSS 隐藏） -->
+    <div class="p3-mob-tabs">
+      <button class="p3-mob-tab p3-mob-tab-a" onclick="p3ShowPanel('orig')">
+        <span class="p3-tab-badge">A</span> 原始简历
+      </button>
+      <button class="p3-mob-tab p3-mob-tab-b" onclick="p3ShowPanel('ai')">
+        <span class="p3-tab-badge">B</span> AI 建议
+      </button>
+    </div>
+
     <div class="p3se-grid">
       <div id="p3-panel-orig" style="min-width:0;">
         <div class="p3se-col-label">原始简历（红=需处理 · 绿=已匹配）</div>
