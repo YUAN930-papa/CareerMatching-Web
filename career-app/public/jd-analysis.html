@@ -1451,24 +1451,18 @@
 
   /* ── Mobile responsive ≤ 768px ──────────────────────────────────── */
   @media (max-width: 768px) {
-    /* Nav: 缩小高度，logo 不换行 */
+
+    /* ─── NAV ─── */
     .topnav {
       height: 52px !important;
       padding: 0 12px !important;
       gap: 8px !important;
     }
-    .nav-logo {
-      font-size: 13px !important;
-      white-space: nowrap;
-    }
+    .nav-logo { font-size: 13px !important; white-space: nowrap; }
     .nav-divider { display: none !important; }
-
-    /* 右上角状态文字 + 看板按钮：手机全部隐藏 */
-    #nav-status       { display: none !important; }
-    #nav-board-divider{ display: none !important; }
+    #nav-status        { display: none !important; }
+    #nav-board-divider { display: none !important; }
     .nav-right .btn-board-nav { display: none !important; }
-
-    /* Step 导航：4 步缩小字体 + 间距 */
     .nav-links {
       min-width: 0 !important;
       grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -1479,7 +1473,7 @@
     .nav-link    { width: 16px !important; height: 16px !important; border-width: 2px !important; }
     .step-check  { font-size: 8px !important; }
 
-    /* P1 主滚动区：全宽，去掉左右大 padding */
+    /* ─── PAGE 1 ─── */
     #page-p1 {
       height: auto !important;
       min-height: calc(100vh - 52px) !important;
@@ -1490,57 +1484,99 @@
       max-width: 100% !important;
       padding: 12px 12px 0 !important;
     }
-
-    /* 上传卡片内部 dropzone */
-    #resume-dropzone {
-      min-height: 120px !important;
-    }
-
-    /* 未来愿景 textarea */
-    .career-goal-card {
-      margin-bottom: 12px !important;
-    }
-    #career-goal {
-      min-height: 100px !important;
-    }
-
-    /* 底部 CTA Banner */
+    #resume-dropzone  { min-height: 110px !important; }
+    .career-goal-card { margin-bottom: 12px !important; }
+    #career-goal      { min-height: 90px !important; }
     #p1-sticky-actions {
       height: auto !important;
       padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px)) !important;
     }
-    #page-p1 #btn-p1-next,
-    #btn-p1-next {
+    #page-p1 #btn-p1-next, #btn-p1-next {
       width: 100% !important;
       height: 44px !important;
       font-size: 15px !important;
       border-radius: 10px !important;
     }
 
-    /* P2 左右面板：手机上纵向堆叠 */
-    #page-p2 {
-      flex-direction: column !important;
-    }
-    .left-panel {
-      width: 100% !important;
+    /* ─── PAGE 2 ─── */
+    /* 关键：grid 两列 → 单列 */
+    #page-p2 .page-layout {
+      grid-template-columns: 1fr !important;
       height: auto !important;
-      position: static !important;
-      border-right: none !important;
-      border-bottom: 1px solid var(--border) !important;
-      max-height: 50vh;
+      min-height: calc(100vh - 52px) !important;
     }
-    .right-panel {
-      width: 100% !important;
+    #page-p2 .left-panel {
       height: auto !important;
+      max-height: none !important;
+      overflow-y: visible !important;
       position: static !important;
-      min-height: 50vh;
+      border-bottom: 1px solid rgba(255,255,255,.40) !important;
     }
+    #page-p2 .right-panel {
+      height: auto !important;
+      overflow: visible !important;
+      position: static !important;
+      min-height: 300px !important;
+    }
+    #right-content-scroll {
+      overflow-y: visible !important;
+      flex: none !important;
+      min-height: 0 !important;
+    }
+    .p2-step-heading {
+      font-size: var(--ts-title) !important;
+      padding: 12px 12px 0 !important;
+    }
+    #page-p2 .panel-body { padding: 10px 12px 12px !important; }
+    /* Job info 两列保留，字段够小 */
+    .job-grid { grid-template-columns: 1fr 1fr !important; gap: 6px !important; }
+    /* Analyze 按钮全宽 */
+    #page-p2 #analyze-btn { width: 100% !important; }
+    /* 分析结果右侧：info-grid 单列 */
+    .info-grid { grid-template-columns: 1fr !important; }
+    /* Score grade 缩小 */
+    .score-grade { font-size: 32px !important; }
 
-    /* P3 双列 → 单列 */
+    /* ─── PAGE 3 ─── */
+    #page-p3 {
+      height: auto !important;
+      overflow: visible !important;
+    }
+    #page-p3 .p3se-main {
+      overflow: visible !important;
+      flex: none !important;
+    }
     #page-p3 .p3se-grid {
       grid-template-columns: 1fr !important;
-      padding: 10px 10px 70px !important;
+      padding: 10px 10px 80px !important;
+      overflow: visible !important;
     }
+    #page-p3 .p3se-page-head {
+      flex-wrap: wrap !important;
+      padding: 8px 12px !important;
+      gap: 6px !important;
+    }
+    #page-p3 .p3se-legend { display: none !important; }
+    #page-p3 .p3se-action-bar {
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+      padding: 10px 12px !important;
+    }
+    #page-p3 #btn-p3-generate { width: 100% !important; }
+
+    /* ─── PAGE 4 ─── */
+    #p4-compare-wrap {
+      grid-template-columns: 1fr !important;
+      gap: 12px !important;
+      padding: 8px 12px 16px !important;
+    }
+    /* AB 对比摘要：两列保留（够小） */
+    #p4-criteria-top > div {
+      grid-template-columns: 1fr 1fr !important;
+    }
+    /* 颜色图例：手机上隐藏（太长） */
+    #p4-criteria-top > div + div { display: none !important; }
+    #p4-jd-check { padding: 0 12px 10px !important; }
   }
 </style>
 </head>
