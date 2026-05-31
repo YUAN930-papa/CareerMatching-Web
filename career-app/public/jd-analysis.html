@@ -1498,8 +1498,8 @@
       border-radius: 10px !important;
     }
 
-    /* ─── PAGE 2 ─── */
-    /* 关键：grid 两列 → 单列 */
+    /* ─── PAGE 2: 手机一屏一步 ─── */
+    /* 默认只显示左面板（输入），右面板隐藏 */
     #page-p2 .page-layout {
       grid-template-columns: 1fr !important;
       height: auto !important;
@@ -1510,18 +1510,29 @@
       max-height: none !important;
       overflow-y: visible !important;
       position: static !important;
-      border-bottom: 1px solid rgba(255,255,255,.40) !important;
     }
     #page-p2 .right-panel {
+      display: none !important;
+    }
+    /* 分析后：隐藏左面板，显示右面板 */
+    #page-p2.p2-results-mode .left-panel {
+      display: none !important;
+    }
+    #page-p2.p2-results-mode .right-panel {
+      display: flex !important;
+      flex-direction: column !important;
       height: auto !important;
       overflow: visible !important;
       position: static !important;
-      min-height: 300px !important;
+      min-height: calc(100vh - 52px) !important;
     }
-    #right-content-scroll {
+    #page-p2.p2-results-mode #right-content-scroll {
       overflow-y: visible !important;
       flex: none !important;
-      min-height: 0 !important;
+    }
+    /* 返回按钮只在手机上显示 */
+    #p2-mobile-back-btn {
+      display: flex !important;
     }
     .p2-step-heading {
       font-size: var(--ts-title) !important;
@@ -1577,6 +1588,10 @@
     /* 颜色图例：手机上隐藏（太长） */
     #p4-criteria-top > div + div { display: none !important; }
     #p4-jd-check { padding: 0 12px 10px !important; }
+
+    /* 防止页面切换时内容溢出 frame */
+    html, body { overflow-x: hidden !important; }
+    #page-p1, #page-p2, #page-p3, #page-p4 { overflow: hidden; }
   }
 </style>
 </head>
@@ -1753,7 +1768,10 @@
   <div class="right-panel" id="right-panel">
 
     <!-- Step 4 heading -->
-    <div class="p2-step-heading" style="padding:16px 16px 0;">第四步：JD 匹配度和职业规划匹配分析</div>
+    <div class="p2-step-heading" style="padding:16px 16px 0;">
+      <button id="p2-mobile-back-btn" onclick="p2MobileBack()" style="display:none;align-items:center;gap:4px;background:none;border:none;font-size:13px;color:var(--text2);cursor:pointer;padding:0;margin-bottom:8px;font-family:inherit;">← 修改 JD</button>
+      第四步：JD 匹配度和职业规划匹配分析
+    </div>
 
     <!-- Scrollable content wrapper -->
     <div id="right-content-scroll">
@@ -2654,6 +2672,18 @@ function setState(s) {
   document.getElementById('empty-state').style.display   = s === 'empty'   ? 'flex' : 'none'
   document.getElementById('loading-state').style.display = s === 'loading' ? 'flex' : 'none'
   document.getElementById('results-state').style.display = s === 'results' ? 'flex' : 'none'
+  // 手机：loading 和 results 都切换到右面板
+  if (s === 'loading' || s === 'results') p2MobileShowResults()
+  else if (s === 'empty') p2MobileBack()
+}
+function p2MobileShowResults() {
+  if (window.innerWidth > 768) return
+  const p2 = document.getElementById('page-p2')
+  if (p2) p2.classList.add('p2-results-mode')
+}
+function p2MobileBack() {
+  const p2 = document.getElementById('page-p2')
+  if (p2) p2.classList.remove('p2-results-mode')
 }
 function setLoadingText(main, sub) {
   document.getElementById('loading-text').textContent = main
