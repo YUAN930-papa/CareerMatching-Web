@@ -62,6 +62,13 @@
     /* Legacy aliases */
     --fs-xs:10px; --fs-sm:12px; --fs-ui:13px; --fs-body-sm:14px;
 
+    /* ── Design System: 4-level type tokens ── */
+    --ts-title:     18px;   /* 页面/区块主标题   font-weight:700 */
+    --ts-sub1:      15px;   /* 卡片标题/面板标题  font-weight:600 */
+    --ts-sub2:      13px;   /* 字段标签/步骤文字  font-weight:600 */
+    --ts-body:      13px;   /* 正文/输入内容      font-weight:400 */
+    --ts-caption:   11px;   /* 辅助信息/字数统计  font-weight:400 */
+
     --lh-tight: 1.2;  --lh-snug: 1.35; --lh-base: 1.6; --lh-relaxed: 1.7;
     --fw-normal:400; --fw-medium:500; --fw-semibold:600; --fw-bold:700;
 
@@ -1431,6 +1438,17 @@
   #page-p3 .p3se-tag-red,
   #page-p3 .p3se-tag-gray { color:rgba(26,26,24,0.80) !important; }
 
+  /* ── Design System: mobile token overrides ≤ 768px ─────────────── */
+  @media (max-width: 768px) {
+    :root {
+      --ts-title:   16px;
+      --ts-sub1:    14px;
+      --ts-sub2:    12px;
+      --ts-body:    13px;
+      --ts-caption: 11px;
+    }
+  }
+
   /* ── Mobile responsive ≤ 768px ──────────────────────────────────── */
   @media (max-width: 768px) {
     /* Nav: 缩小高度，logo 不换行 */
@@ -1445,19 +1463,21 @@
     }
     .nav-divider { display: none !important; }
 
+    /* 右上角状态文字 + 看板按钮：手机全部隐藏 */
+    #nav-status       { display: none !important; }
+    #nav-board-divider{ display: none !important; }
+    .nav-right .btn-board-nav { display: none !important; }
+
     /* Step 导航：4 步缩小字体 + 间距 */
     .nav-links {
       min-width: 0 !important;
       grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
       column-gap: 4px !important;
     }
-    .step-kicker { font-size: 7px !important; }
-    .step-title  { font-size: 7px !important; }
+    .step-kicker { font-size: var(--ts-caption) !important; }
+    .step-title  { font-size: var(--ts-caption) !important; }
     .nav-link    { width: 16px !important; height: 16px !important; border-width: 2px !important; }
     .step-check  { font-size: 8px !important; }
-
-    /* 右上角看板按钮：手机上隐藏，节省空间 */
-    .nav-right .btn-board-nav { display: none !important; }
 
     /* P1 主滚动区：全宽，去掉左右大 padding */
     #page-p1 {
@@ -1569,8 +1589,8 @@
   <div id="page-p1-scroll" style="flex:1;max-width:680px;width:100%;margin:0 auto;padding:40px 24px;padding-bottom:32px;box-sizing:border-box;">
 
     <div style="margin-bottom:28px;">
-      <div style="font-size:20px;font-weight:600;letter-spacing:-.5px;margin-bottom:5px;">第一步：简历设置</div>
-      <div style="font-size:12px;color:var(--text3);"></div>
+      <div style="font-size:var(--ts-title);font-weight:700;letter-spacing:-.3px;margin-bottom:5px;">第一步：简历设置</div>
+      <div style="font-size:var(--ts-caption);color:var(--text3);"></div>
     </div>
 
     <!-- ① 上传 PDF / Word -->
@@ -1587,7 +1607,7 @@
 
     <!-- ② 已上传简历列表（勾选参与分析） -->
     <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:14px;">
-      <div style="font-size:11px;color:#8b9098;margin-bottom:10px;">已上传的简历</div>
+      <div style="font-size:var(--ts-sub2);font-weight:600;color:#8b9098;margin-bottom:10px;">已上传的简历</div>
       <div id="resume-list-host" class="resume-list-host"></div>
       <div style="display:flex;justify-content:flex-end;margin-top:8px;">
         <button type="button" class="btn btn-sm" onclick="clearAllResumes()" style="font-size:12px;">全部清空</button>
@@ -1597,16 +1617,16 @@
     </div>
 
     <!-- ③ 第二步 标题（卡片外，与第一步对齐） -->
-    <div id="step2-heading">
-      <div>第二步：未来愿景，职业发展方向补充</div>
+    <div id="step2-heading" style="margin-bottom:10px;">
+      <div style="font-size:var(--ts-title);font-weight:700;letter-spacing:-.3px;">第二步：未来愿景，职业发展方向补充</div>
     </div>
 
     <!-- ③ 未来职业发展方向 -->
     <div class="career-goal-card" style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:22px 24px;margin-bottom:22px;">
-      <textarea id="career-goal" style="width:100%;min-height:200px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;color:var(--text);background:var(--surface);outline:none;line-height:1.7;transition:border-color .15s;resize:vertical;" placeholder="例如： 我希望在未来1-3年内，工作机会给我较大机会，让我提升技能，积累行业经验，薪资稳定上涨，有可以远程工作的机会。"></textarea>
+      <textarea id="career-goal" style="width:100%;min-height:200px;padding:12px 14px;border:1px solid var(--border);border-radius:8px;font-size:var(--ts-body);font-family:inherit;color:var(--text);background:var(--surface);outline:none;line-height:1.7;transition:border-color .15s;resize:vertical;" placeholder="例如： 我希望在未来1-3年内，工作机会给我较大机会，让我提升技能，积累行业经验，薪资稳定上涨，有可以远程工作的机会。"></textarea>
       <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
-        <span id="career-goal-status" style="font-size:11px;color:var(--green);min-height:1.2em;"></span>
-        <span id="goal-char-count" style="font-size:10px;color:var(--text3);font-family:var(--font-mono);">0 字</span>
+        <span id="career-goal-status" style="font-size:var(--ts-caption);color:var(--green);min-height:1.2em;"></span>
+        <span id="goal-char-count" style="font-size:var(--ts-caption);color:var(--text3);font-family:var(--font-mono);">0 字</span>
       </div>
     </div>
 
